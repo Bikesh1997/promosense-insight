@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,77 +8,77 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/components/ui/use-toast";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Brain, TrendingUp, Target, Users, DollarSign, AlertTriangle, CheckCircle, Clock, Lightbulb, Zap, Filter } from "lucide-react";
+import AIConfigModal from "./AIConfigModal";
+import RecommendationDetailsModal from "./RecommendationDetailsModal";
 
 const AIInsights = () => {
   const { toast } = useToast();
+  const [configModalOpen, setConfigModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedRecommendation, setSelectedRecommendation] = useState(null);
 
   const handleConfigureAI = () => {
-    toast({
-      title: "AI Configuration",
-      description: "Opening AI engine configuration panel...",
-    });
+    setConfigModalOpen(true);
   };
 
   const handleSentimentInsights = () => {
     toast({
-      title: "Sentiment Insights",
-      description: "Opening detailed sentiment analysis dashboard...",
+      title: "Sentiment Insights Dashboard",
+      description: "Opening comprehensive sentiment analysis with detailed metrics and trends...",
     });
   };
 
   const handlePatientAnalyticsFilter = (value: string) => {
     toast({
-      title: "Filter Applied",
-      description: `Filtering patient analytics by: ${value}`,
+      title: "Analytics Filter Applied",
+      description: `Patient analytics filtered by: ${value.replace('_', ' ')}. Data refreshing...`,
     });
   };
 
-  const handleViewDetails = (recommendationId: number) => {
-    toast({
-      title: "Recommendation Details",
-      description: `Opening detailed analysis for recommendation ${recommendationId}...`,
-    });
+  const handleViewDetails = (recommendation: any) => {
+    setSelectedRecommendation(recommendation);
+    setDetailsModalOpen(true);
   };
 
-  const handleSchedule = (recommendationId: number) => {
+  const handleSchedule = (recommendationId: number, title: string) => {
     toast({
-      title: "Scheduled",
-      description: `Recommendation ${recommendationId} has been scheduled for implementation.`,
+      title: "Implementation Scheduled",
+      description: `${title} has been scheduled for next business day with stakeholder notifications sent.`,
     });
   };
 
   const handleImplementNow = (recommendationId: number, title: string) => {
     toast({
       title: "Implementation Started",
-      description: `${title} is being implemented immediately.`,
+      description: `${title} is being implemented immediately. Progress tracking activated.`,
     });
   };
 
   const handleShareBestPractices = () => {
     toast({
       title: "Best Practices Shared",
-      description: "Performance insights have been shared with the team.",
+      description: "Lisa Rodriguez's communication strategies and interaction templates have been shared with all team members.",
     });
   };
 
   const handleScheduleCoaching = () => {
     toast({
-      title: "Coaching Scheduled",
-      description: "Training session has been scheduled for the team member.",
+      title: "Coaching Session Scheduled",
+      description: "One-on-one coaching session scheduled for Emily Davis next Tuesday at 2:00 PM. Meeting invite sent.",
     });
   };
 
   const handleLearnMore = (opportunityTitle: string) => {
     toast({
-      title: "Learn More",
-      description: `Opening detailed analysis for ${opportunityTitle}...`,
+      title: "Market Analysis Opened",
+      description: `Accessing comprehensive market research and competitive analysis for: ${opportunityTitle}`,
     });
   };
 
   const handleCreateCampaign = (opportunityTitle: string) => {
     toast({
-      title: "Campaign Created",
-      description: `New campaign for ${opportunityTitle} has been initiated.`,
+      title: "Campaign Creation Initiated",
+      description: `New marketing campaign for "${opportunityTitle}" has been created with AI-optimized targeting and budget allocation.`,
     });
   };
   // AI Recommendations
@@ -367,8 +368,8 @@ const AIInsights = () => {
                       </div>
 
                       <div className="flex justify-end space-x-2">
-                        <Button variant="outline" onClick={() => handleViewDetails(rec.id)}>View Details</Button>
-                        <Button variant="outline" onClick={() => handleSchedule(rec.id)}>Schedule</Button>
+                        <Button variant="outline" onClick={() => handleViewDetails(rec)}>View Details</Button>
+                        <Button variant="outline" onClick={() => handleSchedule(rec.id, rec.title)}>Schedule</Button>
                         <Button onClick={() => handleImplementNow(rec.id, rec.title)}>Implement Now</Button>
                       </div>
                     </div>
@@ -596,6 +597,17 @@ const AIInsights = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <AIConfigModal 
+        open={configModalOpen} 
+        onOpenChange={setConfigModalOpen} 
+      />
+
+      <RecommendationDetailsModal
+        open={detailsModalOpen}
+        onOpenChange={setDetailsModalOpen}
+        recommendation={selectedRecommendation}
+      />
     </div>
   );
 };
