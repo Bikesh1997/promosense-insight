@@ -4,21 +4,33 @@ import { ArrowRight, BarChart3, Brain, Target } from "lucide-react";
 import heroImage from "@/assets/hero-analytics.jpg";
 import { useToast } from "@/components/ui/use-toast";
 
-const Hero = () => {
+interface HeroProps {
+  onNavigate?: (view: string) => void;
+}
+
+const Hero = ({ onNavigate }: HeroProps) => {
   const { toast } = useToast();
 
   const handleGetStarted = () => {
-    toast({
-      title: "Get Started",
-      description: "Welcome to PromoSense! Let's set up your analytics dashboard.",
-    });
+    if (onNavigate) {
+      onNavigate('dashboard');
+    } else {
+      toast({
+        title: "Get Started",
+        description: "Navigating to dashboard...",
+      });
+    }
   };
 
   const handleViewDemo = () => {
-    toast({
-      title: "Demo Mode",
-      description: "Launching interactive product demonstration...",
-    });
+    if (onNavigate) {
+      onNavigate('insights');
+    } else {
+      toast({
+        title: "Demo Mode",
+        description: "Opening AI insights...",
+      });
+    }
   };
 
   return (

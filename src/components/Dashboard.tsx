@@ -1,18 +1,20 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowUpRight, ArrowDownRight, TrendingUp, Users, DollarSign, Target, AlertTriangle } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 const Dashboard = () => {
   const { toast } = useToast();
+  const [selectedPromotion, setSelectedPromotion] = useState<any>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
-  const handleViewDetails = (promotionName: string) => {
-    toast({
-      title: "Promotion Details",
-      description: `Opening detailed analytics for ${promotionName}...`,
-    });
+  const handleViewDetails = (promotion: any) => {
+    setSelectedPromotion(promotion);
+    setDetailsOpen(true);
   };
 
   // Sample data for the dashboard
@@ -177,9 +179,40 @@ const Dashboard = () => {
                     <div className="font-bold text-success">+{promo.roi}%</div>
                     <div className="text-sm text-muted-foreground">ROI</div>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => handleViewDetails(promo.name)}>
-                    View Details
-                  </Button>
+                  <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm" onClick={() => handleViewDetails(promo)}>
+                        View Details
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-2xl">
+                      <DialogHeader>
+                        <DialogTitle>{selectedPromotion?.name} - Detailed Analytics</DialogTitle>
+                      </DialogHeader>
+                      {selectedPromotion && (
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="p-4 bg-muted/50 rounded-lg">
+                              <div className="text-2xl font-bold text-success">+{selectedPromotion.roi}%</div>
+                              <div className="text-sm text-muted-foreground">ROI</div>
+                            </div>
+                            <div className="p-4 bg-muted/50 rounded-lg">
+                              <div className="text-2xl font-bold">{selectedPromotion.leads}</div>
+                              <div className="text-sm text-muted-foreground">Total Leads</div>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Performance Metrics</h4>
+                            <div className="text-sm space-y-1">
+                              <div>• Conversion Rate: {(selectedPromotion.leads * 0.24).toFixed(1)}%</div>
+                              <div>• Cost per Lead: ${(250 - selectedPromotion.roi).toFixed(2)}</div>
+                              <div>• Revenue Generated: ${(selectedPromotion.leads * 850).toLocaleString()}</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
             ))}

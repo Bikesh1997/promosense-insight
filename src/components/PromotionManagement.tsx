@@ -8,61 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/components/ui/use-toast";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { TrendingUp, TrendingDown, DollarSign, Users, Target, AlertTriangle, Eye, Edit, Pause, Play } from "lucide-react";
+import PromotionDetailsModal from "./PromotionDetailsModal";
 
 const PromotionManagement = () => {
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedChannel, setSelectedChannel] = useState("all");
   const { toast } = useToast();
-
-  const handleCreatePromotion = () => {
-    toast({
-      title: "Create New Promotion",
-      description: "Opening promotion creation wizard...",
-    });
-  };
-
-  const handleViewPromotion = (id: number) => {
-    toast({
-      title: "View Promotion",
-      description: `Opening detailed view for promotion ${id}...`,
-    });
-  };
-
-  const handleEditPromotion = (id: number) => {
-    toast({
-      title: "Edit Promotion",
-      description: `Opening edit mode for promotion ${id}...`,
-    });
-  };
-
-  const handleTogglePromotion = (id: number, currentStatus: string) => {
-    const newStatus = currentStatus === 'active' ? 'paused' : 'active';
-    toast({
-      title: `Promotion ${newStatus === 'active' ? 'Activated' : 'Paused'}`,
-      description: `Promotion ${id} has been ${newStatus === 'active' ? 'activated' : 'paused'}`,
-    });
-  };
-
-  const handleApplyRecommendation = () => {
-    toast({
-      title: "Recommendation Applied",
-      description: "Budget reallocation has been implemented successfully.",
-    });
-  };
-
-  const handleReviewDetails = () => {
-    toast({
-      title: "Review Details",
-      description: "Opening detailed analysis report...",
-    });
-  };
-
-  const handleScaleCampaign = () => {
-    toast({
-      title: "Campaign Scaling",
-      description: "Initiating campaign scaling process...",
-    });
-  };
 
   const promotionData = [
     {
@@ -135,6 +86,61 @@ const PromotionManagement = () => {
     }
   ];
 
+  const [promotions, setPromotions] = useState(promotionData);
+  const [selectedPromotion, setSelectedPromotion] = useState<any>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+
+  const handleCreatePromotion = () => {
+    toast({
+      title: "Create New Promotion",
+      description: "Opening promotion creation wizard...",
+    });
+  };
+
+  const handleViewPromotion = (promotion: any) => {
+    setSelectedPromotion(promotion);
+    setDetailsOpen(true);
+  };
+
+  const handleEditPromotion = (id: number) => {
+    toast({
+      title: "Edit Promotion",
+      description: `Opening edit mode for promotion ${id}...`,
+    });
+  };
+
+  const handleTogglePromotion = (id: number, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'paused' : 'active';
+    setPromotions(prev => prev.map(promo => 
+      promo.id === id ? { ...promo, status: newStatus } : promo
+    ));
+    toast({
+      title: `Promotion ${newStatus === 'active' ? 'Activated' : 'Paused'}`,
+      description: `Promotion ${id} has been ${newStatus === 'active' ? 'activated' : 'paused'}`,
+    });
+  };
+
+  const handleApplyRecommendation = () => {
+    toast({
+      title: "Recommendation Applied",
+      description: "Budget reallocation has been implemented successfully.",
+    });
+  };
+
+  const handleReviewDetails = () => {
+    toast({
+      title: "Review Details",
+      description: "Opening detailed analysis report...",
+    });
+  };
+
+  const handleScaleCampaign = () => {
+    toast({
+      title: "Campaign Scaling",
+      description: "Initiating campaign scaling process...",
+    });
+  };
+
   const channelPerformance = [
     { channel: "Facebook Ads", spend: 145000, leads: 2341, conversions: 587, roi: 198 },
     { channel: "Google Ads", spend: 128000, leads: 1876, conversions: 445, roi: 176 },
@@ -166,7 +172,7 @@ const PromotionManagement = () => {
     }
   };
 
-  const filteredPromotions = promotionData.filter(promo => {
+  const filteredPromotions = promotions.filter(promo => {
     const regionMatch = selectedRegion === "all" || promo.region === selectedRegion;
     const channelMatch = selectedChannel === "all" || promo.channel === selectedChannel;
     return regionMatch && channelMatch;
@@ -299,7 +305,7 @@ const PromotionManagement = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         {getStatusBadge(promo.status)}
-                        <Button variant="ghost" size="sm" onClick={() => handleViewPromotion(promo.id)}>
+                        <Button variant="ghost" size="sm" onClick={() => handleViewPromotion(promo)}>
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleEditPromotion(promo.id)}>
@@ -499,6 +505,12 @@ const PromotionManagement = () => {
           </div>
         </TabsContent>
       </Tabs>
+      
+      <PromotionDetailsModal 
+        open={detailsOpen} 
+        onOpenChange={setDetailsOpen} 
+        promotion={selectedPromotion} 
+      />
     </div>
   );
 };

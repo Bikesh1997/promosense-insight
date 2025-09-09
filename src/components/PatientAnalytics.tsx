@@ -12,7 +12,29 @@ import { useState } from "react";
 const PatientAnalytics = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState("6m");
   const [selectedSegment, setSelectedSegment] = useState("all");
+  const [selectedPatient, setSelectedPatient] = useState<any>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const { toast } = useToast();
+
+  const handleExportData = () => {
+    toast({
+      title: "Export Started",
+      description: "Patient analytics data is being prepared for download...",
+    });
+  };
+
+  const handleViewPatient = (patient: any) => {
+    setSelectedPatient(patient);
+    setDetailsOpen(true);
+  };
+
+  const handleTimeframeChange = (value: string) => {
+    setSelectedTimeframe(value);
+    toast({
+      title: "Timeframe Updated", 
+      description: `Analytics updated for ${value} period.`,
+    });
+  };
 
   const handleActionPlan = (indicator: string) => {
     toast({

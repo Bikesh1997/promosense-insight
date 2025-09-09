@@ -16,7 +16,7 @@ const Index = () => {
   const renderContent = () => {
     switch (activeView) {
       case 'overview':
-        return <Hero />;
+        return <Hero onNavigate={setActiveView} />;
       case 'dashboard':
         return (
           <div className="p-6">
@@ -60,7 +60,7 @@ const Index = () => {
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-background">
-        <Header />
+        <Header onNavigate={setActiveView} activeView={activeView} />
         <div className="flex">
           <Navigation activeView={activeView} onViewChange={setActiveView} />
           <main className="flex-1">
