@@ -6,6 +6,9 @@ import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Dashboard from "@/components/Dashboard";
+import PromotionManagement from "@/components/PromotionManagement";
+import PatientAnalytics from "@/components/PatientAnalytics";
+import AIInsights from "@/components/AIInsights";
 
 const Index = () => {
   const [activeView, setActiveView] = useState('overview');
@@ -27,22 +30,19 @@ const Index = () => {
       case 'promotions':
         return (
           <div className="p-6">
-            <h2 className="text-3xl font-bold mb-6">Promotion Management</h2>
-            <p className="text-muted-foreground">Coming soon - Manage and optimize your promotions</p>
+            <PromotionManagement />
           </div>
         );
       case 'patients':
         return (
           <div className="p-6">
-            <h2 className="text-3xl font-bold mb-6">Patient Analytics</h2>
-            <p className="text-muted-foreground">Coming soon - Patient acquisition and retention insights</p>
+            <PatientAnalytics />
           </div>
         );
       case 'insights':
         return (
           <div className="p-6">
-            <h2 className="text-3xl font-bold mb-6">AI Insights</h2>
-            <p className="text-muted-foreground">Coming soon - AI-powered recommendations and predictions</p>
+            <AIInsights />
           </div>
         );
       case 'settings':
