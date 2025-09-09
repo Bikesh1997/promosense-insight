@@ -1,9 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { ArrowRight, BarChart3, Brain, Target } from "lucide-react";
 import heroImage from "@/assets/hero-analytics.jpg";
 
 const Hero = () => {
+  const { toast } = useToast();
+
+  const handleGetStarted = () => {
+    toast({
+      title: "Get Started",
+      description: "Welcome to PromoSense! Let's set up your analytics dashboard.",
+    });
+  };
+
+  const handleViewDemo = () => {
+    toast({
+      title: "Demo Mode",
+      description: "Launching interactive product demonstration...",
+    });
+  };
+
   return (
     <div className="relative min-h-[600px] bg-gradient-to-br from-primary/5 to-accent/5 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-background/40 z-10" />
@@ -28,11 +45,11 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="group">
+              <Button size="lg" className="group" onClick={handleGetStarted}>
                 View Dashboard
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" onClick={handleViewDemo}>
                 Schedule Demo
               </Button>
             </div>

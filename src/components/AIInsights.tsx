@@ -3,10 +3,68 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Brain, TrendingUp, Target, Users, DollarSign, AlertTriangle, CheckCircle, Clock, Lightbulb, Zap } from "lucide-react";
 
 const AIInsights = () => {
+  const { toast } = useToast();
+
+  const handleConfigureAI = () => {
+    toast({
+      title: "AI Configuration",
+      description: "Opening AI engine configuration panel...",
+    });
+  };
+
+  const handleViewDetails = (recommendationId: number) => {
+    toast({
+      title: "Recommendation Details",
+      description: `Opening detailed analysis for recommendation ${recommendationId}...`,
+    });
+  };
+
+  const handleSchedule = (recommendationId: number) => {
+    toast({
+      title: "Scheduled",
+      description: `Recommendation ${recommendationId} has been scheduled for implementation.`,
+    });
+  };
+
+  const handleImplementNow = (recommendationId: number, title: string) => {
+    toast({
+      title: "Implementation Started",
+      description: `${title} is being implemented immediately.`,
+    });
+  };
+
+  const handleShareBestPractices = () => {
+    toast({
+      title: "Best Practices Shared",
+      description: "Performance insights have been shared with the team.",
+    });
+  };
+
+  const handleScheduleCoaching = () => {
+    toast({
+      title: "Coaching Scheduled",
+      description: "Training session has been scheduled for the team member.",
+    });
+  };
+
+  const handleLearnMore = (opportunityTitle: string) => {
+    toast({
+      title: "Learn More",
+      description: `Opening detailed analysis for ${opportunityTitle}...`,
+    });
+  };
+
+  const handleCreateCampaign = (opportunityTitle: string) => {
+    toast({
+      title: "Campaign Created",
+      description: `New campaign for ${opportunityTitle} has been initiated.`,
+    });
+  };
   // AI Recommendations
   const recommendations = [
     {
@@ -294,9 +352,9 @@ const AIInsights = () => {
                       </div>
 
                       <div className="flex justify-end space-x-2">
-                        <Button variant="outline">View Details</Button>
-                        <Button variant="outline">Schedule</Button>
-                        <Button>Implement Now</Button>
+                        <Button variant="outline" onClick={() => handleViewDetails(rec.id)}>View Details</Button>
+                        <Button variant="outline" onClick={() => handleSchedule(rec.id)}>Schedule</Button>
+                        <Button onClick={() => handleImplementNow(rec.id, rec.title)}>Implement Now</Button>
                       </div>
                     </div>
                   ))}
@@ -436,14 +494,14 @@ const AIInsights = () => {
                   <p className="text-sm text-muted-foreground mt-1">
                     Lisa Rodriguez maintains 4.6/5.0 sentiment with 85% positive interactions
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Share Best Practices</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleShareBestPractices}>Share Best Practices</Button>
                 </div>
                 <div className="p-4 bg-warning/10 border border-warning/20 rounded-lg">
                   <h4 className="font-medium text-warning">Coaching Opportunity</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     Emily Davis showing 3.8/5.0 sentiment - recommend communication training
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Schedule Coaching</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleScheduleCoaching}>Schedule Coaching</Button>
                 </div>
                 <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                   <h4 className="font-medium text-primary">Trending Keywords</h4>
@@ -492,8 +550,8 @@ const AIInsights = () => {
                       </div>
                     </div>
                     <div className="flex justify-end space-x-2">
-                      <Button variant="outline">Learn More</Button>
-                      <Button>Create Campaign</Button>
+                      <Button variant="outline" onClick={() => handleLearnMore(opp.title)}>Learn More</Button>
+                      <Button onClick={() => handleCreateCampaign(opp.title)}>Create Campaign</Button>
                     </div>
                   </div>
                 ))}

@@ -5,12 +5,64 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { TrendingUp, TrendingDown, DollarSign, Users, Target, AlertTriangle, Eye, Edit, Pause, Play } from "lucide-react";
 
 const PromotionManagement = () => {
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedChannel, setSelectedChannel] = useState("all");
+  const { toast } = useToast();
+
+  const handleCreatePromotion = () => {
+    toast({
+      title: "Create New Promotion",
+      description: "Opening promotion creation wizard...",
+    });
+  };
+
+  const handleViewPromotion = (id: number) => {
+    toast({
+      title: "View Promotion",
+      description: `Opening detailed view for promotion ${id}...`,
+    });
+  };
+
+  const handleEditPromotion = (id: number) => {
+    toast({
+      title: "Edit Promotion",
+      description: `Opening edit mode for promotion ${id}...`,
+    });
+  };
+
+  const handleTogglePromotion = (id: number, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'paused' : 'active';
+    toast({
+      title: `Promotion ${newStatus === 'active' ? 'Activated' : 'Paused'}`,
+      description: `Promotion ${id} has been ${newStatus === 'active' ? 'activated' : 'paused'}`,
+    });
+  };
+
+  const handleApplyRecommendation = () => {
+    toast({
+      title: "Recommendation Applied",
+      description: "Budget reallocation has been implemented successfully.",
+    });
+  };
+
+  const handleReviewDetails = () => {
+    toast({
+      title: "Review Details",
+      description: "Opening detailed analysis report...",
+    });
+  };
+
+  const handleScaleCampaign = () => {
+    toast({
+      title: "Campaign Scaling",
+      description: "Initiating campaign scaling process...",
+    });
+  };
 
   const promotionData = [
     {
@@ -153,7 +205,7 @@ const PromotionManagement = () => {
               <SelectItem value="Ally App">Ally App</SelectItem>
             </SelectContent>
           </Select>
-          <Button>Create New Promotion</Button>
+          <Button onClick={handleCreatePromotion}>Create New Promotion</Button>
         </div>
       </div>
 
@@ -247,13 +299,13 @@ const PromotionManagement = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         {getStatusBadge(promo.status)}
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => handleViewPromotion(promo.id)}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => handleEditPromotion(promo.id)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => handleTogglePromotion(promo.id, promo.status)}>
                           {promo.status === 'active' ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                         </Button>
                       </div>
@@ -394,21 +446,21 @@ const PromotionManagement = () => {
                   <p className="text-sm text-muted-foreground mt-1">
                     Facebook Ads showing 23% higher ROI than Google Ads. Consider reallocating $15K from Google to Facebook.
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Apply Recommendation</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleApplyRecommendation}>Apply Recommendation</Button>
                 </div>
                 <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                   <h4 className="font-medium text-destructive">Underperforming Promotion</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     "New Patient Discount" has 18% lower conversion rate. Consider A/B testing the offer amount.
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Review Details</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleReviewDetails}>Review Details</Button>
                 </div>
                 <div className="p-4 bg-success/10 border border-success/20 rounded-lg">
                   <h4 className="font-medium text-success">Scale Successful Campaign</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     "Botox Spring Special" performing 34% above target. Increase budget by $20K for maximum impact.
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Scale Campaign</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleScaleCampaign}>Scale Campaign</Button>
                 </div>
               </CardContent>
             </Card>

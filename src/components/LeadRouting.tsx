@@ -6,11 +6,83 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 import { Users, Target, Clock, TrendingUp, Star, Phone, Mail, MessageSquare, AlertTriangle } from "lucide-react";
 
 const LeadRouting = () => {
   const [selectedPriority, setSelectedPriority] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const { toast } = useToast();
+
+  const handleConfigureRouting = () => {
+    toast({
+      title: "Configure Routing Rules",
+      description: "Opening routing configuration panel...",
+    });
+  };
+
+  const handleContactLead = (leadName: string, method: string) => {
+    toast({
+      title: `Contacting ${leadName}`,
+      description: `Initiating ${method} contact...`,
+    });
+  };
+
+  const handleReassignLead = (leadName: string) => {
+    toast({
+      title: "Lead Reassigned",
+      description: `${leadName} has been reassigned to available representative.`,
+    });
+  };
+
+  const handleViewLeadDetails = (leadName: string) => {
+    toast({
+      title: "Lead Details",
+      description: `Opening detailed profile for ${leadName}...`,
+    });
+  };
+
+  const handleAutoAssign = () => {
+    toast({
+      title: "Auto-Assignment Activated",
+      description: "AI-optimized lead assignment has been implemented.",
+    });
+  };
+
+  const handleRebalance = () => {
+    toast({
+      title: "Load Rebalanced",
+      description: "Lead distribution has been optimized across representatives.",
+    });
+  };
+
+  const handleScheduleTraining = () => {
+    toast({
+      title: "Training Scheduled",
+      description: "Performance improvement session has been scheduled.",
+    });
+  };
+
+  const handleEditRule = (ruleId: number) => {
+    toast({
+      title: "Edit Rule",
+      description: `Opening editor for routing rule ${ruleId}...`,
+    });
+  };
+
+  const handleToggleRule = (ruleId: number) => {
+    toast({
+      title: "Rule Updated",
+      description: `Routing rule ${ruleId} status has been toggled.`,
+    });
+  };
+
+  const handleAddNewRule = () => {
+    toast({
+      title: "Add New Rule",
+      description: "Opening new routing rule creation wizard...",
+    });
+  };
 
   // Lead queue data
   const leads = [
@@ -240,7 +312,7 @@ const LeadRouting = () => {
               <SelectItem value="consultation_booked">Consultation Booked</SelectItem>
             </SelectContent>
           </Select>
-          <Button>Configure Routing Rules</Button>
+          <Button onClick={handleConfigureRouting}>Configure Routing Rules</Button>
         </div>
       </div>
 
@@ -377,12 +449,12 @@ const LeadRouting = () => {
                         <span className="text-sm text-muted-foreground">Lead Score: {lead.score}</span>
                       </div>
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handleContactLead(lead.name, "message")}>
                           <MessageSquare className="h-4 w-4 mr-1" />
                           Contact
                         </Button>
-                        <Button variant="outline" size="sm">Reassign</Button>
-                        <Button size="sm">View Details</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleReassignLead(lead.name)}>Reassign</Button>
+                        <Button size="sm" onClick={() => handleViewLeadDetails(lead.name)}>View Details</Button>
                       </div>
                     </div>
                   </div>
@@ -460,21 +532,21 @@ const LeadRouting = () => {
                   <p className="text-sm text-muted-foreground mt-1">
                     Lisa Rodriguez best match for current Botox leads - 89% success rate predicted
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Auto-Assign</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleAutoAssign}>Auto-Assign</Button>
                 </div>
                 <div className="p-4 bg-warning/10 border border-warning/20 rounded-lg">
                   <h4 className="font-medium text-warning">Capacity Alert</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     Sarah Johnson approaching 90% capacity - redistribute 3 leads
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Rebalance</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleRebalance}>Rebalance</Button>
                 </div>
                 <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                   <h4 className="font-medium text-primary">Training Opportunity</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     Mike Chen's response time 12min avg - coaching recommended
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Schedule Training</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleScheduleTraining}>Schedule Training</Button>
                 </div>
               </CardContent>
             </Card>
@@ -505,8 +577,8 @@ const LeadRouting = () => {
                       <Badge variant={rule.active ? "default" : "outline"}>
                         {rule.active ? "Active" : "Inactive"}
                       </Badge>
-                      <Button variant="outline" size="sm">Edit</Button>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={() => handleEditRule(rule.id)}>Edit</Button>
+                      <Button variant="outline" size="sm" onClick={() => handleToggleRule(rule.id)}>
                         {rule.active ? "Disable" : "Enable"}
                       </Button>
                     </div>
@@ -514,7 +586,7 @@ const LeadRouting = () => {
                 ))}
               </div>
               <div className="mt-6 pt-6 border-t">
-                <Button>Add New Rule</Button>
+                <Button onClick={handleAddNewRule}>Add New Rule</Button>
               </div>
             </CardContent>
           </Card>

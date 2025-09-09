@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, FunnelChart, Funnel, LabelList } from "recharts";
 import { Users, TrendingUp, TrendingDown, Heart, AlertTriangle, Clock, DollarSign, Target } from "lucide-react";
 import { useState } from "react";
@@ -11,6 +12,42 @@ import { useState } from "react";
 const PatientAnalytics = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState("6m");
   const [selectedSegment, setSelectedSegment] = useState("all");
+  const { toast } = useToast();
+
+  const handleActionPlan = (indicator: string) => {
+    toast({
+      title: "Action Plan Created",
+      description: `Initiating action plan for ${indicator} risk indicator...`,
+    });
+  };
+
+  const handleAssignToRep = () => {
+    toast({
+      title: "Assigned to Rep",
+      description: "High-risk patients have been assigned to specialist representatives.",
+    });
+  };
+
+  const handleLaunchCampaign = () => {
+    toast({
+      title: "Campaign Launched",
+      description: "Re-engagement campaign has been initiated successfully.",
+    });
+  };
+
+  const handleEnrollPatients = () => {
+    toast({
+      title: "Patients Enrolled",
+      description: "89 patients have been enrolled in the loyalty program.",
+    });
+  };
+
+  const handleViewDetails = (treatment: string) => {
+    toast({
+      title: "Treatment Details",
+      description: `Opening detailed analytics for ${treatment} treatments...`,
+    });
+  };
 
   // Patient funnel data
   const funnelData = [
@@ -323,7 +360,7 @@ const PatientAnalytics = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         {getRiskBadge(indicator.riskLevel)}
-                        <Button variant="outline" size="sm">Action Plan</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleActionPlan(indicator.indicator)}>Action Plan</Button>
                       </div>
                     </div>
                   ))}
@@ -341,21 +378,21 @@ const PatientAnalytics = () => {
                   <p className="text-sm text-muted-foreground mt-1">
                     14 high-value patients at immediate churn risk
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Assign to Rep</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleAssignToRep}>Assign to Rep</Button>
                 </div>
                 <div className="p-4 bg-warning/10 border border-warning/20 rounded-lg">
                   <h4 className="font-medium text-warning">Follow-up Campaign</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     127 patients with missed appointments need re-engagement
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Launch Campaign</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleLaunchCampaign}>Launch Campaign</Button>
                 </div>
                 <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                   <h4 className="font-medium text-primary">Retention Program</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     89 patients eligible for loyalty program enrollment
                   </p>
-                  <Button variant="outline" size="sm" className="mt-2">Enroll Patients</Button>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={handleEnrollPatients}>Enroll Patients</Button>
                 </div>
               </CardContent>
             </Card>
@@ -391,7 +428,7 @@ const PatientAnalytics = () => {
                         </td>
                         <td className="p-4 text-right">{treatment.satisfaction}/5.0</td>
                         <td className="p-4 text-right">
-                          <Button variant="outline" size="sm">View Details</Button>
+                          <Button variant="outline" size="sm" onClick={() => handleViewDetails(treatment.treatment)}>View Details</Button>
                         </td>
                       </tr>
                     ))}

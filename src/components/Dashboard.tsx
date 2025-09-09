@@ -1,10 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { ArrowUpRight, ArrowDownRight, TrendingUp, Users, DollarSign, Target, AlertTriangle } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 const Dashboard = () => {
+  const { toast } = useToast();
+
+  const handleViewDetails = (promotionName: string) => {
+    toast({
+      title: "Promotion Details",
+      description: `Opening detailed analytics for ${promotionName}...`,
+    });
+  };
+
   // Sample data for the dashboard
   const roiData = [
     { month: 'Jan', roi: 145, leads: 234, conversions: 89 },
@@ -167,7 +177,7 @@ const Dashboard = () => {
                     <div className="font-bold text-success">+{promo.roi}%</div>
                     <div className="text-sm text-muted-foreground">ROI</div>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => handleViewDetails(promo.name)}>
                     View Details
                   </Button>
                 </div>
