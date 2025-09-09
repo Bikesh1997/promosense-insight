@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import { ArrowRight, BarChart3, Brain, Target } from "lucide-react";
 import heroImage from "@/assets/hero-analytics.jpg";
+import { useToast } from "@/components/ui/use-toast";
 
 const Hero = () => {
   const { toast } = useToast();
