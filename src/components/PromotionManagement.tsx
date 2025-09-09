@@ -9,6 +9,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { TrendingUp, TrendingDown, DollarSign, Users, Target, AlertTriangle, Eye, Edit, Pause, Play } from "lucide-react";
 import PromotionDetailsModal from "./PromotionDetailsModal";
+import CreatePromotionModal from "./CreatePromotionModal";
+import EditPromotionModal from "./EditPromotionModal";
 
 const PromotionManagement = () => {
   const [selectedRegion, setSelectedRegion] = useState("all");
@@ -89,12 +91,16 @@ const PromotionManagement = () => {
   const [promotions, setPromotions] = useState(promotionData);
   const [selectedPromotion, setSelectedPromotion] = useState<any>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [promotionToEdit, setPromotionToEdit] = useState<any>(null);
 
   const handleCreatePromotion = () => {
-    toast({
-      title: "Create New Promotion",
-      description: "Opening promotion creation wizard...",
-    });
+    setCreateModalOpen(true);
+  };
+
+  const handlePromotionCreated = (newPromotion: any) => {
+    setPromotions(prev => [...prev, newPromotion]);
   };
 
   const handleViewPromotion = (promotion: any) => {
@@ -102,11 +108,15 @@ const PromotionManagement = () => {
     setDetailsOpen(true);
   };
 
-  const handleEditPromotion = (id: number) => {
-    toast({
-      title: "Edit Promotion",
-      description: `Opening edit mode for promotion ${id}...`,
-    });
+  const handleEditPromotion = (promotion: any) => {
+    setPromotionToEdit(promotion);
+    setEditModalOpen(true);
+  };
+
+  const handlePromotionUpdated = (updatedPromotion: any) => {
+    setPromotions(prev => prev.map(promo => 
+      promo.id === updatedPromotion.id ? updatedPromotion : promo
+    ));
   };
 
   const handleTogglePromotion = (id: number, currentStatus: string) => {
@@ -308,7 +318,7 @@ const PromotionManagement = () => {
                         <Button variant="ghost" size="sm" onClick={() => handleViewPromotion(promo)}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleEditPromotion(promo.id)}>
+                        <Button variant="ghost" size="sm" onClick={() => handleEditPromotion(promo)}>
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleTogglePromotion(promo.id, promo.status)}>
@@ -505,6 +515,19 @@ const PromotionManagement = () => {
           </div>
         </TabsContent>
       </Tabs>
+      
+      <CreatePromotionModal 
+        open={createModalOpen} 
+        onOpenChange={setCreateModalOpen} 
+        onPromotionCreated={handlePromotionCreated}
+      />
+
+      <EditPromotionModal 
+        open={editModalOpen} 
+        onOpenChange={setEditModalOpen} 
+        promotion={promotionToEdit}
+        onPromotionUpdated={handlePromotionUpdated}
+      />
       
       <PromotionDetailsModal 
         open={detailsOpen} 

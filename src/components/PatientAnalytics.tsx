@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, FunnelChart, Funnel, LabelList } from "recharts";
 import { Users, TrendingUp, TrendingDown, Heart, AlertTriangle, Clock, DollarSign, Target } from "lucide-react";
 import { useState } from "react";
+import PatientDetailsModal from "./PatientDetailsModal";
 
 const PatientAnalytics = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState("6m");
@@ -450,7 +451,7 @@ const PatientAnalytics = () => {
                         </td>
                         <td className="p-4 text-right">{treatment.satisfaction}/5.0</td>
                         <td className="p-4 text-right">
-                          <Button variant="outline" size="sm" onClick={() => handleViewDetails(treatment.treatment)}>View Details</Button>
+                          <Button variant="outline" size="sm" onClick={() => handleViewPatient(treatment)}>View Details</Button>
                         </td>
                       </tr>
                     ))}
@@ -461,6 +462,12 @@ const PatientAnalytics = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      
+      <PatientDetailsModal 
+        open={detailsOpen} 
+        onOpenChange={setDetailsOpen} 
+        patient={selectedPatient} 
+      />
     </div>
   );
 };
