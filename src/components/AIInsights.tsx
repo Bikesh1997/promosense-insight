@@ -3,9 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { Brain, TrendingUp, Target, Users, DollarSign, AlertTriangle, CheckCircle, Clock, Lightbulb, Zap } from "lucide-react";
+import { Brain, TrendingUp, Target, Users, DollarSign, AlertTriangle, CheckCircle, Clock, Lightbulb, Zap, Filter } from "lucide-react";
 
 const AIInsights = () => {
   const { toast } = useToast();
@@ -14,6 +15,20 @@ const AIInsights = () => {
     toast({
       title: "AI Configuration",
       description: "Opening AI engine configuration panel...",
+    });
+  };
+
+  const handleSentimentInsights = () => {
+    toast({
+      title: "Sentiment Insights",
+      description: "Opening detailed sentiment analysis dashboard...",
+    });
+  };
+
+  const handlePatientAnalyticsFilter = (value: string) => {
+    toast({
+      title: "Filter Applied",
+      description: `Filtering patient analytics by: ${value}`,
     });
   };
 
@@ -226,7 +241,7 @@ const AIInsights = () => {
             <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
             <span className="text-sm font-medium text-success">AI Engine Active</span>
           </div>
-          <Button>Configure AI Settings</Button>
+          <Button onClick={handleConfigureAI}>Configure AI Settings</Button>
         </div>
       </div>
 
@@ -446,8 +461,29 @@ const AIInsights = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Rep-Patient Sentiment Analysis</CardTitle>
-                <p className="text-sm text-muted-foreground">AI analysis of interaction sentiment scores</p>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle>Rep-Patient Sentiment Analysis</CardTitle>
+                    <p className="text-sm text-muted-foreground">AI analysis of interaction sentiment scores</p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Select onValueChange={handlePatientAnalyticsFilter}>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Filter by timeframe" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="last_week">Last Week</SelectItem>
+                        <SelectItem value="last_month">Last Month</SelectItem>
+                        <SelectItem value="last_quarter">Last Quarter</SelectItem>
+                        <SelectItem value="all_time">All Time</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button variant="outline" size="sm" onClick={handleSentimentInsights}>
+                      <Filter className="h-4 w-4 mr-2" />
+                      Sentiment Insights
+                    </Button>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
