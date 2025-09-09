@@ -563,7 +563,7 @@ const LeadRouting = () => {
                 </div>
                 <div className="mt-6 space-y-3">
                   <div className="flex justify-between items-center text-sm">
-                    <span>< 5 minutes</span>
+                    <span>{"< 5 minutes"}</span>
                     <Badge className="bg-success/10 text-success border-success/20">67%</Badge>
                   </div>
                   <div className="flex justify-between items-center text-sm">
@@ -571,7 +571,7 @@ const LeadRouting = () => {
                     <Badge className="bg-warning/10 text-warning border-warning/20">23%</Badge>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span>> 15 minutes</span>
+                    <span>{"> 15 minutes"}</span>
                     <Badge className="bg-destructive/10 text-destructive border-destructive/20">10%</Badge>
                   </div>
                 </div>
