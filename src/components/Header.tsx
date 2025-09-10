@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Bell, Search, Settings, User, X } from "lucide-react";
+import { Bell, Search, User, X } from "lucide-react";
+import AllerganLogo from "./AllerganLogo";
 
 interface HeaderProps {
   onNavigate?: (view: string) => void;
@@ -24,17 +25,6 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
     setNotificationsOpen(true);
   };
 
-  const handleSettings = () => {
-    if (onNavigate) {
-      onNavigate('settings');
-    } else {
-      toast({
-        title: "Settings",
-        description: "Opening settings panel...",
-      });
-    }
-  };
-
   const handleProfile = () => {
     toast({
       title: "Profile",
@@ -52,17 +42,9 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
     <header className="bg-card border-b border-border sticky top-0 z-50">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-primary-foreground rounded-sm"></div>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-primary">PromoSense</h1>
-              <p className="text-xs text-muted-foreground">Allergan Aesthetics</p>
-            </div>
-          </div>
+          <AllerganLogo />
           <Badge variant="secondary" className="ml-4">
-            AI-Powered Analytics
+            PromoSense - AI Analytics Platform
           </Badge>
         </div>
 
@@ -110,9 +92,6 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
             </DialogContent>
           </Dialog>
 
-          <Button variant="ghost" size="sm" onClick={handleSettings}>
-            <Settings className="h-4 w-4" />
-          </Button>
           <Button variant="ghost" size="sm" onClick={handleProfile}>
             <User className="h-4 w-4" />
           </Button>

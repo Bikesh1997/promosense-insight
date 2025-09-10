@@ -11,12 +11,10 @@ import PatientAnalytics from "@/components/PatientAnalytics";
 import AIInsights from "@/components/AIInsights";
 
 const Index = () => {
-  const [activeView, setActiveView] = useState('overview');
+  const [activeView, setActiveView] = useState('dashboard');
 
   const renderContent = () => {
     switch (activeView) {
-      case 'overview':
-        return <Hero onNavigate={setActiveView} />;
       case 'dashboard':
         return (
           <div className="p-6">
@@ -45,15 +43,16 @@ const Index = () => {
             <AIInsights />
           </div>
         );
-      case 'settings':
+      default:
         return (
           <div className="p-6">
-            <h2 className="text-3xl font-bold mb-6">Settings</h2>
-            <p className="text-muted-foreground">Coming soon - Platform configuration and preferences</p>
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold">Analytics Dashboard</h2>
+              <p className="text-muted-foreground">Real-time promotion effectiveness and patient acquisition insights</p>
+            </div>
+            <Dashboard />
           </div>
         );
-      default:
-        return <Hero />;
     }
   };
 

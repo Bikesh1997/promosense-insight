@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { BarChart3, Users, Target, Brain, Settings, Home } from "lucide-react";
+import { BarChart3, Users, Target, Brain } from "lucide-react";
 
 interface NavigationProps {
   activeView: string;
@@ -10,12 +10,10 @@ interface NavigationProps {
 
 const Navigation = ({ activeView, onViewChange }: NavigationProps) => {
   const navItems = [
-    { id: 'overview', label: 'Overview', icon: Home },
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'promotions', label: 'Promotions', icon: Target },
     { id: 'patients', label: 'Patients', icon: Users },
     { id: 'insights', label: 'AI Insights', icon: Brain },
-    { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   return (
