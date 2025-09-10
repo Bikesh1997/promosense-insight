@@ -92,14 +92,26 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
   const isCollapsed = state === 'collapsed';
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-sidebar-border h-full">
-      <SidebarContent className="bg-sidebar-background h-full">
-        <SidebarGroup className="px-4 py-6">
-          <SidebarGroupLabel className={`${isCollapsed ? "sr-only" : "px-4 py-3 text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider mb-2"}`}>
-            PromoSense Analytics Platform
+    <Sidebar 
+      collapsible="icon" 
+      className="border-r border-border bg-background shadow-sm"
+    >
+      <SidebarContent className="h-full">
+        {/* Header */}
+        <div className="p-4 border-b border-border">
+          <SidebarGroupLabel className={`${
+            isCollapsed 
+              ? "sr-only" 
+              : "text-sm font-semibold text-muted-foreground uppercase tracking-wide"
+          }`}>
+            Navigation
           </SidebarGroupLabel>
-          <SidebarGroupContent className="mt-4">
-            <SidebarMenu className="space-y-2">
+        </div>
+
+        {/* Navigation Items */}
+        <SidebarGroup className="flex-1 p-2">
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
               {sidebarItems.map((item) => {
                 const isActive = activeView === item.id;
                 return (
@@ -107,56 +119,56 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
                     <SidebarMenuButton
                       onClick={() => onViewChange(item.id)}
                       className={`
-                        group relative cursor-pointer rounded-xl transition-all duration-200 ease-out
-                        ${isCollapsed ? 'p-4 justify-center' : 'p-4 justify-start'}
+                        group relative w-full transition-all duration-200
+                        ${isCollapsed ? 'p-3 justify-center' : 'p-3 justify-start'}
                         ${isActive 
-                          ? "bg-primary text-primary-foreground shadow-lg border border-primary/20" 
-                          : "hover:bg-accent/60 text-sidebar-foreground hover:text-accent-foreground border border-transparent hover:border-accent/30"
+                          ? "bg-primary text-primary-foreground shadow-sm" 
+                          : "hover:bg-accent hover:text-accent-foreground"
                         }
+                        rounded-lg
                       `}
+                      data-tooltip={isCollapsed ? item.title : undefined}
                     >
-                      <div className="flex items-center space-x-4 min-w-0 flex-1">
+                      <div className="flex items-center w-full">
                         <item.icon className={`
-                          h-6 w-6 flex-shrink-0 transition-transform duration-200
+                          h-5 w-5 flex-shrink-0 transition-transform duration-200
                           ${isActive ? 'scale-110' : 'group-hover:scale-105'}
                         `} />
+                        
                         {!isCollapsed && (
-                          <div className="flex-1 min-w-0 px-2">
-                            <div className="flex items-center justify-between">
-                              <div className="min-w-0 flex-1">
-                                <div className={`
-                                  font-semibold text-base leading-none truncate mb-1
-                                  ${isActive ? 'text-primary-foreground' : ''}
-                                `}>
-                                  {item.title}
-                                </div>
-                                <div className={`
-                                  text-sm truncate leading-relaxed
-                                  ${isActive 
-                                    ? 'text-primary-foreground/85' 
-                                    : 'text-sidebar-foreground/70 group-hover:text-accent-foreground/80'
-                                  }
-                                `}>
-                                  {item.subtitle}
-                                </div>
+                          <div className="flex-1 flex items-center justify-between ml-3 min-w-0">
+                            <div className="min-w-0 flex-1">
+                              <div className="font-medium text-sm truncate">
+                                {item.title}
                               </div>
-                              <div className="flex items-center space-x-3 flex-shrink-0 ml-4">
-                                {item.badge && (
-                                  <Badge 
-                                    variant={item.badge === "AI" ? "default" : "secondary"} 
-                                    className="text-xs px-2 py-1 h-6 font-medium"
-                                  >
-                                    {item.badge}
-                                  </Badge>
-                                )}
-                                <ChevronRight className={`
-                                  h-4 w-4 transition-all duration-200
-                                  ${isActive 
-                                    ? 'text-primary-foreground/80 rotate-90' 
-                                    : 'text-sidebar-foreground/50 group-hover:text-accent-foreground/70 group-hover:rotate-90'
-                                  }
-                                `} />
+                              <div className={`
+                                text-xs truncate mt-0.5
+                                ${isActive 
+                                  ? 'text-primary-foreground/80' 
+                                  : 'text-muted-foreground'
+                                }
+                              `}>
+                                {item.subtitle}
                               </div>
+                            </div>
+                            
+                            <div className="flex items-center space-x-2 ml-2">
+                              {item.badge && (
+                                <Badge 
+                                  variant={item.badge === "AI" ? "default" : "secondary"} 
+                                  className="text-xs px-2 py-0.5 h-5"
+                                >
+                                  {item.badge}
+                                </Badge>
+                              )}
+                              <ChevronRight className={`
+                                h-3 w-3 transition-transform duration-200
+                                ${isActive ? 'rotate-90' : 'group-hover:rotate-90'}
+                                ${isActive 
+                                  ? 'text-primary-foreground/70' 
+                                  : 'text-muted-foreground'
+                                }
+                              `} />
                             </div>
                           </div>
                         )}
@@ -164,25 +176,7 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
                       
                       {/* Active indicator */}
                       {isActive && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-primary-foreground rounded-r-full" />
-                      )}
-                      
-                      {/* Tooltip for collapsed state */}
-                      {isCollapsed && (
-                        <div className="
-                          absolute left-full ml-3 px-4 py-3 bg-popover text-popover-foreground 
-                          rounded-lg shadow-lg border opacity-0 pointer-events-none
-                          group-hover:opacity-100 transition-opacity duration-200 z-50
-                          whitespace-nowrap text-sm min-w-max
-                        ">
-                          <div className="font-semibold mb-1">{item.title}</div>
-                          <div className="text-xs text-muted-foreground">{item.subtitle}</div>
-                          {item.badge && (
-                            <Badge variant="outline" className="mt-1 text-xs">
-                              {item.badge}
-                            </Badge>
-                          )}
-                        </div>
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary-foreground rounded-r-full" />
                       )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -192,16 +186,16 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
           </SidebarGroupContent>
         </SidebarGroup>
         
-        {/* Footer with branding */}
+        {/* Footer */}
         {!isCollapsed && (
-          <div className="mt-auto p-6 border-t border-sidebar-border bg-sidebar-background/50">
-            <div className="flex items-center space-x-4 px-2">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                <div className="w-5 h-5 bg-primary-foreground rounded-sm"></div>
+          <div className="p-4 border-t border-border bg-muted/30">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-4 h-4 bg-primary-foreground rounded opacity-90"></div>
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-base font-semibold text-sidebar-foreground">PromoSense</div>
-                <div className="text-sm text-sidebar-foreground/70">Allergan Aesthetics</div>
+                <div className="text-sm font-semibold">PromoSense</div>
+                <div className="text-xs text-muted-foreground">Allergan Aesthetics</div>
               </div>
             </div>
           </div>
