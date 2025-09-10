@@ -43,15 +43,18 @@ const Index = () => {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background flex w-full">
-        <AppSidebar activeView={activeView} onViewChange={setActiveView} />
-        <div className="flex-1 flex flex-col">
-          <header className="h-16 flex items-center border-b px-4 bg-card shadow-sm">
-            <SidebarTrigger className="hover-scale" />
-            <div className="flex-1">
-              <Header onNavigate={setActiveView} activeView={activeView} />
-            </div>
-          </header>
+      <div className="min-h-screen bg-background flex flex-col w-full">
+        {/* Full-width header */}
+        <header className="h-16 flex items-center border-b px-4 bg-card shadow-sm w-full">
+          <SidebarTrigger className="hover-scale" />
+          <div className="flex-1">
+            <Header onNavigate={setActiveView} activeView={activeView} />
+          </div>
+        </header>
+        
+        {/* Content area with sidebar */}
+        <div className="flex-1 flex w-full">
+          <AppSidebar activeView={activeView} onViewChange={setActiveView} />
           <main className="flex-1 p-6 overflow-auto bg-background">
             {renderContent()}
           </main>
