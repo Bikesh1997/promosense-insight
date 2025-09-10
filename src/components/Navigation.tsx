@@ -11,8 +11,9 @@ interface NavigationProps {
 const Navigation = ({ activeView, onViewChange }: NavigationProps) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'promotions', label: 'Promotions', icon: Target },
-    { id: 'patients', label: 'Patients', icon: Users },
+    { id: 'strategies', label: 'Strategies', icon: Target },
+    { id: 'funnel', label: 'Funnel Analysis', icon: Users },
+    { id: 'data-hub', label: 'Data Hub', icon: Brain },
     { id: 'insights', label: 'AI Insights', icon: Brain },
   ];
 

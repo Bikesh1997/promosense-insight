@@ -6,8 +6,9 @@ import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Dashboard from "@/components/Dashboard";
-import PromotionManagement from "@/components/PromotionManagement";
-import PatientAnalytics from "@/components/PatientAnalytics";
+import PromotionStrategies from "@/components/PromotionStrategies";
+import FunnelLeakageAnalysis from "@/components/FunnelLeakageAnalysis";
+import DataIntegrationHub from "@/components/DataIntegrationHub";
 import AIInsights from "@/components/AIInsights";
 
 const Index = () => {
@@ -25,16 +26,22 @@ const Index = () => {
             <Dashboard />
           </div>
         );
-      case 'promotions':
+      case 'strategies':
         return (
           <div className="p-6">
-            <PromotionManagement />
+            <PromotionStrategies />
           </div>
         );
-      case 'patients':
+      case 'funnel':
         return (
           <div className="p-6">
-            <PatientAnalytics />
+            <FunnelLeakageAnalysis />
+          </div>
+        );
+      case 'data-hub':
+        return (
+          <div className="p-6">
+            <DataIntegrationHub />
           </div>
         );
       case 'insights':
