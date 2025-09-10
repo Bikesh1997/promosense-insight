@@ -46,13 +46,13 @@ const Index = () => {
       <div className="min-h-screen bg-background flex w-full">
         <AppSidebar activeView={activeView} onViewChange={setActiveView} />
         <div className="flex-1 flex flex-col">
-          <header className="h-16 flex items-center border-b px-4">
-            <SidebarTrigger />
+          <header className="h-16 flex items-center border-b px-4 bg-card shadow-sm">
+            <SidebarTrigger className="hover-scale" />
             <div className="flex-1">
               <Header onNavigate={setActiveView} activeView={activeView} />
             </div>
           </header>
-          <main className="flex-1 p-6 overflow-auto">
+          <main className="flex-1 p-6 overflow-auto bg-background">
             {renderContent()}
           </main>
         </div>

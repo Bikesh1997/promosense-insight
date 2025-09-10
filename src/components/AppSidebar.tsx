@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import { 
   Sidebar,
   SidebarContent,
@@ -19,49 +18,67 @@ import {
   BarChart3, 
   Users, 
   Smartphone, 
-  Settings 
+  Settings,
+  ChevronRight
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const sidebarItems = [
   {
-    title: "Promotion Effectiveness Tracking",
+    title: "Promotion Effectiveness",
+    subtitle: "8-strategy ROI analysis",
     id: "strategies",
-    icon: Target
+    icon: Target,
+    badge: "New"
   },
   {
     title: "Funnel Leakage Analysis", 
+    subtitle: "Patient journey insights",
     id: "funnel",
-    icon: TrendingDown
+    icon: TrendingDown,
+    badge: null
   },
   {
     title: "Data Integration Hub",
+    subtitle: "Pipeline monitoring",
     id: "data-hub", 
-    icon: Database
+    icon: Database,
+    badge: null
   },
   {
-    title: "AI Insights / Force Multiplier",
+    title: "AI Force Multiplier",
+    subtitle: "Intelligent recommendations",
     id: "insights",
-    icon: Brain
+    icon: Brain,
+    badge: "AI"
   },
   {
     title: "Executive Dashboard",
+    subtitle: "Strategic overview",
     id: "executive",
-    icon: BarChart3
+    icon: BarChart3,
+    badge: null
   },
   {
-    title: "Sales Manager Dashboard", 
+    title: "Sales Manager Hub", 
+    subtitle: "Team performance",
     id: "manager",
-    icon: Users
+    icon: Users,
+    badge: null
   },
   {
-    title: "Rep Dashboard (Mobile-First)",
+    title: "Rep Dashboard",
+    subtitle: "Mobile-optimized",
     id: "rep",
-    icon: Smartphone
+    icon: Smartphone,
+    badge: null
   },
   {
-    title: "System Admin / Data Quality Monitor",
+    title: "System Admin",
+    subtitle: "Data quality monitor",
     id: "admin",
-    icon: Settings
+    icon: Settings,
+    badge: null
   }
 ];
 
@@ -75,34 +92,115 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
   const isCollapsed = state === 'collapsed';
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>
-            PromoSense Dashboards
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+      <SidebarContent className="bg-sidebar-background">
+        <SidebarGroup className="px-3 py-4">
+          <SidebarGroupLabel className={`${isCollapsed ? "sr-only" : "px-3 py-2 text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider"}`}>
+            PromoSense Analytics
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {sidebarItems.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    onClick={() => onViewChange(item.id)}
-                    className={`cursor-pointer ${
-                      activeView === item.id 
-                        ? "bg-primary text-primary-foreground font-medium" 
-                        : "hover:bg-muted/50"
-                    }`}
-                  >
-                    <item.icon className="h-4 w-4 flex-shrink-0" />
-                    {!isCollapsed && (
-                      <span className="text-sm leading-tight">{item.title}</span>
-                    )}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+          <SidebarGroupContent className="mt-2">
+            <SidebarMenu className="space-y-1">
+              {sidebarItems.map((item) => {
+                const isActive = activeView === item.id;
+                return (
+                  <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton
+                      onClick={() => onViewChange(item.id)}
+                      className={`
+                        group relative cursor-pointer rounded-lg transition-all duration-200 ease-out
+                        ${isCollapsed ? 'p-3 justify-center' : 'p-3 justify-start'}
+                        ${isActive 
+                          ? "bg-primary text-primary-foreground shadow-sm" 
+                          : "hover:bg-accent text-sidebar-foreground hover:text-accent-foreground"
+                        }
+                      `}
+                    >
+                      <div className="flex items-center space-x-3 min-w-0 flex-1">
+                        <item.icon className={`
+                          h-5 w-5 flex-shrink-0 transition-transform duration-200
+                          ${isActive ? 'scale-110' : 'group-hover:scale-105'}
+                        `} />
+                        {!isCollapsed && (
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <div className="min-w-0 flex-1">
+                                <div className={`
+                                  font-medium text-sm leading-none truncate
+                                  ${isActive ? 'text-primary-foreground' : ''}
+                                `}>
+                                  {item.title}
+                                </div>
+                                <div className={`
+                                  text-xs mt-1 truncate
+                                  ${isActive 
+                                    ? 'text-primary-foreground/80' 
+                                    : 'text-sidebar-foreground/60 group-hover:text-accent-foreground/70'
+                                  }
+                                `}>
+                                  {item.subtitle}
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-2 flex-shrink-0 ml-2">
+                                {item.badge && (
+                                  <Badge 
+                                    variant={item.badge === "AI" ? "default" : "secondary"} 
+                                    className="text-xs px-1.5 py-0.5 h-5"
+                                  >
+                                    {item.badge}
+                                  </Badge>
+                                )}
+                                <ChevronRight className={`
+                                  h-3 w-3 transition-all duration-200
+                                  ${isActive 
+                                    ? 'text-primary-foreground/70 rotate-90' 
+                                    : 'text-sidebar-foreground/40 group-hover:text-accent-foreground/60 group-hover:rotate-90'
+                                  }
+                                `} />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Active indicator */}
+                      {isActive && (
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary-foreground rounded-r-full" />
+                      )}
+                      
+                      {/* Tooltip for collapsed state */}
+                      {isCollapsed && (
+                        <div className="
+                          absolute left-full ml-2 px-3 py-2 bg-popover text-popover-foreground 
+                          rounded-md shadow-md border opacity-0 pointer-events-none
+                          group-hover:opacity-100 transition-opacity duration-200 z-50
+                          whitespace-nowrap text-sm
+                        ">
+                          <div className="font-medium">{item.title}</div>
+                          <div className="text-xs text-muted-foreground">{item.subtitle}</div>
+                        </div>
+                      )}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        
+        {/* Footer with branding */}
+        {!isCollapsed && (
+          <div className="mt-auto p-4 border-t border-sidebar-border">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-4 h-4 bg-primary-foreground rounded-sm"></div>
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-medium text-sidebar-foreground">PromoSense</div>
+                <div className="text-xs text-sidebar-foreground/60">Allergan Aesthetics</div>
+              </div>
+            </div>
+          </div>
+        )}
       </SidebarContent>
     </Sidebar>
   );
