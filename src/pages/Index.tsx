@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -46,7 +45,6 @@ const Index = () => {
       <div className="min-h-screen bg-background w-full">
         {/* Fixed header at top */}
         <header className="fixed top-0 left-0 right-0 h-24 flex items-center border-b px-4 bg-card shadow-sm z-50">
-          <SidebarTrigger />
           <div className="flex-1">
             <Header onNavigate={setActiveView} activeView={activeView} />
           </div>
