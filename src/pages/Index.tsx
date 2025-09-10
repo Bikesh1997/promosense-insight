@@ -1,75 +1,58 @@
 import { useState } from "react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/Header";
-import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
+import { AppSidebar } from "@/components/AppSidebar";
 import Dashboard from "@/components/Dashboard";
 import PromotionStrategies from "@/components/PromotionStrategies";
 import FunnelLeakageAnalysis from "@/components/FunnelLeakageAnalysis";
 import DataIntegrationHub from "@/components/DataIntegrationHub";
+import ExecutiveDashboard from "@/components/ExecutiveDashboard";
+import SalesManagerDashboard from "@/components/SalesManagerDashboard";
+import RepDashboard from "@/components/RepDashboard";
+import SystemAdminDashboard from "@/components/SystemAdminDashboard";
 import AIInsights from "@/components/AIInsights";
 
 const Index = () => {
-  const [activeView, setActiveView] = useState('dashboard');
+  const [activeView, setActiveView] = useState('executive');
 
   const renderContent = () => {
     switch (activeView) {
-      case 'dashboard':
-        return (
-          <div className="p-6">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold">Analytics Dashboard</h2>
-              <p className="text-muted-foreground">Real-time promotion effectiveness and patient acquisition insights</p>
-            </div>
-            <Dashboard />
-          </div>
-        );
       case 'strategies':
-        return (
-          <div className="p-6">
-            <PromotionStrategies />
-          </div>
-        );
+        return <PromotionStrategies />;
       case 'funnel':
-        return (
-          <div className="p-6">
-            <FunnelLeakageAnalysis />
-          </div>
-        );
+        return <FunnelLeakageAnalysis />;
       case 'data-hub':
-        return (
-          <div className="p-6">
-            <DataIntegrationHub />
-          </div>
-        );
+        return <DataIntegrationHub />;
       case 'insights':
-        return (
-          <div className="p-6">
-            <AIInsights />
-          </div>
-        );
+        return <AIInsights />;
+      case 'executive':
+        return <ExecutiveDashboard />;
+      case 'manager':
+        return <SalesManagerDashboard />;
+      case 'rep':
+        return <RepDashboard />;
+      case 'admin':
+        return <SystemAdminDashboard />;
       default:
-        return (
-          <div className="p-6">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold">Analytics Dashboard</h2>
-              <p className="text-muted-foreground">Real-time promotion effectiveness and patient acquisition insights</p>
-            </div>
-            <Dashboard />
-          </div>
-        );
+        return <ExecutiveDashboard />;
     }
   };
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background">
-        <Header onNavigate={setActiveView} activeView={activeView} />
-        <div className="flex">
-          <Navigation activeView={activeView} onViewChange={setActiveView} />
-          <main className="flex-1">
+      <div className="min-h-screen bg-background flex w-full">
+        <AppSidebar activeView={activeView} onViewChange={setActiveView} />
+        <div className="flex-1 flex flex-col">
+          <header className="h-16 flex items-center border-b px-4">
+            <SidebarTrigger />
+            <div className="flex-1">
+              <Header onNavigate={setActiveView} activeView={activeView} />
+            </div>
+          </header>
+          <main className="flex-1 p-6 overflow-auto">
             {renderContent()}
           </main>
         </div>
