@@ -94,11 +94,11 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
   return (
     <Sidebar 
       collapsible="icon" 
-      className="border-r border-border bg-background shadow-sm"
+      className="border-r border-border bg-background shadow-sm mt-2 mb-2 ml-2 rounded-lg"
     >
-      <SidebarContent className="h-full">
+      <SidebarContent className="h-full p-4">
         {/* Header */}
-        <div className="p-4 border-b border-border">
+        <div className="pb-4 mb-4 border-b border-border">
           <SidebarGroupLabel className={`${
             isCollapsed 
               ? "sr-only" 
@@ -109,9 +109,9 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
         </div>
 
         {/* Navigation Items */}
-        <SidebarGroup className="flex-1 p-2">
+        <SidebarGroup className="flex-1">
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
+            <SidebarMenu className="space-y-2">
               {sidebarItems.map((item) => {
                 const isActive = activeView === item.id;
                 return (
@@ -188,7 +188,7 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
         
         {/* Footer */}
         {!isCollapsed && (
-          <div className="p-4 border-t border-border bg-muted/30">
+          <div className="mt-4 pt-4 border-t border-border bg-muted/30 rounded-lg p-4">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
                 <div className="w-4 h-4 bg-primary-foreground rounded opacity-90"></div>
