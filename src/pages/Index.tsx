@@ -13,13 +13,13 @@ import SalesManagerDashboard from "@/components/SalesManagerDashboard";
 import RepDashboard from "@/components/RepDashboard";
 import SystemAdminDashboard from "@/components/SystemAdminDashboard";
 import AIInsights from "@/components/AIInsights";
-import AlleLoyaltyDashboard from "@/components/AlleLoyaltyDashboard";
 
 const Index = () => {
   const [activeView, setActiveView] = useState('executive');
 
   const renderContent = () => {
     switch (activeView) {
+      case 'alle-loyalty':
       case 'strategies':
         return <PromotionStrategies />;
       case 'funnel':
@@ -28,8 +28,6 @@ const Index = () => {
         return <DataIntegrationHub />;
       case 'insights':
         return <AIInsights />;
-      case 'alle-loyalty':
-        return <AlleLoyaltyDashboard />;
       case 'executive':
         return <ExecutiveDashboard />;
       case 'manager':

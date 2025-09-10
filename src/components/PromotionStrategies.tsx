@@ -4,10 +4,77 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { TrendingUp, Users, DollarSign, Target, Gift, UserPlus, Calendar, Award } from 'lucide-react';
 
 const PromotionStrategies = () => {
   const [selectedStrategy, setSelectedStrategy] = useState('alle-loyalty');
+
+  // Dashboard data for each promotion type
+  const getDashboardData = (strategy: string) => {
+    const baseData = {
+      offers: [
+        { id: 101, name: 'Botox Welcome Reward', type: 'Discount', startDate: '09/01/2025', endDate: '09/30/2025', cost: 5000, status: 'Active' },
+        { id: 102, name: 'Juvederm Points Boost', type: 'Points', startDate: '08/15/2025', endDate: '09/15/2025', cost: 3000, status: 'Ended' },
+        { id: 103, name: 'Latisse Referral Bonus', type: 'Discount', startDate: '07/01/2025', endDate: '12/31/2025', cost: 2500, status: 'Active' }
+      ],
+      roiData: [
+        { id: 101, newPatients: 120, revenue: 18000, cost: 5000, roi: 260 },
+        { id: 102, newPatients: 80, revenue: 12000, cost: 3000, roi: 300 },
+        { id: 103, newPatients: 200, revenue: 30000, cost: 2500, roi: 1100 }
+      ],
+      channelData: [
+        { name: 'App / Digital', value: 55, color: 'hsl(var(--primary))' },
+        { name: 'In-Clinic', value: 30, color: 'hsl(var(--secondary))' },
+        { name: 'Rep-Driven', value: 15, color: 'hsl(var(--accent))' }
+      ],
+      funnelData: [
+        { step: 'Total Enrolled', value: 1500, percentage: 100 },
+        { step: 'Points Earned', value: 1350, percentage: 90 },
+        { step: 'Points Redeemed', value: 950, percentage: 63 },
+        { step: 'First Treatment', value: 800, percentage: 53 },
+        { step: 'Repeat Treatments', value: 400, percentage: 27 }
+      ],
+      topPatients: [
+        { name: 'Emily Johnson', pointsRedeemed: 450, treatments: 5, revenue: 4500 },
+        { name: 'Michael Smith', pointsRedeemed: 300, treatments: 3, revenue: 3000 },
+        { name: 'Sophia Williams', pointsRedeemed: 500, treatments: 6, revenue: 6000 }
+      ]
+    };
+
+    // Customize data based on strategy
+    switch (strategy) {
+      case 'refer-friend':
+        return {
+          ...baseData,
+          offers: baseData.offers.map(offer => ({
+            ...offer,
+            name: offer.name.replace('Botox', 'Referral').replace('Juvederm', 'Friend Bonus').replace('Latisse', 'Share & Save')
+          })),
+          channelData: [
+            { name: 'Social Media', value: 45, color: 'hsl(var(--primary))' },
+            { name: 'Direct Referral', value: 35, color: 'hsl(var(--secondary))' },
+            { name: 'Email Campaign', value: 20, color: 'hsl(var(--accent))' }
+          ]
+        };
+      case 'branded-events':
+        return {
+          ...baseData,
+          offers: baseData.offers.map(offer => ({
+            ...offer,
+            name: offer.name.replace('Botox', 'Holiday Special').replace('Juvederm', 'Summer Glow').replace('Latisse', 'Spring Refresh')
+          })),
+          channelData: [
+            { name: 'Event Registration', value: 50, color: 'hsl(var(--primary))' },
+            { name: 'Social Media', value: 30, color: 'hsl(var(--secondary))' },
+            { name: 'Email Invites', value: 20, color: 'hsl(var(--accent))' }
+          ]
+        };
+      default:
+        return baseData;
+    }
+  };
 
   const strategies = {
     'alle-loyalty': {
@@ -347,6 +414,173 @@ const PromotionStrategies = () => {
                       </>
                     )}
                   </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Dashboard Analytics Section */}
+            <div className="space-y-6 mt-8">
+              <h3 className="text-2xl font-bold">Campaign Analytics Dashboard</h3>
+              
+              {/* Offer List Table */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Active Campaigns</CardTitle>
+                  <CardDescription>Track all promotion campaigns and their status</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Offer ID</TableHead>
+                        <TableHead>Campaign Name</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Start Date</TableHead>
+                        <TableHead>End Date</TableHead>
+                        <TableHead>Cost ($)</TableHead>
+                        <TableHead>Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {getDashboardData(key).offers.map((offer) => (
+                        <TableRow key={offer.id}>
+                          <TableCell className="font-medium">{offer.id}</TableCell>
+                          <TableCell>{offer.name}</TableCell>
+                          <TableCell>
+                            <Badge variant={offer.type === 'Discount' ? 'default' : 'secondary'}>
+                              {offer.type}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{offer.startDate}</TableCell>
+                          <TableCell>{offer.endDate}</TableCell>
+                          <TableCell>${offer.cost.toLocaleString()}</TableCell>
+                          <TableCell>
+                            <Badge variant={offer.status === 'Active' ? 'default' : offer.status === 'Ended' ? 'destructive' : 'secondary'}>
+                              {offer.status}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+
+              {/* Charts and ROI Section */}
+              <div className="grid lg:grid-cols-2 gap-6">
+                {/* Channel Attribution */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Channel Attribution</CardTitle>
+                    <CardDescription>Patient acquisition by channel</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-[300px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={getDashboardData(key).channelData}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                            label={({ name, value }) => `${name}: ${value}%`}
+                          >
+                            {getDashboardData(key).channelData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* ROI Performance Table */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Campaign ROI Performance</CardTitle>
+                    <CardDescription>Revenue and ROI metrics by campaign</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Campaign</TableHead>
+                          <TableHead>New Patients</TableHead>
+                          <TableHead>Revenue</TableHead>
+                          <TableHead>ROI (%)</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {getDashboardData(key).roiData.map((item) => (
+                          <TableRow key={item.id}>
+                            <TableCell className="font-medium">{item.id}</TableCell>
+                            <TableCell>{item.newPatients}</TableCell>
+                            <TableCell>${item.revenue.toLocaleString()}</TableCell>
+                            <TableCell>
+                              <Badge variant={item.roi > 500 ? 'default' : item.roi > 200 ? 'secondary' : 'outline'}>
+                                {item.roi}%
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Patient Funnel */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Patient Journey Funnel</CardTitle>
+                  <CardDescription>Track patient progression through the campaign funnel</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={getDashboardData(key).funnelData} layout="horizontal">
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis dataKey="step" type="category" width={100} />
+                        <Tooltip />
+                        <Bar dataKey="value" fill="hsl(var(--primary))" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Top Patients */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Top Performing Patients</CardTitle>
+                  <CardDescription>High-value patients based on points and treatments</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Patient Name</TableHead>
+                        <TableHead>Points Redeemed</TableHead>
+                        <TableHead>Treatments</TableHead>
+                        <TableHead>Total Revenue</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {getDashboardData(key).topPatients.map((patient, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium">{patient.name}</TableCell>
+                          <TableCell>{patient.pointsRedeemed}</TableCell>
+                          <TableCell>{patient.treatments}</TableCell>
+                          <TableCell>${patient.revenue.toLocaleString()}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </CardContent>
               </Card>
             </div>
