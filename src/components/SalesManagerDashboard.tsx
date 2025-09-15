@@ -1,35 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Progress } from '@/components/ui/progress';
-import { AlertTriangle, TrendingUp, Users, Target, Phone, Mail, Settings } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { AlertTriangle, TrendingUp, Users, Target, Phone, Mail, Settings, Search, Calendar, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 
 const SalesManagerDashboard = () => {
-  const handleInvestigateClinic = (clinicName: string, leakage: number, stage: string) => {
-    toast.success(`Investigation initiated for ${clinicName}`, {
-      description: `Analyzing ${leakage}% leakage at stage: ${stage}. Detailed report will be generated with recommended actions.`
-    });
+  const [investigateModalOpen, setInvestigateModalOpen] = useState(false);
+  const [callModalOpen, setCallModalOpen] = useState(false);
+  const [messageModalOpen, setMessageModalOpen] = useState(false);
+  const [optimizeModalOpen, setOptimizeModalOpen] = useState(false);
+  const [selectedClinic, setSelectedClinic] = useState(null);
+  const [selectedRep, setSelectedRep] = useState(null);
+  const [callNotes, setCallNotes] = useState('');
+  const [messageContent, setMessageContent] = useState('');
+
+  const handleInvestigateClinic = (clinic) => {
+    setSelectedClinic(clinic);
+    setInvestigateModalOpen(true);
   };
 
   const handleCallRep = (repName: string, clinic: string) => {
-    toast.success(`Calling ${repName}`, {
-      description: `Initiating call to discuss ${clinic} performance improvement strategies.`
-    });
+    setSelectedRep({ name: repName, clinic });
+    setCallModalOpen(true);
   };
 
   const handleMessageRep = (repName: string, clinic: string) => {
-    toast.success(`Message sent to ${repName}`, {
-      description: `Urgent performance improvement message sent regarding ${clinic}.`
-    });
+    setSelectedRep({ name: repName, clinic });
+    setMessageModalOpen(true);
   };
 
   const handleOptimizeRep = (repName: string, conversion: number) => {
-    toast.success(`Optimization plan activated for ${repName}`, {
-      description: `Performance improvement plan created to boost ${conversion}% conversion rate with targeted training and support.`
-    });
+    setSelectedRep({ name: repName, conversion });
+    setOptimizeModalOpen(true);
+  };
+
+  const submitCall = () => {
+    toast.success(`Call completed with ${selectedRep?.name}`);
+    setCallModalOpen(false);
+    setCallNotes('');
+  };
+
+  const submitMessage = () => {
+    toast.success(`Message sent to ${selectedRep?.name}`);
+    setMessageModalOpen(false);
+    setMessageContent('');
+  };
+
+  const submitOptimization = () => {
+    toast.success(`Optimization plan activated for ${selectedRep?.name}`);
+    setOptimizeModalOpen(false);
   };
   const regionalSummary = {
     northeast: { revenue: 4800000, patients: 1800, roi: 168, churnRisk: 22 },
@@ -129,7 +155,7 @@ const SalesManagerDashboard = () => {
                     <Button 
                       size="sm" 
                       variant="outline" 
-                      onClick={() => handleInvestigateClinic(clinic.clinic, clinic.leakage, clinic.stage)}
+                      onClick={() => handleInvestigateClinic(clinic)}
                     >
                       Investigate
                     </Button>
@@ -250,6 +276,165 @@ const SalesManagerDashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Investigation Modal */}
+      <Dialog open={investigateModalOpen} onOpenChange={setInvestigateModalOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Clinic Investigation: {selectedClinic?.clinic}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-3 border rounded">
+                <div className="text-sm text-muted-foreground">Leakage Rate</div>
+                <div className="text-xl font-bold text-destructive">{selectedClinic?.leakage}%</div>
+              </div>
+              <div className="p-3 border rounded">
+                <div className="text-sm text-muted-foreground">Problem Stage</div>
+                <div className="font-medium">{selectedClinic?.stage}</div>
+              </div>
+              <div className="p-3 border rounded">
+                <div className="text-sm text-muted-foreground">Revenue Risk</div>
+                <div className="font-bold">${selectedClinic?.revenue?.toLocaleString()}</div>
+              </div>
+              <div className="p-3 border rounded">
+                <div className="text-sm text-muted-foreground">Assigned Rep</div>
+                <div className="font-medium">{selectedClinic?.rep}</div>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <h4 className="font-medium mb-2">Investigation Findings:</h4>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• Patient follow-up rate 23% below target</li>
+                  <li>• Average response time: 4.2 hours (target: 2 hours)</li>
+                  <li>• Promotional email open rate: 34% (industry avg: 42%)</li>
+                  <li>• Treatment education materials not being distributed</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-medium mb-2">Recommended Actions:</h4>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• Implement automated follow-up system</li>
+                  <li>• Increase rep training on treatment benefits</li>
+                  <li>• Review and update promotional email templates</li>
+                  <li>• Schedule weekly check-ins with clinic staff</li>
+                </ul>
+              </div>
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setInvestigateModalOpen(false)}>Close</Button>
+              <Button onClick={() => {
+                toast.success('Investigation report generated and sent to stakeholders');
+                setInvestigateModalOpen(false);
+              }}>Generate Report</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Call Rep Modal */}
+      <Dialog open={callModalOpen} onOpenChange={setCallModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Call {selectedRep?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-3 bg-muted rounded">
+              <div className="text-sm text-muted-foreground">Regarding</div>
+              <div className="font-medium">{selectedRep?.clinic} Performance</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Call Notes</label>
+              <Textarea
+                value={callNotes}
+                onChange={(e) => setCallNotes(e.target.value)}
+                placeholder="Document key discussion points, action items, and next steps..."
+                rows={4}
+              />
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setCallModalOpen(false)}>Cancel</Button>
+              <Button onClick={submitCall}>Complete Call</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Message Rep Modal */}
+      <Dialog open={messageModalOpen} onOpenChange={setMessageModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Message {selectedRep?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-3 bg-muted rounded">
+              <div className="text-sm text-muted-foreground">Subject</div>
+              <div className="font-medium">Performance Improvement - {selectedRep?.clinic}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Message</label>
+              <Textarea
+                value={messageContent}
+                onChange={(e) => setMessageContent(e.target.value)}
+                placeholder="Hi [Rep Name], I wanted to discuss the performance metrics for [Clinic]..."
+                rows={5}
+              />
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setMessageModalOpen(false)}>Cancel</Button>
+              <Button onClick={submitMessage}>Send Message</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Optimize Rep Modal */}
+      <Dialog open={optimizeModalOpen} onOpenChange={setOptimizeModalOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Performance Optimization: {selectedRep?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-3 bg-destructive/10 border border-destructive/20 rounded">
+              <div className="text-sm text-destructive">Current Conversion Rate: {selectedRep?.conversion}%</div>
+              <div className="text-sm text-muted-foreground">Target: 70%+ conversion rate</div>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <h4 className="font-medium mb-2">Performance Analysis:</h4>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• Follow-up timing needs improvement</li>
+                  <li>• Product knowledge assessment required</li>
+                  <li>• Objection handling skills to develop</li>
+                  <li>• CRM usage optimization needed</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-medium mb-2">Optimization Plan:</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">1-on-1 Coaching Session</span>
+                    <Button size="sm" variant="outline">Schedule</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">Product Training Module</span>
+                    <Button size="sm" variant="outline">Assign</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">Shadow Top Performer</span>
+                    <Button size="sm" variant="outline">Arrange</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setOptimizeModalOpen(false)}>Cancel</Button>
+              <Button onClick={submitOptimization}>Activate Plan</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Funnel Drop-Off Analysis */}
       <Card>

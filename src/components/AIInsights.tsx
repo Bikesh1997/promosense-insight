@@ -5,9 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { Brain, TrendingUp, Target, Users, DollarSign, AlertTriangle, CheckCircle, Clock, Lightbulb, Zap, Filter } from "lucide-react";
+import { Brain, TrendingUp, Target, Users, DollarSign, AlertTriangle, CheckCircle, Clock, Lightbulb, Zap, Filter, Calendar, Rocket } from "lucide-react";
 import AIConfigModal from "./AIConfigModal";
 import RecommendationDetailsModal from "./RecommendationDetailsModal";
 
@@ -15,7 +18,14 @@ const AIInsights = () => {
   const { toast } = useToast();
   const [configModalOpen, setConfigModalOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [implementModalOpen, setImplementModalOpen] = useState(false);
+  const [learnMoreModalOpen, setLearnMoreModalOpen] = useState(false);
+  const [createCampaignModalOpen, setCreateCampaignModalOpen] = useState(false);
   const [selectedRecommendation, setSelectedRecommendation] = useState(null);
+  const [selectedOpportunity, setSelectedOpportunity] = useState(null);
+  const [scheduledDate, setScheduledDate] = useState('');
+  const [campaignName, setCampaignName] = useState('');
 
   const handleConfigureAI = () => {
     setConfigModalOpen(true);
@@ -40,18 +50,14 @@ const AIInsights = () => {
     setDetailsModalOpen(true);
   };
 
-  const handleSchedule = (recommendationId: number, title: string) => {
-    toast({
-      title: "Implementation Scheduled",
-      description: `${title} has been scheduled for next business day with stakeholder notifications sent.`,
-    });
+  const handleSchedule = (recommendation) => {
+    setSelectedRecommendation(recommendation);
+    setScheduleModalOpen(true);
   };
 
-  const handleImplementNow = (recommendationId: number, title: string) => {
-    toast({
-      title: "Implementation Started",
-      description: `${title} is being implemented immediately. Progress tracking activated.`,
-    });
+  const handleImplementNow = (recommendation) => {
+    setSelectedRecommendation(recommendation);
+    setImplementModalOpen(true);
   };
 
   const handleShareBestPractices = () => {
@@ -68,18 +74,15 @@ const AIInsights = () => {
     });
   };
 
-  const handleLearnMore = (opportunityTitle: string) => {
-    toast({
-      title: "Market Analysis Opened",
-      description: `Accessing comprehensive market research and competitive analysis for: ${opportunityTitle}`,
-    });
+  const handleLearnMore = (opportunity) => {
+    setSelectedOpportunity(opportunity);
+    setLearnMoreModalOpen(true);
   };
 
-  const handleCreateCampaign = (opportunityTitle: string) => {
-    toast({
-      title: "Campaign Creation Initiated",
-      description: `New marketing campaign for "${opportunityTitle}" has been created with AI-optimized targeting and budget allocation.`,
-    });
+  const handleCreateCampaign = (opportunity) => {
+    setSelectedOpportunity(opportunity);
+    setCampaignName(`${opportunity.title} Campaign`);
+    setCreateCampaignModalOpen(true);
   };
   // AI Recommendations
   const recommendations = [
@@ -369,8 +372,8 @@ const AIInsights = () => {
 
                       <div className="flex justify-end space-x-2">
                         <Button variant="outline" onClick={() => handleViewDetails(rec)}>View Details</Button>
-                        <Button variant="outline" onClick={() => handleSchedule(rec.id, rec.title)}>Schedule</Button>
-                        <Button onClick={() => handleImplementNow(rec.id, rec.title)}>Implement Now</Button>
+                        <Button variant="outline" onClick={() => handleSchedule(rec)}>Schedule</Button>
+                        <Button onClick={() => handleImplementNow(rec)}>Implement Now</Button>
                       </div>
                     </div>
                   ))}
@@ -587,8 +590,8 @@ const AIInsights = () => {
                       </div>
                     </div>
                     <div className="flex justify-end space-x-2">
-                      <Button variant="outline" onClick={() => handleLearnMore(opp.title)}>Learn More</Button>
-                      <Button onClick={() => handleCreateCampaign(opp.title)}>Create Campaign</Button>
+                      <Button variant="outline" onClick={() => handleLearnMore(opp)}>Learn More</Button>
+                      <Button onClick={() => handleCreateCampaign(opp)}>Create Campaign</Button>
                     </div>
                   </div>
                 ))}
@@ -608,6 +611,184 @@ const AIInsights = () => {
         onOpenChange={setDetailsModalOpen}
         recommendation={selectedRecommendation}
       />
+
+      {/* Schedule Implementation Modal */}
+      <Dialog open={scheduleModalOpen} onOpenChange={setScheduleModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Schedule Implementation</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-3 bg-muted rounded">
+              <div className="font-medium">{selectedRecommendation?.title}</div>
+              <div className="text-sm text-muted-foreground">{selectedRecommendation?.description}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Implementation Date</label>
+              <Input
+                type="date"
+                value={scheduledDate}
+                onChange={(e) => setScheduledDate(e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Notes</label>
+              <Textarea placeholder="Additional implementation notes..." rows={3} />
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setScheduleModalOpen(false)}>Cancel</Button>
+              <Button onClick={() => {
+                toast({ title: "Implementation Scheduled", description: `${selectedRecommendation?.title} scheduled for ${scheduledDate}` });
+                setScheduleModalOpen(false);
+              }}>
+                <Calendar className="h-4 w-4 mr-2" />
+                Schedule
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Implement Now Modal */}
+      <Dialog open={implementModalOpen} onOpenChange={setImplementModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Implement Recommendation</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-3 bg-primary/10 border border-primary/20 rounded">
+              <div className="font-medium">{selectedRecommendation?.title}</div>
+              <div className="text-sm text-muted-foreground mt-1">Expected Impact: {selectedRecommendation?.impact}</div>
+              <div className="text-sm text-muted-foreground">Confidence: {selectedRecommendation?.confidence}%</div>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium">Implementation Steps:</h4>
+              <div className="space-y-1 text-sm">
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>System configuration updated</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Stakeholders notified</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                  <span>Monitoring dashboard activated</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setImplementModalOpen(false)}>Cancel</Button>
+              <Button onClick={() => {
+                toast({ title: "Implementation Started", description: `${selectedRecommendation?.title} is now being implemented` });
+                setImplementModalOpen(false);
+              }}>
+                <Rocket className="h-4 w-4 mr-2" />
+                Implement Now
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Learn More Modal */}
+      <Dialog open={learnMoreModalOpen} onOpenChange={setLearnMoreModalOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Market Analysis: {selectedOpportunity?.title}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-3 bg-muted rounded">
+              <div className="text-sm text-muted-foreground">Opportunity</div>
+              <div className="font-medium">{selectedOpportunity?.description}</div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-3 border rounded">
+                <div className="text-sm text-muted-foreground">Potential Impact</div>
+                <div className="font-bold text-success">{selectedOpportunity?.potential}</div>
+              </div>
+              <div className="p-3 border rounded">
+                <div className="text-sm text-muted-foreground">Confidence Level</div>
+                <div className="font-bold">{selectedOpportunity?.confidence}%</div>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h4 className="font-medium">Market Research:</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>• Market size: $2.4B with 15% annual growth</p>
+                <p>• Competitor analysis shows 23% capacity gap</p>
+                <p>• Consumer demand trending upward (+28% YoY)</p>
+                <p>• Optimal timing window: Next 6 months</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h4 className="font-medium">Recommended Strategy:</h4>
+              <div className="p-3 bg-success/10 border border-success/20 rounded">
+                <p className="text-sm">{selectedOpportunity?.action}</p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <Button onClick={() => setLearnMoreModalOpen(false)}>Close</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Campaign Modal */}
+      <Dialog open={createCampaignModalOpen} onOpenChange={setCreateCampaignModalOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Create Marketing Campaign</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Campaign Name</label>
+              <Input
+                value={campaignName}
+                onChange={(e) => setCampaignName(e.target.value)}
+                placeholder="Enter campaign name"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium">Budget</label>
+                <Input placeholder="$50,000" />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Duration</label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select duration" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2weeks">2 Weeks</SelectItem>
+                    <SelectItem value="1month">1 Month</SelectItem>
+                    <SelectItem value="3months">3 Months</SelectItem>
+                    <SelectItem value="6months">6 Months</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Target Audience</label>
+              <Textarea placeholder="Define your target audience demographics and characteristics..." rows={3} />
+            </div>
+            <div className="p-3 bg-primary/10 border border-primary/20 rounded">
+              <div className="text-sm font-medium">AI Optimization Enabled</div>
+              <div className="text-sm text-muted-foreground">Budget allocation, timing, and targeting will be automatically optimized based on real-time performance data.</div>
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setCreateCampaignModalOpen(false)}>Cancel</Button>
+              <Button onClick={() => {
+                toast({ title: "Campaign Created", description: `${campaignName} has been created with AI optimization enabled` });
+                setCreateCampaignModalOpen(false);
+              }}>Create Campaign</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
