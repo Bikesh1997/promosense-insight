@@ -368,10 +368,84 @@ const RepDashboardRevised = () => {
                   <CardTitle>Lead Pipeline Management</CardTitle>
                   <CardDescription>Complete customer journey tracking</CardDescription>
                 </div>
-                <Button size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Lead
-                </Button>
+                <Dialog open={showAddLead} onOpenChange={setShowAddLead}>
+                  <DialogTrigger asChild>
+                    <Button size="sm">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Lead
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Add New Lead</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium">Lead Name *</label>
+                          <Input
+                            value={newLead.leadName}
+                            onChange={(e) => setNewLead({...newLead, leadName: e.target.value})}
+                            placeholder="Enter lead name"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Clinic *</label>
+                          <Input
+                            value={newLead.clinic}
+                            onChange={(e) => setNewLead({...newLead, clinic: e.target.value})}
+                            placeholder="Enter clinic name"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Phone *</label>
+                          <Input
+                            value={newLead.phone}
+                            onChange={(e) => setNewLead({...newLead, phone: e.target.value})}
+                            placeholder="(555) 123-4567"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Email</label>
+                          <Input
+                            value={newLead.email}
+                            onChange={(e) => setNewLead({...newLead, email: e.target.value})}
+                            placeholder="email@example.com"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Treatment</label>
+                          <Input
+                            value={newLead.treatment}
+                            onChange={(e) => setNewLead({...newLead, treatment: e.target.value})}
+                            placeholder="Botox, Juvederm, etc."
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">Est. Value</label>
+                          <Input
+                            value={newLead.value}
+                            onChange={(e) => setNewLead({...newLead, value: e.target.value})}
+                            placeholder="800"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Notes</label>
+                        <Textarea
+                          value={newLead.notes}
+                          onChange={(e) => setNewLead({...newLead, notes: e.target.value})}
+                          placeholder="Additional notes about the lead..."
+                          rows={3}
+                        />
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <Button variant="outline" onClick={() => setShowAddLead(false)}>Cancel</Button>
+                        <Button onClick={handleAddLead}>Add Lead</Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </CardHeader>
             <CardContent>

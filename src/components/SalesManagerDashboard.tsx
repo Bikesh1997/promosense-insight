@@ -4,9 +4,33 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Progress } from '@/components/ui/progress';
-import { AlertTriangle, TrendingUp, Users, Target, Phone, Mail } from 'lucide-react';
+import { AlertTriangle, TrendingUp, Users, Target, Phone, Mail, Settings } from 'lucide-react';
+import { toast } from 'sonner';
 
 const SalesManagerDashboard = () => {
+  const handleInvestigateClinic = (clinicName: string, leakage: number, stage: string) => {
+    toast.success(`Investigation initiated for ${clinicName}`, {
+      description: `Analyzing ${leakage}% leakage at stage: ${stage}. Detailed report will be generated with recommended actions.`
+    });
+  };
+
+  const handleCallRep = (repName: string, clinic: string) => {
+    toast.success(`Calling ${repName}`, {
+      description: `Initiating call to discuss ${clinic} performance improvement strategies.`
+    });
+  };
+
+  const handleMessageRep = (repName: string, clinic: string) => {
+    toast.success(`Message sent to ${repName}`, {
+      description: `Urgent performance improvement message sent regarding ${clinic}.`
+    });
+  };
+
+  const handleOptimizeRep = (repName: string, conversion: number) => {
+    toast.success(`Optimization plan activated for ${repName}`, {
+      description: `Performance improvement plan created to boost ${conversion}% conversion rate with targeted training and support.`
+    });
+  };
   const regionalSummary = {
     northeast: { revenue: 4800000, patients: 1800, roi: 168, churnRisk: 22 },
     southeast: { revenue: 3200000, patients: 1200, roi: 152, churnRisk: 18 },
@@ -102,7 +126,13 @@ const SalesManagerDashboard = () => {
                   <TableCell>${clinic.revenue.toLocaleString()}</TableCell>
                   <TableCell>{clinic.rep}</TableCell>
                   <TableCell>
-                    <Button size="sm" variant="outline">Investigate</Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => handleInvestigateClinic(clinic.clinic, clinic.leakage, clinic.stage)}
+                    >
+                      Investigate
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -128,6 +158,7 @@ const SalesManagerDashboard = () => {
                   <TableHead>Conversion %</TableHead>
                   <TableHead>Avg Follow-Up</TableHead>
                   <TableHead>Hot Leads</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -137,15 +168,25 @@ const SalesManagerDashboard = () => {
                     <TableCell>{rep.region}</TableCell>
                     <TableCell>{rep.leadsAssigned}</TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant={rep.conversion > 75 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"}>
-                          {rep.conversion}%
-                        </Badge>
-                      </div>
+                      <Badge variant={rep.conversion > 75 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"}>
+                        {rep.conversion}%
+                      </Badge>
                     </TableCell>
                     <TableCell>{rep.avgFollowUp} days</TableCell>
                     <TableCell>
                       <Badge variant="outline">{rep.hotLeads}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      {rep.conversion < 70 && (
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          onClick={() => handleOptimizeRep(rep.rep, rep.conversion)}
+                          title="Optimize Performance"
+                        >
+                          <Settings className="h-3 w-3" />
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -177,10 +218,28 @@ const SalesManagerDashboard = () => {
                       </Badge>
                     </div>
                     <div className="flex space-x-1 ml-4">
-                      <Button size="sm" variant="ghost">
+                      <Button 
+                        size="sm" 
+                        variant="ghost"
+                        onClick={() => handleCallRep(
+                          suggestion.clinic === 'ClearSkin Chicago' ? 'Michael Lee' :
+                          suggestion.clinic === 'Rejuvenate Dallas' ? 'Daniel Brooks' :
+                          suggestion.clinic === 'Miami Glow' ? 'John Carter' : 'Daniel Brooks',
+                          suggestion.clinic
+                        )}
+                      >
                         <Phone className="h-3 w-3" />
                       </Button>
-                      <Button size="sm" variant="ghost">
+                      <Button 
+                        size="sm" 
+                        variant="ghost"
+                        onClick={() => handleMessageRep(
+                          suggestion.clinic === 'ClearSkin Chicago' ? 'Michael Lee' :
+                          suggestion.clinic === 'Rejuvenate Dallas' ? 'Daniel Brooks' :
+                          suggestion.clinic === 'Miami Glow' ? 'John Carter' : 'Daniel Brooks',
+                          suggestion.clinic
+                        )}
+                      >
                         <Mail className="h-3 w-3" />
                       </Button>
                     </div>
