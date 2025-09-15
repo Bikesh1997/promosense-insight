@@ -1,10 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { TrendingUp, TrendingDown, DollarSign, Users, Target, AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { TrendingUp, TrendingDown, DollarSign, Users, Target, AlertTriangle, Filter, Calendar } from 'lucide-react';
 
 const ExecutiveDashboard = () => {
+  const [selectedProduct, setSelectedProduct] = useState('all');
+  const [selectedTimeline, setSelectedTimeline] = useState('current-quarter');
+
+  const productOptions = [
+    { value: 'all', label: 'All Products' },
+    { value: 'alle', label: 'Allē' },
+    { value: 'refer-friend', label: 'Refer-a-Friend' },
+    { value: 'branded', label: 'Branded' },
+    { value: 'multi-service', label: 'Multi-service' },
+    { value: 'gift', label: 'Gift' },
+    { value: 'influencer', label: 'Influencer/User' },
+    { value: 'practice', label: 'Practice' },
+    { value: 'educational', label: 'Educational' }
+  ];
+
+  const timelineOptions = [
+    { value: 'current-quarter', label: 'Current Quarter' },
+    { value: 'last-quarter', label: 'Last Quarter' },
+    { value: 'ytd', label: 'Year to Date' },
+    { value: 'last-year', label: 'Last Year' },
+    { value: 'last-30-days', label: 'Last 30 Days' },
+    { value: 'last-90-days', label: 'Last 90 Days' },
+    { value: 'custom-range', label: 'Custom Range' }
+  ];
+
   const executiveMetrics = {
     totalROI: 468,
     totalRevenue: 47200000,
@@ -38,9 +65,43 @@ const ExecutiveDashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold">Executive Dashboard</h2>
-        <p className="text-muted-foreground">Strategic overview of promotion effectiveness and business performance</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold">Executive Dashboard</h2>
+          <p className="text-muted-foreground">Strategic overview of promotion effectiveness and business performance</p>
+        </div>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <Filter className="h-4 w-4 text-muted-foreground" />
+            <Select value={selectedProduct} onValueChange={setSelectedProduct}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="Select Product" />
+              </SelectTrigger>
+              <SelectContent>
+                {productOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Select value={selectedTimeline} onValueChange={setSelectedTimeline}>
+              <SelectTrigger className="w-44">
+                <SelectValue placeholder="Select Timeline" />
+              </SelectTrigger>
+              <SelectContent>
+                {timelineOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </div>
 
       {/* Key Performance Indicators */}

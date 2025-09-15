@@ -9,6 +9,7 @@ import { PaginationTable } from '@/components/ui/pagination-table';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { toast } from 'sonner';
 import { 
   Phone, 
   Mail, 
@@ -22,7 +23,9 @@ import {
   MessageCircle,
   CheckCircle,
   XCircle,
-  Plus
+  Plus,
+  PhoneCall,
+  Brain
 } from 'lucide-react';
 
 const RepDashboardRevised = () => {
@@ -30,7 +33,62 @@ const RepDashboardRevised = () => {
   const [selectedLead, setSelectedLead] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [leadsPage, setLeadsPage] = useState(1);
+  const [showAddLead, setShowAddLead] = useState(false);
+  const [showCallDialog, setShowCallDialog] = useState(false);
+  const [callNotes, setCallNotes] = useState('');
+  const [newLead, setNewLead] = useState({
+    leadName: '',
+    clinic: '',
+    phone: '',
+    email: '',
+    treatment: '',
+    value: '',
+    notes: ''
+  });
   const itemsPerPage = 8;
+
+  const handleAddLead = () => {
+    if (newLead.leadName && newLead.clinic && newLead.phone) {
+      toast.success('Lead added successfully!');
+      setShowAddLead(false);
+      setNewLead({
+        leadName: '',
+        clinic: '',
+        phone: '',
+        email: '',
+        treatment: '',
+        value: '',
+        notes: ''
+      });
+    } else {
+      toast.error('Please fill in required fields');
+    }
+  };
+
+  const handleCall = (lead) => {
+    setSelectedLead(lead);
+    setShowCallDialog(true);
+    toast.success(`Calling ${lead.leadName}...`);
+  };
+
+  const handleCallComplete = () => {
+    if (callNotes.trim()) {
+      toast.success('Call completed and notes saved!');
+      setShowCallDialog(false);
+      setCallNotes('');
+      setSelectedLead(null);
+    } else {
+      toast.error('Please add call notes before completing');
+    }
+  };
+
+  const analyzeCallWithAI = () => {
+    if (callNotes.trim()) {
+      toast.success('AI analysis completed! Key insights: Patient showed high interest, recommend follow-up in 2 days.');
+    } else {
+      toast.error('Please add call notes to analyze');
+    }
+  };
 
   const comprehensiveLeads = [
     { 
@@ -355,10 +413,20 @@ const RepDashboardRevised = () => {
                       <TableCell className="text-xs max-w-40 truncate">{lead.nextAction}</TableCell>
                       <TableCell>
                         <div className="flex space-x-1">
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            className="h-8 w-8 p-0"
+                            onClick={() => handleCall(lead)}
+                          >
                             <Phone className="h-3 w-3" />
                           </Button>
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            className="h-8 w-8 p-0"
+                            onClick={() => toast.success(`Email sent to ${lead.leadName}`)}
+                          >
                             <Mail className="h-3 w-3" />
                           </Button>
                           <Dialog>
@@ -391,11 +459,20 @@ const RepDashboardRevised = () => {
                                   </ul>
                                 </div>
                                 <div className="flex space-x-2">
-                                  <Button size="sm" className="flex-1">
+                                  <Button 
+                                    size="sm" 
+                                    className="flex-1"
+                                    onClick={() => handleCall(lead)}
+                                  >
                                     <Phone className="h-4 w-4 mr-2" />
                                     Call
                                   </Button>
-                                  <Button size="sm" variant="outline" className="flex-1">
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline" 
+                                    className="flex-1"
+                                    onClick={() => toast.success(`Email sent to ${lead.leadName}`)}
+                                  >
                                     <Mail className="h-4 w-4 mr-2" />
                                     Email
                                   </Button>
@@ -420,6 +497,51 @@ const RepDashboardRevised = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Call Dialog */}
+          <Dialog open={showCallDialog} onOpenChange={setShowCallDialog}>
+            <DialogContent className="sm:max-w-lg">
+              <DialogHeader>
+                <DialogTitle className="flex items-center">
+                  <PhoneCall className="h-5 w-5 mr-2" />
+                  Call with {selectedLead?.leadName}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div><strong>Phone:</strong> {selectedLead?.phone}</div>
+                  <div><strong>Treatment:</strong> {selectedLead?.treatment}</div>
+                  <div><strong>Stage:</strong> {selectedLead?.stage}</div>
+                  <div><strong>Value:</strong> ${selectedLead?.value}</div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Call Notes & Summary</label>
+                  <Textarea 
+                    value={callNotes}
+                    onChange={(e) => setCallNotes(e.target.value)}
+                    placeholder="Document call details, patient concerns, next steps..."
+                    rows={4}
+                    className="mt-1"
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  <Button 
+                    onClick={analyzeCallWithAI} 
+                    variant="outline" 
+                    className="flex-1"
+                    disabled={!callNotes.trim()}
+                  >
+                    <Brain className="h-4 w-4 mr-2" />
+                    Analyze call summary with AI
+                  </Button>
+                </div>
+                <div className="flex space-x-2">
+                  <Button onClick={handleCallComplete} className="flex-1">Complete Call</Button>
+                  <Button variant="outline" onClick={() => setShowCallDialog(false)} className="flex-1">Cancel</Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </TabsContent>
 
         <TabsContent value="performance" className="space-y-6">

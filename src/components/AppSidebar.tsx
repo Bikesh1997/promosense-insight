@@ -16,13 +16,6 @@ import { cn } from '@/lib/utils';
 
 const sidebarItems = [
   {
-    title: "Allē Loyalty Dashboard",
-    subtitle: "Rewards program analytics",
-    id: "alle-loyalty",
-    icon: Gift,
-    badge: "Featured"
-  },
-  {
     title: "Promotion Effectiveness",
     subtitle: "8-strategy ROI analysis",
     id: "strategies",

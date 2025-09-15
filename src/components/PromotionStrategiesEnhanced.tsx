@@ -23,11 +23,10 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tool
 
 const PromotionStrategiesEnhanced = () => {
   const [activeTab, setActiveTab] = useState('alle-botox');
-  const [currentPage, setCurrentPage] = useState(1);
   const [patientsPage, setPatientsPage] = useState(1);
   const [campaignsPage, setCampaignsPage] = useState(1);
   const [showMoreCampaigns, setShowMoreCampaigns] = useState(false);
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
 
   // Enhanced mock data for Allē Loyalty Dashboard
   const alleCampaigns = {
@@ -166,17 +165,22 @@ const PromotionStrategiesEnhanced = () => {
     );
   }
   
-  // Pagination logic
-  const totalCampaigns = currentCampaignData.active.length;
-  const totalPages = Math.ceil(totalCampaigns / itemsPerPage);
-  const visibleCampaigns = showMoreCampaigns ? currentCampaignData.active : currentCampaignData.active.slice(0, 3);
-  
+  // Pagination logic for patients
+  const totalPatients = currentCampaignData.topPatients.length;
+  const patientTotalPages = Math.ceil(totalPatients / itemsPerPage);
   const paginatedPatients = currentCampaignData.topPatients.slice(
     (patientsPage - 1) * itemsPerPage,
     patientsPage * itemsPerPage
   );
-  
-  const patientTotalPages = Math.ceil(currentCampaignData.topPatients.length / itemsPerPage);
+
+  // Pagination logic for campaigns 
+  const totalCampaigns = currentCampaignData.active.length;
+  const campaignTotalPages = Math.ceil(totalCampaigns / itemsPerPage);
+  const paginatedCampaigns = currentCampaignData.active.slice(
+    (campaignsPage - 1) * itemsPerPage,
+    campaignsPage * itemsPerPage
+  );
+  const visibleCampaigns = showMoreCampaigns ? currentCampaignData.active : currentCampaignData.active.slice(0, 3);
 
   // KPI calculations
   const totalNewPatients = currentCampaignData.active.reduce((sum, campaign) => sum + campaign.newPatients, 0);
@@ -413,7 +417,7 @@ const PromotionStrategiesEnhanced = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {data.active.map((campaign) => (
+                    {paginatedCampaigns.map((campaign) => (
                       <TableRow key={campaign.id}>
                         <TableCell className="font-medium">{campaign.name}</TableCell>
                         <TableCell>{campaign.newPatients}</TableCell>
@@ -431,6 +435,15 @@ const PromotionStrategiesEnhanced = () => {
                     ))}
                   </TableBody>
                 </Table>
+                <div className="mt-4">
+                  <PaginationTable
+                    currentPage={campaignsPage}
+                    totalPages={campaignTotalPages}
+                    onPageChange={setCampaignsPage}
+                    itemsPerPage={itemsPerPage}
+                    totalItems={totalCampaigns}
+                  />
+                </div>
               </CardContent>
             </Card>
 
