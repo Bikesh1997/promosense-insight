@@ -196,10 +196,9 @@ const FunnelLeakageAnalysis = () => {
       </div>
 
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="executive">📊 Executive Dashboard</TabsTrigger>
           <TabsTrigger value="manager">📌 Manager Dashboard</TabsTrigger>
-          <TabsTrigger value="rep">📱 Rep Mobile View</TabsTrigger>
         </TabsList>
 
         {/* Executive Dashboard */}
@@ -580,152 +579,6 @@ const FunnelLeakageAnalysis = () => {
           </div>
         </TabsContent>
 
-        {/* Rep Mobile View */}
-        <TabsContent value="rep" className="space-y-6">
-          <div className="max-w-md mx-auto space-y-4">
-            {/* My Funnel Snapshot */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">My Funnel Snapshot</CardTitle>
-                <CardDescription>Mini funnel with patient counts for personal pipeline</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Leads Assigned</span>
-                    <span className="font-bold">45</span>
-                  </div>
-                  <Progress value={100} className="h-2" />
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Showed Interest</span>
-                    <span className="font-bold">32</span>
-                  </div>
-                  <Progress value={71} className="h-2" />
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Accepted Promo</span>
-                    <span className="font-bold">24</span>
-                  </div>
-                  <Progress value={53} className="h-2" />
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">First Treatment</span>
-                    <span className="font-bold">18</span>
-                  </div>
-                  <Progress value={40} className="h-2" />
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Repeat Patients</span>
-                    <span className="font-bold">12</span>
-                  </div>
-                  <Progress value={27} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Leakage Alerts List */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center space-x-2">
-                  <AlertTriangle className="h-4 w-4 text-orange-500" />
-                  <span>Leakage Alerts List</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="p-3 border border-orange-200 rounded-lg bg-orange-50">
-                    <div className="text-sm font-medium">3 patients didn't book after accepting promo</div>
-                    <div className="text-xs text-muted-foreground mt-1">Sarah M., Jennifer L., Maria R.</div>
-                    <div className="flex space-x-2 mt-2">
-                      <Button size="sm" onClick={() => handleFollowUp('Sarah M.')}>
-                        <PhoneCall className="h-3 w-3 mr-1" />
-                        Call
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleMarkContacted('Sarah M.')}>
-                        <MessageSquare className="h-3 w-3 mr-1" />
-                        Text
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  <div className="p-3 border border-red-200 rounded-lg bg-red-50">
-                    <div className="text-sm font-medium">2 patients missed follow-up appointments</div>
-                    <div className="text-xs text-muted-foreground mt-1">David C., Lisa W.</div>
-                    <div className="flex space-x-2 mt-2">
-                      <Button size="sm" onClick={() => handleFollowUp('David C.')}>
-                        <PhoneCall className="h-3 w-3 mr-1" />
-                        Call
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleEscalate('Missed appointments')}>
-                        Escalate
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* AI Recommendation Cards */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center space-x-2">
-                  <Zap className="h-4 w-4" />
-                  <span>AI Recommendation Cards</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="p-3 border rounded-lg">
-                    <div className="text-sm font-medium">Call-back suggested within 48h for Promo-Accepted patients</div>
-                    <div className="text-xs text-muted-foreground mt-1">5 patients pending follow-up</div>
-                    <Button size="sm" className="mt-2" onClick={() => handleFollowUp('Promo patients')}>
-                      <Clock className="h-3 w-3 mr-1" />
-                      Schedule Calls
-                    </Button>
-                  </div>
-                  
-                  <div className="p-3 border rounded-lg">
-                    <div className="text-sm font-medium">Send treatment info packet to interested patients</div>
-                    <div className="text-xs text-muted-foreground mt-1">Showing hesitation about procedure</div>
-                    <Button size="sm" variant="outline" className="mt-2" onClick={() => toast.success('Info packets sent to 5 patients')}>
-                      <Eye className="h-3 w-3 mr-1" />
-                      Send Materials
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Actions</CardTitle>
-                <CardDescription>Buttons for "Follow up," "Mark Contacted," "Escalate to Manager."</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button className="w-full" onClick={() => handleFollowUp('All pending')}>
-                    <PhoneCall className="h-4 w-4 mr-2" />
-                    Follow Up
-                  </Button>
-                  <Button variant="outline" className="w-full" onClick={() => handleMarkContacted('All')}>
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Mark Contacted
-                  </Button>
-                  <Button variant="outline" className="w-full" onClick={() => handleEscalate('Multiple issues')}>
-                    <AlertTriangle className="h-4 w-4 mr-2" />
-                    Escalate to Manager
-                  </Button>
-                  <Button variant="outline" className="w-full" onClick={() => toast.success('Dashboard refreshed')}>
-                    <Eye className="h-4 w-4 mr-2" />
-                    Refresh Data
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
       </Tabs>
 
       {/* Drill-down Modal */}
