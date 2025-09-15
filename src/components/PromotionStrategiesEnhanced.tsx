@@ -112,10 +112,59 @@ const PromotionStrategiesEnhanced = () => {
         { month: 'May', enrolled: 280, active: 210, converted: 147, retained: 118 },
         { month: 'Jun', enrolled: 310, active: 232, converted: 163, retained: 130 }
       ]
+    },
+    'alle-coolsculpting': {
+      name: "CoolSculpting Allē Program",
+      description: "Body contouring rewards with session-based benefits",
+      active: [
+        { id: 'C301', name: 'CoolSculpting Multi-Session', type: 'Bundle', startDate: '2025-08-01', endDate: '2025-11-30', cost: 25000, status: 'Active', newPatients: 112, revenue: 168000, roi: 572 },
+        { id: 'C302', name: 'Body Confidence Package', type: 'Discount', startDate: '2025-09-01', endDate: '2025-12-31', cost: 18000, status: 'Active', newPatients: 89, revenue: 133500, roi: 642 },
+        { id: 'C303', name: 'Summer Body Prep', type: 'Points', startDate: '2025-07-15', endDate: '2025-10-15', cost: 15000, status: 'Active', newPatients: 76, revenue: 114000, roi: 660 }
+      ],
+      channelData: [
+        { name: 'Mobile App', value: 35, color: '#8884d8' },
+        { name: 'Social Media', value: 32, color: '#82ca9d' },
+        { name: 'In-Clinic', value: 25, color: '#ffc658' },
+        { name: 'Partner Referrals', value: 18, color: '#ff7300' },
+        { name: 'Rep-Driven', value: 10, color: '#00ff88' }
+      ],
+      funnelSteps: [
+        { name: 'Enrolled', value: 1800, fill: '#8884d8' },
+        { name: 'Points Earned', value: 1620, fill: '#82ca9d' },
+        { name: 'Points Redeemed', value: 1134, fill: '#ffc658' },
+        { name: 'First Treatment', value: 907, fill: '#ff7300' },
+        { name: 'Repeat Treatments', value: 544, fill: '#00ff88' }
+      ],
+      topPatients: [
+        { name: 'Victoria Thompson', pointsRedeemed: 1200, treatments: 12, revenue: 18000, joinDate: '2024-09-15', tier: 'Diamond' },
+        { name: 'Christopher Lee', pointsRedeemed: 980, treatments: 8, revenue: 11760, joinDate: '2024-11-20', tier: 'Platinum' },
+        { name: 'Samantha Clark', pointsRedeemed: 840, treatments: 7, revenue: 10080, joinDate: '2025-01-12', tier: 'Gold' },
+        { name: 'Daniel Martinez', pointsRedeemed: 720, treatments: 6, revenue: 8640, joinDate: '2024-12-08', tier: 'Gold' }
+      ],
+      patientJourneyData: [
+        { month: 'Jan', enrolled: 120, active: 85, converted: 58, retained: 46 },
+        { month: 'Feb', enrolled: 145, active: 108, converted: 72, retained: 58 },
+        { month: 'Mar', enrolled: 168, active: 128, converted: 89, retained: 71 },
+        { month: 'Apr', enrolled: 185, active: 142, converted: 98, retained: 78 },
+        { month: 'May', enrolled: 210, active: 162, converted: 115, retained: 92 },
+        { month: 'Jun', enrolled: 225, active: 175, converted: 128, retained: 102 }
+      ]
     }
   };
 
   const currentCampaignData = alleCampaigns[activeTab as keyof typeof alleCampaigns];
+  
+  // Add safety check
+  if (!currentCampaignData) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center p-8 border rounded-lg bg-muted/30">
+          <p className="text-lg font-medium text-muted-foreground">Campaign data not available</p>
+          <p className="text-sm text-muted-foreground mt-2">Please select a different campaign tab.</p>
+        </div>
+      </div>
+    );
+  }
   
   // Pagination logic
   const totalCampaigns = currentCampaignData.active.length;
