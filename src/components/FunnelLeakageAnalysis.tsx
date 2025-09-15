@@ -332,10 +332,10 @@ const FunnelLeakageAnalysis = () => {
                 <div className="space-y-4">
                   <div className="grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground border-b pb-2">
                     <div>Region</div>
-                    <div>Exp→Int</div>
-                    <div>Int→Acc</div>
-                    <div>Acc→Tr</div>
-                    <div>Tr→Rep</div>
+                    <div>Exposed → Interest</div>
+                    <div>Interest → Accepted</div>
+                    <div>Accepted → Treatment</div>
+                    <div>Treatment → Repeat</div>
                   </div>
                   {regionalHeatmapData.map((region) => (
                     <div key={region.region} className="grid grid-cols-5 gap-2 items-center">
