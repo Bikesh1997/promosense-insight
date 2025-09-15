@@ -5,12 +5,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Header from "@/components/Header";
 import { AppSidebar } from "@/components/AppSidebar";
 import Dashboard from "@/components/Dashboard";
-import PromotionStrategies from "@/components/PromotionStrategies";
+import PromotionStrategiesEnhanced from "@/components/PromotionStrategiesEnhanced";
 import FunnelLeakageAnalysis from "@/components/FunnelLeakageAnalysis";
 import DataIntegrationHub from "@/components/DataIntegrationHub";
 import ExecutiveDashboard from "@/components/ExecutiveDashboard";
 import SalesManagerDashboard from "@/components/SalesManagerDashboard";
-import RepDashboard from "@/components/RepDashboard";
+import RepDashboardRevised from "@/components/RepDashboardRevised";
 import SystemAdminDashboard from "@/components/SystemAdminDashboard";
 import AIInsights from "@/components/AIInsights";
 
@@ -21,7 +21,7 @@ const Index = () => {
     switch (activeView) {
       case 'alle-loyalty':
       case 'strategies':
-        return <PromotionStrategies />;
+        return <PromotionStrategiesEnhanced />;
       case 'funnel':
         return <FunnelLeakageAnalysis />;
       case 'data-hub':
@@ -33,7 +33,7 @@ const Index = () => {
       case 'manager':
         return <SalesManagerDashboard />;
       case 'rep':
-        return <RepDashboard />;
+        return <RepDashboardRevised />;
       case 'admin':
         return <SystemAdminDashboard />;
       default:
@@ -43,18 +43,11 @@ const Index = () => {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background w-full">
-        {/* Fixed header at top */}
-        <header className="fixed top-0 left-0 right-0 h-24 flex items-center border-b px-4 bg-card shadow-sm z-50">
-          <div className="flex-1">
-            <Header onNavigate={setActiveView} activeView={activeView} />
-          </div>
-        </header>
-        
-        {/* Content area with sidebar - starts below header */}
-        <div className="flex pt-24 min-h-screen">
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="flex">
           <AppSidebar activeView={activeView} onViewChange={setActiveView} />
-          <main className="flex-1 p-6 overflow-auto bg-background">
+          <main className="flex-1 p-6 ml-64">
             {renderContent()}
           </main>
         </div>

@@ -39,10 +39,12 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
   ];
 
   return (
-    <header className="bg-card border-b border-border sticky top-0 z-50">
-      <div className="flex items-center justify-between px-6 py-3">
+    <header className="bg-card border-b border-border sticky top-0 z-50 h-16">
+      <div className="flex items-center justify-between px-6 py-3 h-full">
         <div className="flex items-center space-x-4">
-          <AllerganLogo />
+          <div className="h-10">
+            <AllerganLogo />
+          </div>
           <Badge variant="secondary" className="ml-4">
             PromoSense - AI Analytics Platform
           </Badge>

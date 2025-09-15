@@ -133,10 +133,9 @@ const FunnelLeakageAnalysis = () => {
       </div>
 
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="executive">Executive Dashboard</TabsTrigger>
           <TabsTrigger value="manager">Manager Dashboard</TabsTrigger>
-          <TabsTrigger value="rep">Rep Mobile View</TabsTrigger>
         </TabsList>
 
         <TabsContent value="executive" className="space-y-6">
@@ -199,20 +198,31 @@ const FunnelLeakageAnalysis = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
+                  <div className="grid grid-cols-6 gap-2 text-xs font-medium text-muted-foreground border-b pb-2">
+                    <div>Region</div>
+                    <div>Exposed→Interest</div>
+                    <div>Interest→Promo</div>
+                    <div>Promo→Treatment</div>
+                    <div>Treatment→Repeat</div>
+                    <div>Overall</div>
+                  </div>
                   {funnelData.regions.map((region) => (
-                    <div key={region.region} className="grid grid-cols-5 gap-2 text-sm">
+                    <div key={region.region} className="grid grid-cols-6 gap-2 text-sm">
                       <div className="font-medium">{region.region}</div>
-                      <Badge variant={calculateLeakage(region.interest, region.exposed) < 20 ? "default" : "destructive"} className="text-xs">
+                      <Badge variant={calculateLeakage(region.interest, region.exposed) < 20 ? "default" : "destructive"} className="text-xs justify-center">
                         {calculateLeakage(region.interest, region.exposed)}%
                       </Badge>
-                      <Badge variant={calculateLeakage(region.accepted, region.interest) < 30 ? "default" : "destructive"} className="text-xs">
+                      <Badge variant={calculateLeakage(region.accepted, region.interest) < 30 ? "default" : "destructive"} className="text-xs justify-center">
                         {calculateLeakage(region.accepted, region.interest)}%
                       </Badge>
-                      <Badge variant={calculateLeakage(region.treated, region.accepted) < 40 ? "default" : "destructive"} className="text-xs">
+                      <Badge variant={calculateLeakage(region.treated, region.accepted) < 40 ? "default" : "destructive"} className="text-xs justify-center">
                         {calculateLeakage(region.treated, region.accepted)}%
                       </Badge>
-                      <Badge variant={calculateLeakage(region.repeat, region.treated) < 50 ? "default" : "destructive"} className="text-xs">
+                      <Badge variant={calculateLeakage(region.repeat, region.treated) < 50 ? "default" : "destructive"} className="text-xs justify-center">
                         {calculateLeakage(region.repeat, region.treated)}%
+                      </Badge>
+                      <Badge variant={calculateLeakage(region.repeat, region.exposed) < 10 ? "destructive" : "secondary"} className="text-xs justify-center">
+                        {calculateLeakage(region.repeat, region.exposed)}%
                       </Badge>
                     </div>
                   ))}
