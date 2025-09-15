@@ -481,7 +481,7 @@ const PromotionStrategiesEnhanced = () => {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={paginatedCampaigns} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <BarChart data={data.active} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
                     <YAxis />
@@ -489,15 +489,6 @@ const PromotionStrategiesEnhanced = () => {
                     <Bar dataKey="roi" fill="#8884d8" />
                   </BarChart>
                 </ResponsiveContainer>
-                <div className="mt-4">
-                  <PaginationTable
-                    currentPage={campaignsPage}
-                    totalPages={campaignTotalPages}
-                    onPageChange={setCampaignsPage}
-                    itemsPerPage={itemsPerPage}
-                    totalItems={data.active.length}
-                  />
-                </div>
               </CardContent>
             </Card>
 

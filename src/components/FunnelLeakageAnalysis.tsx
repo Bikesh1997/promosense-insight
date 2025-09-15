@@ -3,244 +3,445 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Progress } from '@/components/ui/progress';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { TrendingDown, Users, MapPin, Target, AlertTriangle, Phone, Mail, Calendar } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { 
+  TrendingDown, 
+  TrendingUp, 
+  Users, 
+  DollarSign, 
+  AlertTriangle, 
+  Target,
+  PhoneCall,
+  MessageSquare,
+  CheckCircle,
+  Clock,
+  Eye,
+  ArrowDown,
+  Zap,
+  Calendar,
+  FileText,
+  Settings
+} from 'lucide-react';
+import { ResponsiveContainer, FunnelChart, Funnel, LabelList, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
+import { toast } from 'sonner';
 
 const FunnelLeakageAnalysis = () => {
   const [activeView, setActiveView] = useState('executive');
   const [selectedRegion, setSelectedRegion] = useState('all');
-  
+  const [selectedOffer, setSelectedOffer] = useState('all');
+  const [drillDownOpen, setDrillDownOpen] = useState(false);
+  const [investigateModalOpen, setInvestigateModalOpen] = useState(false);
+  const [optimizeModalOpen, setOptimizeModalOpen] = useState(false);
+  const [selectedStage, setSelectedStage] = useState(null);
+  const [selectedClinic, setSelectedClinic] = useState(null);
+  const [selectedRep, setSelectedRep] = useState(null);
+
+  // Sample Data Model as specified
   const funnelData = {
-    stages: [
-      { stage: "Leads Exposed", count: 10000, conversion: 100, leakage: 0 },
-      { stage: "Clinic Interest", count: 1400, conversion: 14, leakage: 86 },
-      { stage: "Promo Accepted", count: 700, conversion: 7, leakage: 93 },
-      { stage: "First Treatment", count: 400, conversion: 4, leakage: 96 },
-      { stage: "Repeat Treatments", count: 150, conversion: 1.5, leakage: 98.5 }
+    funnelStages: [
+      { stage: "Leads Exposed", count: 10000, color: "#8884d8" },
+      { stage: "Clinic Interest", count: 1400, color: "#82ca9d" },
+      { stage: "Promo Accepted", count: 700, color: "#ffc658" },
+      { stage: "First Treatment", count: 400, color: "#ff7300" },
+      { stage: "Repeat Treatments", count: 150, color: "#00ff88" }
     ],
     regions: [
-      { region: "Northeast", exposed: 3000, interest: 400, accepted: 220, treated: 120, repeat: 50 },
-      { region: "Southeast", exposed: 4000, interest: 600, accepted: 300, treated: 180, repeat: 70 },
-      { region: "Midwest", exposed: 3000, interest: 400, accepted: 180, treated: 100, repeat: 30 },
-      { region: "West Coast", exposed: 3000, interest: 420, accepted: 250, treated: 160, repeat: 65 },
-      { region: "Southwest", exposed: 3000, interest: 380, accepted: 150, treated: 90, repeat: 25 }
+      { region: "West", exposed: 3000, interest: 400, accepted: 220, treated: 120, repeat: 50 },
+      { region: "East", exposed: 4000, interest: 600, accepted: 300, treated: 180, repeat: 70 },
+      { region: "South", exposed: 3000, interest: 400, accepted: 180, treated: 100, repeat: 30 }
     ],
     offers: [
       { offer: "Botox Rebate", exposed: 2000, interest: 280, accepted: 150, treated: 90, repeat: 40 },
       { offer: "Juvederm Bundle", exposed: 1500, interest: 220, accepted: 110, treated: 60, repeat: 25 },
-      { offer: "Loyalty Points", exposed: 2500, interest: 350, accepted: 200, treated: 120, repeat: 50 },
-      { offer: "Referral Bonus", exposed: 1800, interest: 240, accepted: 120, treated: 70, repeat: 30 },
-      { offer: "BOGO Gift Cards", exposed: 2200, interest: 310, accepted: 120, treated: 60, repeat: 15 }
+      { offer: "CoolSculpting Promo", exposed: 2500, interest: 350, accepted: 200, treated: 130, repeat: 50 },
+      { offer: "Holiday Special", exposed: 2000, interest: 290, accepted: 140, treated: 80, repeat: 35 }
     ],
     reps: [
-      { rep: "Alice Monroe", region: "Northeast", patients: 120, leakageStage: "Exposed → Interest", performance: 78 },
-      { rep: "John Carter", region: "Southeast", patients: 90, leakageStage: "Promo → First Treatment", performance: 65 },
-      { rep: "Michael Lee", region: "Midwest", patients: 70, leakageStage: "Repeat Retention", performance: 52 },
-      { rep: "Laura Smith", region: "West Coast", patients: 135, leakageStage: "Interest → Promo", performance: 82 },
-      { rep: "Daniel Brooks", region: "Southwest", patients: 85, leakageStage: "First → Repeat", performance: 58 }
+      { rep: "Alice", patients: 120, leakageStage: "Exposed → Interest", conversion: 78, region: "West" },
+      { rep: "Brian", patients: 90, leakageStage: "Promo → First Treatment", conversion: 65, region: "East" },
+      { rep: "Chloe", patients: 70, leakageStage: "Repeat Retention", conversion: 52, region: "South" }
     ],
-    atRiskClinics: [
-      { clinic: "ClearSkin Chicago", region: "Midwest", leakage: 72, stage: "Promo → Treatment", revenue: 145000 },
-      { clinic: "Rejuvenate Dallas", region: "Southwest", leakage: 68, stage: "Interest → Promo", revenue: 98000 },
-      { clinic: "Miami Glow", region: "Southeast", leakage: 65, stage: "Treatment → Repeat", revenue: 87000 },
-      { clinic: "Phoenix Beauty", region: "Southwest", leakage: 61, stage: "Exposed → Interest", revenue: 76000 },
-      { clinic: "Denver Aesthetics", region: "Midwest", leakage: 58, stage: "Promo → Treatment", revenue: 112000 }
-    ]
+    financials: {
+      avgTreatmentRevenue: 600,
+      promoCostPerPatient: 100
+    }
   };
 
-  const financials = {
-    avgTreatmentRevenue: 600,
-    promoCostPerPatient: 100,
-    totalLostRevenue: (10000 - 150) * 600
-  };
-
-  const calculateConversion = (current: number, previous: number) => {
+  // Calculations as specified
+  const calculateConversion = (current, previous) => {
     return previous > 0 ? Math.round((current / previous) * 100) : 0;
   };
 
-  const calculateLeakage = (current: number, previous: number) => {
+  const calculateLeakage = (current, previous) => {
     return previous > 0 ? Math.round(((previous - current) / previous) * 100) : 0;
   };
 
-  const FunnelVisualization = ({ data }: { data: any[] }) => (
-    <div className="space-y-4">
-      {data.map((stage, index) => {
-        const prevStage = index > 0 ? data[index - 1] : null;
-        const conversionRate = prevStage ? calculateConversion(stage.count, prevStage.count) : 100;
-        const leakageRate = prevStage ? calculateLeakage(stage.count, prevStage.count) : 0;
-        
-        return (
-          <div key={stage.stage} className="relative">
-            <div className="flex items-center space-x-4 p-4 bg-card border rounded-lg">
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium">{stage.stage}</h4>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant="outline">{stage.count.toLocaleString()}</Badge>
-                    {index > 0 && (
-                      <>
-                        <Badge variant={conversionRate > 50 ? "default" : conversionRate > 30 ? "secondary" : "destructive"}>
-                          {conversionRate}% conversion
-                        </Badge>
-                        <Badge variant="destructive">{leakageRate}% leakage</Badge>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="w-full bg-muted rounded-full h-3">
-                  <div 
-                    className="bg-primary h-3 rounded-full transition-all" 
-                    style={{ width: `${Math.max(stage.count / 10000 * 100, 5)}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-            {index < data.length - 1 && (
-              <div className="flex justify-center mt-2 mb-2">
-                <TrendingDown className="h-4 w-4 text-muted-foreground" />
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
+  const calculateLostRevenue = (lost, avgRevenue) => {
+    return lost * avgRevenue;
+  };
+
+  const calculateROI = (repeatPatients, avgRevenue, promoCost, totalAccepted) => {
+    const revenue = repeatPatients * avgRevenue;
+    const cost = promoCost * totalAccepted;
+    return cost > 0 ? Math.round(((revenue - cost) / cost) * 100) : 0;
+  };
+
+  // Enhanced funnel data with calculations
+  const enhancedFunnelData = funnelData.funnelStages.map((stage, index) => {
+    const previousStage = index > 0 ? funnelData.funnelStages[index - 1] : null;
+    const conversion = previousStage ? calculateConversion(stage.count, previousStage.count) : 100;
+    const leakage = previousStage ? calculateLeakage(stage.count, previousStage.count) : 0;
+    const lost = previousStage ? previousStage.count - stage.count : 0;
+    const lostRevenue = calculateLostRevenue(lost, funnelData.financials.avgTreatmentRevenue);
+
+    return {
+      ...stage,
+      conversion,
+      leakage,
+      lost,
+      lostRevenue,
+      fill: stage.color
+    };
+  });
+
+  // Regional leakage heatmap data
+  const regionalHeatmapData = funnelData.regions.map(region => {
+    const exposedLeakage = calculateLeakage(region.interest, region.exposed);
+    const interestLeakage = calculateLeakage(region.accepted, region.interest);
+    const acceptedLeakage = calculateLeakage(region.treated, region.accepted);
+    const treatedLeakage = calculateLeakage(region.repeat, region.treated);
+
+    return {
+      ...region,
+      exposed_leakage: exposedLeakage,
+      interest_leakage: interestLeakage,
+      accepted_leakage: acceptedLeakage,
+      treated_leakage: treatedLeakage
+    };
+  });
+
+  // At-risk clinics (simulated data)
+  const atRiskClinics = [
+    { clinic: "Radiance Med Spa", region: "West", leakageRate: 72, stage: "Promo → Treatment", lostRevenue: 145000, riskLevel: "Critical" },
+    { clinic: "Glow Aesthetics", region: "East", leakageRate: 68, stage: "Interest → Promo", lostRevenue: 98000, riskLevel: "High" },
+    { clinic: "Beauty Central", region: "South", leakageRate: 65, stage: "Treatment → Repeat", lostRevenue: 87000, riskLevel: "High" },
+    { clinic: "Elite Skin Care", region: "West", leakageRate: 61, stage: "Exposed → Interest", lostRevenue: 76000, riskLevel: "Medium" },
+    { clinic: "Perfect Look Clinic", region: "East", leakageRate: 58, stage: "Promo → Treatment", lostRevenue: 112000, riskLevel: "Medium" }
+  ];
+
+  const handleDrillDown = (stage) => {
+    setSelectedStage(stage);
+    setDrillDownOpen(true);
+  };
+
+  const handleInvestigateClinic = (clinic) => {
+    setSelectedClinic(clinic);
+    setInvestigateModalOpen(true);
+  };
+
+  const handleOptimizeRep = (rep) => {
+    setSelectedRep(rep);
+    setOptimizeModalOpen(true);
+  };
+
+  const handleFollowUp = (repName) => {
+    toast.success(`Follow-up initiated for ${repName}`);
+  };
+
+  const handleMarkContacted = (patient) => {
+    toast.success(`${patient} marked as contacted`);
+  };
+
+  const handleEscalate = (issue) => {
+    toast.success(`Issue escalated to manager: ${issue}`);
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold">Funnel Leakage Analysis</h2>
-          <p className="text-muted-foreground">Patient journey analysis with leakage identification and revenue impact</p>
+          <h2 className="text-3xl font-bold">PromoSense – Funnel Leakage Dashboard</h2>
+          <p className="text-muted-foreground">Patient journey analysis with leakage detection and revenue impact</p>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
           <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Select Region" />
+            <SelectTrigger className="w-32">
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Regions</SelectItem>
-              <SelectItem value="northeast">Northeast</SelectItem>
-              <SelectItem value="southeast">Southeast</SelectItem>
-              <SelectItem value="midwest">Midwest</SelectItem>
-              <SelectItem value="westcoast">West Coast</SelectItem>
-              <SelectItem value="southwest">Southwest</SelectItem>
+              <SelectItem value="west">West</SelectItem>
+              <SelectItem value="east">East</SelectItem>
+              <SelectItem value="south">South</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={selectedOffer} onValueChange={setSelectedOffer}>
+            <SelectTrigger className="w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Offers</SelectItem>
+              <SelectItem value="botox">Botox Rebate</SelectItem>
+              <SelectItem value="juvederm">Juvederm Bundle</SelectItem>
+              <SelectItem value="coolsculpting">CoolSculpting Promo</SelectItem>
+              <SelectItem value="holiday">Holiday Special</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="executive">Executive Dashboard</TabsTrigger>
-          <TabsTrigger value="manager">Manager Dashboard</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="executive">📊 Executive Dashboard</TabsTrigger>
+          <TabsTrigger value="manager">📌 Manager Dashboard</TabsTrigger>
+          <TabsTrigger value="rep">📱 Rep Mobile View</TabsTrigger>
         </TabsList>
 
+        {/* Executive Dashboard */}
         <TabsContent value="executive" className="space-y-6">
           {/* KPI Cards */}
           <div className="grid md:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium">Total Leads Exposed</CardTitle>
+                <CardTitle className="text-sm font-medium flex items-center">
+                  <Users className="h-4 w-4 mr-2" />
+                  Total Leads Exposed
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">10,000</div>
-                <p className="text-xs text-muted-foreground">Last 30 days</p>
+                <div className="text-2xl font-bold">{funnelData.funnelStages[0].count.toLocaleString()}</div>
+                <p className="text-xs text-muted-foreground">Starting funnel volume</p>
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium">End-to-End Conversion</CardTitle>
+                <CardTitle className="text-sm font-medium flex items-center">
+                  <Target className="h-4 w-4 mr-2" />
+                  End-to-End Conversion Rate
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-destructive">1.5%</div>
-                <p className="text-xs text-muted-foreground">Leads to repeat treatments</p>
+                <div className="text-2xl font-bold text-success">
+                  {calculateConversion(funnelData.funnelStages[4].count, funnelData.funnelStages[0].count)}%
+                </div>
+                <p className="text-xs text-muted-foreground">Leads → Repeat patients</p>
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium">Repeat Patients</CardTitle>
+                <CardTitle className="text-sm font-medium flex items-center">
+                  <TrendingUp className="h-4 w-4 mr-2" />
+                  Total Repeat Patients
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">150</div>
-                <p className="text-xs text-muted-foreground">Successfully retained</p>
+                <div className="text-2xl font-bold">{funnelData.funnelStages[4].count}</div>
+                <p className="text-xs text-muted-foreground">Successful retention</p>
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium">Lost Revenue</CardTitle>
+                <CardTitle className="text-sm font-medium flex items-center">
+                  <DollarSign className="h-4 w-4 mr-2 text-destructive" />
+                  Lost Revenue due to Leakage
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-destructive">$5.9M</div>
-                <p className="text-xs text-muted-foreground">Due to leakage</p>
+                <div className="text-2xl font-bold text-destructive">
+                  ${(enhancedFunnelData.reduce((sum, stage) => sum + stage.lostRevenue, 0) / 1000000).toFixed(1)}M
+                </div>
+                <p className="text-xs text-muted-foreground">Revenue impact of leakage</p>
               </CardContent>
             </Card>
           </div>
 
-          {/* Main Funnel */}
+          {/* Funnel Chart and Leakage Heatmap */}
           <div className="grid lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Patient Journey Funnel</CardTitle>
-                <CardDescription>Click stages for detailed breakdown</CardDescription>
+                <CardTitle>Funnel Chart</CardTitle>
+                <CardDescription>Vertical funnel with stage counts, % conversion, and % leakage</CardDescription>
               </CardHeader>
               <CardContent>
-                <FunnelVisualization data={funnelData.stages} />
+                <div className="space-y-4">
+                  {enhancedFunnelData.map((stage, index) => (
+                    <div 
+                      key={stage.stage} 
+                      className="cursor-pointer hover:bg-muted/50 p-3 rounded-lg border transition-colors"
+                      onClick={() => handleDrillDown(stage)}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium">{stage.stage}</h4>
+                        <div className="flex items-center space-x-2">
+                          {index > 0 && (
+                            <>
+                              <Badge variant={stage.leakage > 30 ? "destructive" : stage.leakage > 15 ? "secondary" : "default"}>
+                                {stage.leakage}% leakage
+                              </Badge>
+                              <Badge variant="outline">
+                                {stage.conversion}% conversion
+                              </Badge>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex-1">
+                          <div className="text-lg font-bold" style={{ color: stage.color }}>
+                            {stage.count.toLocaleString()}
+                          </div>
+                          {index > 0 && (
+                            <div className="text-sm text-muted-foreground">
+                              -{stage.lost.toLocaleString()} lost • ${(stage.lostRevenue / 1000).toFixed(0)}K revenue impact
+                            </div>
+                          )}
+                        </div>
+                        <div className="w-20">
+                          <Progress 
+                            value={(stage.count / funnelData.funnelStages[0].count) * 100} 
+                            className="h-3"
+                            style={{ backgroundColor: stage.leakage > 30 ? '#fee2e2' : undefined }}
+                          />
+                        </div>
+                      </div>
+                      {index < enhancedFunnelData.length - 1 && (
+                        <div className="flex justify-center mt-2">
+                          <ArrowDown className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Regional Leakage Heatmap</CardTitle>
-                <CardDescription>Leakage % by stage and region</CardDescription>
+                <CardTitle>Leakage Heatmap (by Region)</CardTitle>
+                <CardDescription>Color-coded matrix showing leakage per stage per region</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  <div className="grid grid-cols-6 gap-2 text-xs font-medium text-muted-foreground border-b pb-2">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-5 gap-2 text-xs font-medium text-muted-foreground border-b pb-2">
                     <div>Region</div>
-                    <div>Exposed→Interest</div>
-                    <div>Interest→Promo</div>
-                    <div>Promo→Treatment</div>
-                    <div>Treatment→Repeat</div>
-                    <div>Overall</div>
+                    <div>Exp→Int</div>
+                    <div>Int→Acc</div>
+                    <div>Acc→Tr</div>
+                    <div>Tr→Rep</div>
                   </div>
-                  {funnelData.regions.map((region) => (
-                    <div key={region.region} className="grid grid-cols-6 gap-2 text-sm">
-                      <div className="font-medium">{region.region}</div>
-                      <Badge variant={calculateLeakage(region.interest, region.exposed) < 20 ? "default" : "destructive"} className="text-xs justify-center">
-                        {calculateLeakage(region.interest, region.exposed)}%
-                      </Badge>
-                      <Badge variant={calculateLeakage(region.accepted, region.interest) < 30 ? "default" : "destructive"} className="text-xs justify-center">
-                        {calculateLeakage(region.accepted, region.interest)}%
-                      </Badge>
-                      <Badge variant={calculateLeakage(region.treated, region.accepted) < 40 ? "default" : "destructive"} className="text-xs justify-center">
-                        {calculateLeakage(region.treated, region.accepted)}%
-                      </Badge>
-                      <Badge variant={calculateLeakage(region.repeat, region.treated) < 50 ? "default" : "destructive"} className="text-xs justify-center">
-                        {calculateLeakage(region.repeat, region.treated)}%
-                      </Badge>
-                      <Badge variant={calculateLeakage(region.repeat, region.exposed) < 10 ? "destructive" : "secondary"} className="text-xs justify-center">
-                        {calculateLeakage(region.repeat, region.exposed)}%
-                      </Badge>
+                  {regionalHeatmapData.map((region) => (
+                    <div key={region.region} className="grid grid-cols-5 gap-2 items-center">
+                      <div className="font-medium text-sm">{region.region}</div>
+                      <div className={`text-center p-2 rounded text-white font-medium text-xs ${
+                        region.exposed_leakage > 50 ? 'bg-red-500' : 
+                        region.exposed_leakage > 30 ? 'bg-orange-400' : 'bg-green-500'
+                      }`}>
+                        {region.exposed_leakage}%
+                      </div>
+                      <div className={`text-center p-2 rounded text-white font-medium text-xs ${
+                        region.interest_leakage > 50 ? 'bg-red-500' : 
+                        region.interest_leakage > 30 ? 'bg-orange-400' : 'bg-green-500'
+                      }`}>
+                        {region.interest_leakage}%
+                      </div>
+                      <div className={`text-center p-2 rounded text-white font-medium text-xs ${
+                        region.accepted_leakage > 50 ? 'bg-red-500' : 
+                        region.accepted_leakage > 30 ? 'bg-orange-400' : 'bg-green-500'
+                      }`}>
+                        {region.accepted_leakage}%
+                      </div>
+                      <div className={`text-center p-2 rounded text-white font-medium text-xs ${
+                        region.treated_leakage > 50 ? 'bg-red-500' : 
+                        region.treated_leakage > 30 ? 'bg-orange-400' : 'bg-green-500'
+                      }`}>
+                        {region.treated_leakage}%
+                      </div>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
           </div>
+
+          {/* Offer Breakdown Widget */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Offer Breakdown Widget</CardTitle>
+              <CardDescription>Bar chart comparing conversion rates of different offer types</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={funnelData.offers} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="offer" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="exposed" fill="#8884d8" name="Exposed" />
+                  <Bar dataKey="treated" fill="#82ca9d" name="Treated" />
+                  <Bar dataKey="repeat" fill="#ffc658" name="Repeat" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
         </TabsContent>
 
+        {/* Manager Dashboard */}
         <TabsContent value="manager" className="space-y-6">
-          {/* At-Risk Clinics */}
+          {/* Regional Funnel Comparison */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Regional Funnel Comparison</CardTitle>
+              <CardDescription>Side-by-side funnels per region</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-6">
+                {funnelData.regions.map((region) => (
+                  <div key={region.region} className="space-y-3">
+                    <h4 className="font-medium text-center">{region.region} Region</h4>
+                    <div className="space-y-2">
+                      {[
+                        { label: 'Exposed', value: region.exposed, max: 4000 },
+                        { label: 'Interest', value: region.interest, max: 600 },
+                        { label: 'Accepted', value: region.accepted, max: 300 },
+                        { label: 'Treated', value: region.treated, max: 180 },
+                        { label: 'Repeat', value: region.repeat, max: 70 }
+                      ].map((stage, index, array) => (
+                        <div key={stage.label} className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span>{stage.label}</span>
+                            <span className="font-medium">{stage.value}</span>
+                          </div>
+                          <Progress value={(stage.value / stage.max) * 100} className="h-2" />
+                          {index > 0 && (
+                            <div className="text-xs text-muted-foreground">
+                              {calculateConversion(stage.value, array[index - 1].value)}% conversion
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* At-Risk Clinics Table */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <AlertTriangle className="h-5 w-5 text-destructive" />
-                <span>At-Risk Clinics</span>
+                <span>At-Risk Clinics Table</span>
               </CardTitle>
-              <CardDescription>Top clinics with highest leakage rates requiring immediate attention</CardDescription>
+              <CardDescription>Top 10 clinics with highest leakage % (highlighted in red)</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
@@ -248,65 +449,38 @@ const FunnelLeakageAnalysis = () => {
                   <TableRow>
                     <TableHead>Clinic Name</TableHead>
                     <TableHead>Region</TableHead>
-                    <TableHead>Leakage %</TableHead>
+                    <TableHead>Leakage Rate</TableHead>
                     <TableHead>Problem Stage</TableHead>
-                    <TableHead>Revenue Risk</TableHead>
+                    <TableHead>Lost Revenue</TableHead>
+                    <TableHead>Risk Level</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {funnelData.atRiskClinics.map((clinic) => (
-                    <TableRow key={clinic.clinic}>
+                  {atRiskClinics.map((clinic) => (
+                    <TableRow key={clinic.clinic} className={clinic.riskLevel === 'Critical' ? 'bg-red-50' : ''}>
                       <TableCell className="font-medium">{clinic.clinic}</TableCell>
                       <TableCell>{clinic.region}</TableCell>
                       <TableCell>
-                        <Badge variant="destructive">{clinic.leakage}%</Badge>
+                        <Badge variant="destructive">{clinic.leakageRate}%</Badge>
                       </TableCell>
-                      <TableCell>{clinic.stage}</TableCell>
-                      <TableCell>${clinic.revenue.toLocaleString()}</TableCell>
+                      <TableCell className="text-sm">{clinic.stage}</TableCell>
+                      <TableCell>${clinic.lostRevenue.toLocaleString()}</TableCell>
                       <TableCell>
-                        <Button size="sm" variant="outline">Investigate</Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-
-          {/* Rep Performance */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Rep Performance Analysis</CardTitle>
-              <CardDescription>Representative effectiveness by region and conversion stage</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Rep Name</TableHead>
-                    <TableHead>Region</TableHead>
-                    <TableHead>Patients Handled</TableHead>
-                    <TableHead>Main Leakage Stage</TableHead>
-                    <TableHead>Performance Score</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {funnelData.reps.map((rep) => (
-                    <TableRow key={rep.rep}>
-                      <TableCell className="font-medium">{rep.rep}</TableCell>
-                      <TableCell>{rep.region}</TableCell>
-                      <TableCell>{rep.patients}</TableCell>
-                      <TableCell>{rep.leakageStage}</TableCell>
-                      <TableCell>
-                        <Badge variant={rep.performance > 75 ? "default" : rep.performance > 60 ? "secondary" : "destructive"}>
-                          {rep.performance}%
+                        <Badge variant={
+                          clinic.riskLevel === 'Critical' ? 'destructive' : 
+                          clinic.riskLevel === 'High' ? 'secondary' : 'outline'
+                        }>
+                          {clinic.riskLevel}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Button size="sm" variant="outline">
-                          {rep.performance < 60 ? "Coach" : "Optimize"}
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleInvestigateClinic(clinic)}
+                        >
+                          Investigate
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -315,72 +489,237 @@ const FunnelLeakageAnalysis = () => {
               </Table>
             </CardContent>
           </Card>
+
+          {/* Rep Contribution Chart & AI Insights Panel */}
+          <div className="grid lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Rep Contribution Chart</CardTitle>
+                <CardDescription>Stacked bar → reps vs patients moved through leakage stages</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Rep Name</TableHead>
+                      <TableHead>Region</TableHead>
+                      <TableHead>Patients</TableHead>
+                      <TableHead>Conversion</TableHead>
+                      <TableHead>Leakage Stage</TableHead>
+                      <TableHead>Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {funnelData.reps.map((rep) => (
+                      <TableRow key={rep.rep}>
+                        <TableCell className="font-medium">{rep.rep}</TableCell>
+                        <TableCell>{rep.region}</TableCell>
+                        <TableCell>{rep.patients}</TableCell>
+                        <TableCell>
+                          <Badge variant={rep.conversion > 70 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"}>
+                            {rep.conversion}%
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-sm">{rep.leakageStage}</TableCell>
+                        <TableCell>
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            onClick={() => handleOptimizeRep(rep)}
+                          >
+                            <Settings className="h-3 w-3" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Zap className="h-5 w-5" />
+                  <span>AI Insights Panel</span>
+                </CardTitle>
+                <CardDescription>Text-based suggestions for improvement</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 border rounded-lg bg-orange-50 border-orange-200">
+                    <h4 className="font-medium text-orange-800">West region leaks 50% at Promo → First Treatment</h4>
+                    <p className="text-sm text-orange-700 mt-1">
+                      Suggest stronger rep follow-up within 48 hours. Consider implementing automated reminder system.
+                    </p>
+                    <Button size="sm" className="mt-2" onClick={() => toast.success('Follow-up protocol activated for West region')}>
+                      Implement
+                    </Button>
+                  </div>
+                  <div className="p-4 border rounded-lg bg-blue-50 border-blue-200">
+                    <h4 className="font-medium text-blue-800">East region shows best retention rates</h4>
+                    <p className="text-sm text-blue-700 mt-1">
+                      18% better repeat patient conversion. Share Alice's best practices with other regions.
+                    </p>
+                    <Button size="sm" variant="outline" className="mt-2" onClick={() => toast.success('Best practices shared')}>
+                      Share Practices
+                    </Button>
+                  </div>
+                  <div className="p-4 border rounded-lg bg-green-50 border-green-200">
+                    <h4 className="font-medium text-green-800">Botox Rebate performing above average</h4>
+                    <p className="text-sm text-green-700 mt-1">
+                      Consider expanding budget allocation by 25% for this high-performing offer.
+                    </p>
+                    <Button size="sm" variant="outline" className="mt-2" onClick={() => toast.success('Budget reallocation recommended')}>
+                      Review Budget
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
+        {/* Rep Mobile View */}
         <TabsContent value="rep" className="space-y-6">
-          {/* Rep Mobile View */}
-          <div className="grid gap-4 max-w-md mx-auto">
+          <div className="max-w-md mx-auto space-y-4">
+            {/* My Funnel Snapshot */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">My Pipeline Snapshot</CardTitle>
+                <CardTitle className="text-lg">My Funnel Snapshot</CardTitle>
+                <CardDescription>Mini funnel with patient counts for personal pipeline</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span>Leads Assigned</span>
-                    <Badge>45</Badge>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Leads Assigned</span>
+                    <span className="font-bold">45</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Promo Accepted</span>
-                    <Badge variant="secondary">28</Badge>
+                  <Progress value={100} className="h-2" />
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Showed Interest</span>
+                    <span className="font-bold">32</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Treatments Completed</span>
-                    <Badge variant="secondary">18</Badge>
+                  <Progress value={71} className="h-2" />
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Accepted Promo</span>
+                    <span className="font-bold">24</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Repeat Patients</span>
-                    <Badge variant="default">7</Badge>
+                  <Progress value={53} className="h-2" />
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">First Treatment</span>
+                    <span className="font-bold">18</span>
+                  </div>
+                  <Progress value={40} className="h-2" />
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Repeat Patients</span>
+                    <span className="font-bold">12</span>
+                  </div>
+                  <Progress value={27} className="h-2" />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Leakage Alerts List */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center space-x-2">
+                  <AlertTriangle className="h-4 w-4 text-orange-500" />
+                  <span>Leakage Alerts List</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="p-3 border border-orange-200 rounded-lg bg-orange-50">
+                    <div className="text-sm font-medium">3 patients didn't book after accepting promo</div>
+                    <div className="text-xs text-muted-foreground mt-1">Sarah M., Jennifer L., Maria R.</div>
+                    <div className="flex space-x-2 mt-2">
+                      <Button size="sm" onClick={() => handleFollowUp('Sarah M.')}>
+                        <PhoneCall className="h-3 w-3 mr-1" />
+                        Call
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => handleMarkContacted('Sarah M.')}>
+                        <MessageSquare className="h-3 w-3 mr-1" />
+                        Text
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 border border-red-200 rounded-lg bg-red-50">
+                    <div className="text-sm font-medium">2 patients missed follow-up appointments</div>
+                    <div className="text-xs text-muted-foreground mt-1">David C., Lisa W.</div>
+                    <div className="flex space-x-2 mt-2">
+                      <Button size="sm" onClick={() => handleFollowUp('David C.')}>
+                        <PhoneCall className="h-3 w-3 mr-1" />
+                        Call
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => handleEscalate('Missed appointments')}>
+                        Escalate
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
+            {/* AI Recommendation Cards */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Leakage Alerts</CardTitle>
+                <CardTitle className="text-lg flex items-center space-x-2">
+                  <Zap className="h-4 w-4" />
+                  <span>AI Recommendation Cards</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="p-3 border rounded-lg bg-destructive/5">
-                    <p className="text-sm font-medium text-destructive">3 patients didn't book after accepting promo</p>
-                    <p className="text-xs text-muted-foreground">Follow-up recommended within 24h</p>
+                  <div className="p-3 border rounded-lg">
+                    <div className="text-sm font-medium">Call-back suggested within 48h for Promo-Accepted patients</div>
+                    <div className="text-xs text-muted-foreground mt-1">5 patients pending follow-up</div>
+                    <Button size="sm" className="mt-2" onClick={() => handleFollowUp('Promo patients')}>
+                      <Clock className="h-3 w-3 mr-1" />
+                      Schedule Calls
+                    </Button>
                   </div>
-                  <div className="p-3 border rounded-lg bg-warning/5">
-                    <p className="text-sm font-medium text-warning">2 patients missed repeat appointments</p>
-                    <p className="text-xs text-muted-foreground">Retention risk identified</p>
+                  
+                  <div className="p-3 border rounded-lg">
+                    <div className="text-sm font-medium">Send treatment info packet to interested patients</div>
+                    <div className="text-xs text-muted-foreground mt-1">Showing hesitation about procedure</div>
+                    <Button size="sm" variant="outline" className="mt-2" onClick={() => toast.success('Info packets sent to 5 patients')}>
+                      <Eye className="h-3 w-3 mr-1" />
+                      Send Materials
+                    </Button>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
+            {/* Quick Actions */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Quick Actions</CardTitle>
+                <CardDescription>Buttons for "Follow up," "Mark Contacted," "Escalate to Manager."</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-3">
-                  <Button size="sm" variant="outline" className="flex flex-col space-y-1 h-auto py-3">
-                    <Phone className="h-4 w-4" />
-                    <span className="text-xs">Follow Up</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button className="w-full" onClick={() => handleFollowUp('All pending')}>
+                    <PhoneCall className="h-4 w-4 mr-2" />
+                    Follow Up
                   </Button>
-                  <Button size="sm" variant="outline" className="flex flex-col space-y-1 h-auto py-3">
-                    <Mail className="h-4 w-4" />
-                    <span className="text-xs">Send Email</span>
+                  <Button variant="outline" className="w-full" onClick={() => handleMarkContacted('All')}>
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Mark Contacted
                   </Button>
-                  <Button size="sm" variant="outline" className="flex flex-col space-y-1 h-auto py-3">
-                    <Calendar className="h-4 w-4" />
-                    <span className="text-xs">Schedule</span>
+                  <Button variant="outline" className="w-full" onClick={() => handleEscalate('Multiple issues')}>
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Escalate to Manager
+                  </Button>
+                  <Button variant="outline" className="w-full" onClick={() => toast.success('Dashboard refreshed')}>
+                    <Eye className="h-4 w-4 mr-2" />
+                    Refresh Data
                   </Button>
                 </div>
               </CardContent>
@@ -388,6 +727,192 @@ const FunnelLeakageAnalysis = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Drill-down Modal */}
+      <Dialog open={drillDownOpen} onOpenChange={setDrillDownOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Stage Breakdown: {selectedStage?.stage}</DialogTitle>
+          </DialogHeader>
+          {selectedStage && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-3 border rounded">
+                  <div className="text-sm text-muted-foreground">Patient Count</div>
+                  <div className="text-xl font-bold">{selectedStage.count.toLocaleString()}</div>
+                </div>
+                <div className="p-3 border rounded">
+                  <div className="text-sm text-muted-foreground">Conversion Rate</div>
+                  <div className="text-xl font-bold">{selectedStage.conversion}%</div>
+                </div>
+                <div className="p-3 border rounded">
+                  <div className="text-sm text-muted-foreground">Patients Lost</div>
+                  <div className="text-xl font-bold text-destructive">{selectedStage.lost?.toLocaleString() || 0}</div>
+                </div>
+                <div className="p-3 border rounded">
+                  <div className="text-sm text-muted-foreground">Revenue Impact</div>
+                  <div className="text-xl font-bold text-destructive">${(selectedStage.lostRevenue / 1000).toFixed(0)}K</div>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-medium">Regional Breakdown:</h4>
+                {funnelData.regions.map((region) => (
+                  <div key={region.region} className="flex justify-between items-center p-2 border rounded">
+                    <span>{region.region}</span>
+                    <span className="font-medium">{region.exposed}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-medium">Offer Breakdown:</h4>
+                {funnelData.offers.map((offer) => (
+                  <div key={offer.offer} className="flex justify-between items-center p-2 border rounded">
+                    <span>{offer.offer}</span>
+                    <span className="font-medium">{offer.exposed}</span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="flex justify-end">
+                <Button onClick={() => setDrillDownOpen(false)}>Close</Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Investigate Clinic Modal */}
+      <Dialog open={investigateModalOpen} onOpenChange={setInvestigateModalOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Investigate: {selectedClinic?.clinic}</DialogTitle>
+          </DialogHeader>
+          {selectedClinic && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-3 border rounded">
+                  <div className="text-sm text-muted-foreground">Leakage Rate</div>
+                  <div className="text-xl font-bold text-destructive">{selectedClinic.leakageRate}%</div>
+                </div>
+                <div className="p-3 border rounded">
+                  <div className="text-sm text-muted-foreground">Problem Stage</div>
+                  <div className="font-medium">{selectedClinic.stage}</div>
+                </div>
+                <div className="p-3 border rounded">
+                  <div className="text-sm text-muted-foreground">Lost Revenue</div>
+                  <div className="font-bold text-destructive">${selectedClinic.lostRevenue.toLocaleString()}</div>
+                </div>
+                <div className="p-3 border rounded">
+                  <div className="text-sm text-muted-foreground">Risk Level</div>
+                  <div className="font-medium">{selectedClinic.riskLevel}</div>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-medium">Investigation Findings:</h4>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• Patient follow-up rate 35% below target</li>
+                  <li>• Average response time: 6.2 hours (target: 2 hours)</li>
+                  <li>• Staff training on promo benefits needed</li>
+                  <li>• CRM system not being utilized effectively</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-medium">Recommended Actions:</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">Staff training session</span>
+                    <Button size="sm" variant="outline">Schedule</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">CRM optimization</span>
+                    <Button size="sm" variant="outline">Initiate</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">Follow-up protocol review</span>
+                    <Button size="sm" variant="outline">Review</Button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setInvestigateModalOpen(false)}>Close</Button>
+                <Button onClick={() => {
+                  toast.success(`Investigation report generated for ${selectedClinic.clinic}`);
+                  setInvestigateModalOpen(false);
+                }}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Generate Report
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Optimize Rep Modal */}
+      <Dialog open={optimizeModalOpen} onOpenChange={setOptimizeModalOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Optimize Performance: {selectedRep?.rep}</DialogTitle>
+          </DialogHeader>
+          {selectedRep && (
+            <div className="space-y-4">
+              <div className="p-3 bg-orange-50 border border-orange-200 rounded">
+                <div className="text-sm font-medium">Current Performance: {selectedRep.conversion}%</div>
+                <div className="text-sm text-muted-foreground">Main leakage: {selectedRep.leakageStage}</div>
+                <div className="text-sm text-muted-foreground">Patients handled: {selectedRep.patients}</div>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-medium">Performance Analysis:</h4>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• Follow-up timing needs improvement (avg 3.2 days vs target 1 day)</li>
+                  <li>• Product knowledge assessment required</li>
+                  <li>• Objection handling skills to develop</li>
+                  <li>• CRM usage optimization needed</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-medium">Optimization Plan:</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">1-on-1 Coaching Session</span>
+                    <Button size="sm" variant="outline">Schedule</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">Product Training Module</span>
+                    <Button size="sm" variant="outline">Assign</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">Shadow Top Performer</span>
+                    <Button size="sm" variant="outline">Arrange</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-2 border rounded">
+                    <span className="text-sm">CRM Training</span>
+                    <Button size="sm" variant="outline">Enroll</Button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setOptimizeModalOpen(false)}>Cancel</Button>
+                <Button onClick={() => {
+                  toast.success(`Optimization plan activated for ${selectedRep.rep}`);
+                  setOptimizeModalOpen(false);
+                }}>
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Activate Plan
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
