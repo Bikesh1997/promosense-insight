@@ -29,6 +29,9 @@ const PromotionStrategiesEnhanced = () => {
   const [showMoreCampaigns, setShowMoreCampaigns] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [campaignDetailsOpen, setCampaignDetailsOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
   const itemsPerPage = 4;
 
   // Enhanced mock data for all promotion categories
@@ -248,10 +251,21 @@ const PromotionStrategiesEnhanced = () => {
 
   const data = alleCampaigns[activeTab as keyof typeof alleCampaigns] || alleCampaigns.alle;
   
+  // Filter campaigns based on filters
+  const filteredCampaigns = data.active.filter(campaign => {
+    const statusMatch = statusFilter === 'all' || campaign.status.toLowerCase() === statusFilter;
+    const typeMatch = typeFilter === 'all' || campaign.type.toLowerCase() === typeFilter;
+    return statusMatch && typeMatch;
+  });
+  
+  // Get unique types and statuses for filter options
+  const uniqueTypes = Array.from(new Set(data.active.map(c => c.type)));
+  const uniqueStatuses = Array.from(new Set(data.active.map(c => c.status)));
+  
   // Pagination logic
-  const totalCampaigns = showMoreCampaigns ? data.active.length : Math.min(4, data.active.length);
+  const totalCampaigns = showMoreCampaigns ? filteredCampaigns.length : Math.min(4, filteredCampaigns.length);
   const campaignTotalPages = Math.ceil(totalCampaigns / itemsPerPage);
-  const paginatedCampaigns = data.active.slice(
+  const paginatedCampaigns = filteredCampaigns.slice(
     (campaignsPage - 1) * itemsPerPage,
     Math.min(campaignsPage * itemsPerPage, totalCampaigns)
   );
@@ -270,10 +284,75 @@ const PromotionStrategiesEnhanced = () => {
           <p className="text-muted-foreground">Comprehensive promotion management and performance analytics</p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
-            <Filter className="h-4 w-4 mr-2" />
-            Filter
-          </Button>
+          <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Filter className="h-4 w-4 mr-2" />
+                Filter
+                {(statusFilter !== 'all' || typeFilter !== 'all') && (
+                  <Badge variant="secondary" className="ml-2 h-4 px-1 text-xs">
+                    {[statusFilter !== 'all' ? 1 : 0, typeFilter !== 'all' ? 1 : 0].reduce((a, b) => a + b)}
+                  </Badge>
+                )}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Filter Campaigns</DialogTitle>
+                <DialogDescription>
+                  Filter campaigns by status and type
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Status</label>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      {uniqueStatuses.map(status => (
+                        <SelectItem key={status} value={status.toLowerCase()}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Type</label>
+                  <Select value={typeFilter} onValueChange={setTypeFilter}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      {uniqueTypes.map(type => (
+                        <SelectItem key={type} value={type.toLowerCase()}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setStatusFilter('all');
+                      setTypeFilter('all');
+                    }}
+                  >
+                    Clear All
+                  </Button>
+                  <Button onClick={() => setFilterOpen(false)}>
+                    Apply Filters
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Export
@@ -305,7 +384,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{data.active.reduce((sum, campaign) => sum + campaign.newPatients, 0).toLocaleString()}</div>
+                  <div className="text-2xl font-bold">{filteredCampaigns.reduce((sum, campaign) => sum + campaign.newPatients, 0).toLocaleString()}</div>
                   <p className="text-xs text-muted-foreground">+18% from last month</p>
                 </CardContent>
               </Card>
@@ -317,7 +396,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">${(data.active.reduce((sum, campaign) => sum + campaign.revenue, 0) / 1000).toFixed(0)}K</div>
+                  <div className="text-2xl font-bold">${(filteredCampaigns.reduce((sum, campaign) => sum + campaign.revenue, 0) / 1000).toFixed(0)}K</div>
                   <p className="text-xs text-muted-foreground">+22% growth</p>
                 </CardContent>
               </Card>
@@ -329,7 +408,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-success">{Math.round(data.active.reduce((sum, campaign) => sum + campaign.roi, 0) / data.active.length)}%</div>
+                  <div className="text-2xl font-bold text-success">{Math.round(filteredCampaigns.reduce((sum, campaign) => sum + campaign.roi, 0) / Math.max(filteredCampaigns.length, 1))}%</div>
                   <p className="text-xs text-muted-foreground">Above target</p>
                 </CardContent>
               </Card>
@@ -341,7 +420,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{data.active.length}</div>
+                  <div className="text-2xl font-bold">{filteredCampaigns.length}</div>
                   <p className="text-xs text-muted-foreground">Running now</p>
                 </CardContent>
               </Card>
@@ -353,7 +432,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">${(data.active.reduce((sum, campaign) => sum + campaign.cost, 0) / 1000).toFixed(0)}K</div>
+                  <div className="text-2xl font-bold">${(filteredCampaigns.reduce((sum, campaign) => sum + campaign.cost, 0) / 1000).toFixed(0)}K</div>
                   <p className="text-xs text-muted-foreground">This period</p>
                 </CardContent>
               </Card>
@@ -619,22 +698,28 @@ const PromotionStrategiesEnhanced = () => {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={data.active} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <BarChart data={data.active} margin={{ top: 20, right: 30, left: 40, bottom: 80 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis 
                       dataKey="name" 
-                      angle={-45} 
-                      textAnchor="end" 
-                      height={100}
-                      tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      angle={0} 
+                      textAnchor="middle" 
+                      height={80}
+                      tick={{ 
+                        fill: 'hsl(var(--muted-foreground))',
+                        fontSize: 12
+                      }}
+                      interval={0}
                     />
                     <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: 'hsl(var(--card))', 
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px'
+                        backgroundColor: 'transparent', 
+                        border: 'none',
+                        borderRadius: '8px',
+                        boxShadow: 'none'
                       }}
+                      cursor={false}
                     />
                     <Bar 
                       dataKey="roi" 
