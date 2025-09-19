@@ -38,14 +38,14 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-allergan-secondary via-white to-allergan-accent flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-allergan-secondary via-white to-allergan-accent flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-md mx-auto">
         {/* Logo Section */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl shadow-lg mb-4">
             <AllerganLogo />
           </div>
-          <h1 className="text-2xl font-semibold text-allergan-text mb-2">
+          <h1 className="text-xl sm:text-2xl font-semibold text-allergan-text mb-2">
             Welcome Back
           </h1>
           <p className="text-allergan-text-light text-sm">
@@ -55,16 +55,16 @@ const LoginPage = () => {
 
         {/* Login Card */}
         <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
-          <CardHeader className="space-y-1 pb-6">
-            <CardTitle className="text-xl text-center text-allergan-text">
+          <CardHeader className="space-y-1 pb-4 sm:pb-6 px-4 sm:px-6">
+            <CardTitle className="text-lg sm:text-xl text-center text-allergan-text">
               Sign In
             </CardTitle>
-            <CardDescription className="text-center text-allergan-text-light">
+            <CardDescription className="text-center text-allergan-text-light text-sm">
               Enter your credentials to continue
             </CardDescription>
           </CardHeader>
           
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email Field */}
               <div className="space-y-2">
@@ -77,7 +77,7 @@ const LoginPage = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 px-4 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200"
+                  className="h-11 sm:h-12 px-3 sm:px-4 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base"
                   required
                 />
               </div>
@@ -94,7 +94,7 @@ const LoginPage = () => {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 px-4 pr-12 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200"
+                    className="h-11 sm:h-12 px-3 sm:px-4 pr-10 sm:pr-12 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base"
                     required
                   />
                   <button
@@ -112,12 +112,12 @@ const LoginPage = () => {
                 </div>
               </div>
 
-              {/* Forgot Password Link */}
-              <div className="flex justify-between items-center">
+              {/* Demo and Forgot Password Links */}
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
                 <button
                   type="button"
                   onClick={handleDemoLogin}
-                  className="flex items-center space-x-2 text-sm text-allergan-primary hover:text-allergan-primary/80 transition-colors group"
+                  className="flex items-center space-x-2 text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 transition-colors group"
                 >
                   <User className="w-4 h-4" />
                   <span>Use Demo Account</span>
@@ -125,7 +125,7 @@ const LoginPage = () => {
                 
                 <button
                   type="button"
-                  className="text-sm text-allergan-primary hover:text-allergan-primary/80 underline underline-offset-2 transition-colors"
+                  className="text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 underline underline-offset-2 transition-colors"
                 >
                   Forgot password?
                 </button>
@@ -135,7 +135,7 @@ const LoginPage = () => {
               <Button
                 type="submit"
                 disabled={isLoading || !email || !password}
-                className="w-full h-12 bg-allergan-primary hover:bg-allergan-primary/90 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 group"
+                className="w-full h-11 sm:h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-lg hover:shadow-xl transition-all duration-200 group text-sm sm:text-base"
               >
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
@@ -151,9 +151,9 @@ const LoginPage = () => {
               </Button>
             </form>
 
-            <div className="pt-4">
-              <Separator className="mb-4" />
-              <p className="text-center text-sm text-allergan-text-light">
+            <div className="pt-3 sm:pt-4">
+              <Separator className="mb-3 sm:mb-4" />
+              <p className="text-center text-xs sm:text-sm text-allergan-text-light">
                 Don't have an account?{' '}
                 <button className="text-allergan-primary hover:text-allergan-primary/80 font-medium underline underline-offset-2 transition-colors">
                   Contact your administrator
@@ -164,15 +164,15 @@ const LoginPage = () => {
         </Card>
 
         {/* Footer */}
-        <div className="text-center mt-8 space-y-2">
+        <div className="text-center mt-6 sm:mt-8 space-y-2 px-4">
           <p className="text-xs text-allergan-text-light">
-            © 2024 Allergan Aesthetics, an AbbVie company
+            © 2024 Allergan Aesthetics
           </p>
-          <div className="flex justify-center space-x-4 text-xs">
+          <div className="flex flex-col sm:flex-row justify-center items-center space-y-1 sm:space-y-0 sm:space-x-4 text-xs">
             <button className="text-allergan-text-light hover:text-allergan-text transition-colors">
               Privacy Policy
             </button>
-            <span className="text-allergan-text-light">•</span>
+            <span className="hidden sm:inline text-allergan-text-light">•</span>
             <button className="text-allergan-text-light hover:text-allergan-text transition-colors">
               Terms of Service
             </button>

@@ -39,25 +39,28 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
   ];
 
   return (
-    <header className="bg-card border-b border-border sticky top-0 z-50 h-16">
-      <div className="flex items-center justify-between px-6 py-3 h-full">
-        <div className="flex items-center space-x-4">
-          <div className="h-10">
+    <header className="bg-card border-b border-border sticky top-0 z-50 h-14 sm:h-16">
+      <div className="flex items-center justify-between px-4 sm:px-6 py-3 h-full">
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="h-8 sm:h-10">
             <AllerganLogo />
           </div>
-          <Badge variant="secondary" className="ml-4">
+          <Badge variant="secondary" className="hidden sm:block ml-2 sm:ml-4 text-xs">
             PromoSense - AI Analytics Platform
+          </Badge>
+          <Badge variant="secondary" className="block sm:hidden ml-2 text-xs">
+            PromoSense
           </Badge>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 sm:space-x-4">
           <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm" onClick={handleSearch}>
                 <Search className="h-4 w-4" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md mx-4">
               <DialogHeader>
                 <DialogTitle>Search PromoSense</DialogTitle>
               </DialogHeader>
@@ -77,11 +80,11 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
                 <div className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full"></div>
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md mx-4">
               <DialogHeader>
                 <DialogTitle>Notifications</DialogTitle>
               </DialogHeader>
-              <div className="space-y-3">
+              <div className="space-y-3 max-h-80 overflow-y-auto">
                 {notifications.map((notification) => (
                   <div key={notification.id} className="flex items-start space-x-3 p-3 bg-muted/50 rounded-lg">
                     <div className="flex-1">
