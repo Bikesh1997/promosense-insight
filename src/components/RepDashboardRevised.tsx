@@ -464,7 +464,7 @@ const RepDashboardRevised = () => {
                 </TableHeader>
                 <TableBody>
                   {paginatedLeads.map((lead) => (
-                    <TableRow key={lead.id} className="hover:bg-muted/50">
+                    <TableRow key={lead.id} className={`hover:bg-muted/50 ${paginatedLeads.indexOf(lead) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}`}>
                       <TableCell>
                         <div>
                           <div className="font-medium">{lead.leadName}</div>

@@ -327,7 +327,7 @@ const SalesManagerDashboard = () => {
               </TableHeader>
               <TableBody>
                 {filteredAtRiskClinics.map((clinic) => (
-                  <TableRow key={clinic.clinic}>
+                  <TableRow key={clinic.clinic} className={filteredAtRiskClinics.indexOf(clinic) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                     <TableCell className="font-medium">{clinic.clinic}</TableCell>
                     <TableCell>{clinic.region}</TableCell>
                     <TableCell>

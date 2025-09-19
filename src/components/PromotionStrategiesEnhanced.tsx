@@ -762,7 +762,7 @@ const PromotionStrategiesEnhanced = () => {
                   </TableHeader>
                   <TableBody>
                     {paginatedPatients.map((patient) => (
-                      <TableRow key={patient.name}>
+                      <TableRow key={patient.name} className={paginatedPatients.indexOf(patient) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                         <TableCell className="font-medium">{patient.name}</TableCell>
                         <TableCell>{patient.pointsRedeemed}</TableCell>
                         <TableCell>{patient.treatments}</TableCell>

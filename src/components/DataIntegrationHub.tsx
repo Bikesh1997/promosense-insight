@@ -333,7 +333,7 @@ const DataIntegrationHub = () => {
               </TableHeader>
               <TableBody>
                 {entityMatching.map((match, index) => (
-                  <TableRow key={index}>
+                  <TableRow key={index} className={index % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                     <TableCell>{match.sourceA}</TableCell>
                     <TableCell>{match.sourceB}</TableCell>
                     <TableCell>{match.recordsLinked.toLocaleString()}</TableCell>

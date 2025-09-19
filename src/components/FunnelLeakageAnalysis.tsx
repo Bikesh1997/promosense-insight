@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
 import { 
   TrendingDown, 
@@ -520,7 +521,10 @@ const FunnelLeakageAnalysis = () => {
                 </TableHeader>
                 <TableBody>
                   {atRiskClinics.map((clinic) => (
-                    <TableRow key={clinic.clinic} className={clinic.riskLevel === 'Critical' ? 'bg-red-50' : ''}>
+                    <TableRow key={clinic.clinic} className={cn(
+                      clinic.riskLevel === 'Critical' ? 'bg-red-50' : '',
+                      atRiskClinics.indexOf(clinic) % 2 === 0 ? 'bg-muted/20' : 'bg-background'
+                    )}>
                       <TableCell className="font-medium">{clinic.clinic}</TableCell>
                       <TableCell>{clinic.region}</TableCell>
                       <TableCell>
