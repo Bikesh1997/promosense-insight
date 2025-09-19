@@ -290,7 +290,7 @@ const PromotionStrategiesEnhanced = () => {
               value="alle" 
               className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
             >
-              Allē Loyalty
+              Promotion Strategies
             </TabsTrigger>
             <TabsTrigger 
               value="refer-friend" 
