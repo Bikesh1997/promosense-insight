@@ -40,52 +40,82 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-allergan-secondary via-white to-allergan-accent flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-md mx-auto">
-        {/* Logo Section */}
+        {/* Enhanced Logo Section */}
         <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl shadow-lg mb-4">
-            <AllerganLogo />
+          {/* Improved Logo Container */}
+          <div className="relative inline-flex items-center justify-center mb-6">
+            {/* Logo Background with Gradient */}
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-white via-allergan-secondary to-allergan-accent rounded-3xl shadow-2xl border border-white/20 backdrop-blur-sm">
+              {/* Inner Logo Container */}
+              <div className="absolute inset-2 bg-white rounded-2xl shadow-inner flex items-center justify-center">
+                <div className="scale-125 sm:scale-150">
+                  <AllerganLogo />
+                </div>
+              </div>
+              {/* Subtle Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-allergan-primary/10 to-transparent rounded-3xl"></div>
+            </div>
+            
+            {/* Floating Badge */}
+            <div className="absolute -top-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-r from-allergan-primary to-primary rounded-full flex items-center justify-center shadow-lg">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            </div>
           </div>
-          <h1 className="text-xl sm:text-2xl font-semibold text-allergan-text mb-2">
-            Welcome Back
-          </h1>
-          <p className="text-allergan-text-light text-sm">
-            Sign in to access your account
-          </p>
+          
+          {/* Enhanced Typography */}
+          <div className="space-y-2">
+            <h1 className="text-xl sm:text-2xl font-semibold text-allergan-text mb-1">
+              Welcome Back
+            </h1>
+            <div className="flex items-center justify-center space-x-2 text-allergan-text-light">
+              <div className="w-8 h-px bg-gradient-to-r from-transparent to-allergan-primary/30"></div>
+              <p className="text-sm font-medium">PromoSense Portal</p>
+              <div className="w-8 h-px bg-gradient-to-l from-transparent to-allergan-primary/30"></div>
+            </div>
+            <p className="text-xs sm:text-sm text-allergan-text-light/80">
+              AI-Powered Analytics Platform
+            </p>
+          </div>
         </div>
 
-        {/* Login Card */}
-        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
-          <CardHeader className="space-y-1 pb-4 sm:pb-6 px-4 sm:px-6">
-            <CardTitle className="text-lg sm:text-xl text-center text-allergan-text">
-              Sign In
+        {/* Enhanced Login Card */}
+        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm relative overflow-hidden">
+          {/* Subtle Pattern Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-allergan-primary/5 via-transparent to-allergan-accent/5 pointer-events-none"></div>
+          
+          <CardHeader className="space-y-1 pb-4 sm:pb-6 px-4 sm:px-6 relative">
+            <CardTitle className="text-lg sm:text-xl text-center text-allergan-text flex items-center justify-center space-x-2">
+              <span>Sign In</span>
             </CardTitle>
             <CardDescription className="text-center text-allergan-text-light text-sm">
               Enter your credentials to continue
             </CardDescription>
           </CardHeader>
           
-          <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
+          <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6 relative">
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Email Field */}
+              {/* Email Field - Enhanced */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-allergan-text">
-                  Email Address
+                <Label htmlFor="email" className="text-sm font-medium text-allergan-text flex items-center space-x-1">
+                  <span>Email Address</span>
+                  <span className="text-destructive text-xs">*</span>
                 </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 sm:h-12 px-3 sm:px-4 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base"
+                  className="h-11 sm:h-12 px-3 sm:px-4 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base rounded-lg"
                   required
                 />
               </div>
 
-              {/* Password Field */}
+              {/* Password Field - Enhanced */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-allergan-text">
-                  Password
+                <Label htmlFor="password" className="text-sm font-medium text-allergan-text flex items-center space-x-1">
+                  <span>Password</span>
+                  <span className="text-destructive text-xs">*</span>
                 </Label>
                 <div className="relative">
                   <Input
@@ -94,14 +124,15 @@ const LoginPage = () => {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-11 sm:h-12 px-3 sm:px-4 pr-10 sm:pr-12 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base"
+                    className="h-11 sm:h-12 px-3 sm:px-4 pr-10 sm:pr-12 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base rounded-lg"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-allergan-text-light hover:text-allergan-text transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-allergan-text-light hover:text-allergan-text transition-colors p-1 rounded-md hover:bg-allergan-accent/20"
                     tabIndex={-1}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -112,38 +143,41 @@ const LoginPage = () => {
                 </div>
               </div>
 
-              {/* Demo and Forgot Password Links */}
+              {/* Enhanced Action Links - All functionality preserved */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
                 <button
                   type="button"
                   onClick={handleDemoLogin}
-                  className="flex items-center space-x-2 text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 transition-colors group"
+                  className="flex items-center space-x-2 text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 transition-all duration-200 group px-3 py-1.5 rounded-lg hover:bg-allergan-accent/10 w-full sm:w-auto justify-center sm:justify-start"
                 >
-                  <User className="w-4 h-4" />
-                  <span>Use Demo Account</span>
+                  <User className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  <span className="font-medium">Use Demo Account</span>
                 </button>
                 
                 <button
                   type="button"
-                  className="text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 underline underline-offset-2 transition-colors"
+                  className="text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 underline underline-offset-2 transition-all duration-200 px-3 py-1.5 rounded-lg hover:bg-allergan-accent/10 w-full sm:w-auto text-center"
                 >
                   Forgot password?
                 </button>
               </div>
 
-              {/* Submit Button */}
+              {/* Enhanced Submit Button */}
               <Button
                 type="submit"
                 disabled={isLoading || !email || !password}
-                className="w-full h-11 sm:h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-lg hover:shadow-xl transition-all duration-200 group text-sm sm:text-base"
+                className="w-full h-11 sm:h-12 bg-gradient-to-r from-primary to-allergan-primary hover:from-primary/90 hover:to-allergan-primary/90 text-primary-foreground font-medium shadow-lg hover:shadow-xl transition-all duration-200 group text-sm sm:text-base rounded-lg relative overflow-hidden"
               >
+                {/* Button shine effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                
                 {isLoading ? (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 relative z-10">
                     <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                     <span>Signing in...</span>
                   </div>
                 ) : (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 relative z-10">
                     <span>Sign In</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
                   </div>
@@ -151,31 +185,51 @@ const LoginPage = () => {
               </Button>
             </form>
 
+            {/* Enhanced Contact Section - All functionality preserved */}
             <div className="pt-3 sm:pt-4">
-              <Separator className="mb-3 sm:mb-4" />
-              <p className="text-center text-xs sm:text-sm text-allergan-text-light">
-                Don't have an account?{' '}
-                <button className="text-allergan-primary hover:text-allergan-primary/80 font-medium underline underline-offset-2 transition-colors">
-                  Contact your administrator
+              <div className="relative">
+                <Separator className="mb-3 sm:mb-4" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-white px-3 text-xs text-allergan-text-light">or</div>
+                </div>
+              </div>
+              <div className="text-center space-y-3">
+                <p className="text-xs sm:text-sm text-allergan-text-light">
+                  Don't have an account?
+                </p>
+                <button className="text-allergan-primary hover:text-allergan-primary/80 font-medium underline underline-offset-2 transition-all duration-200 text-sm px-4 py-2 rounded-lg hover:bg-allergan-accent/10 inline-flex items-center space-x-1">
+                  <span>Contact your administrator</span>
                 </button>
-              </p>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Footer */}
-        <div className="text-center mt-6 sm:mt-8 space-y-2 px-4">
-          <p className="text-xs text-allergan-text-light">
-            © 2024 Allergan Aesthetics
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center space-y-1 sm:space-y-0 sm:space-x-4 text-xs">
-            <button className="text-allergan-text-light hover:text-allergan-text transition-colors">
+        {/* Enhanced Footer - All functionality preserved */}
+        <div className="text-center mt-6 sm:mt-8 space-y-3 px-4">
+          <div className="flex items-center justify-center space-x-2">
+            <div className="w-8 h-px bg-gradient-to-r from-transparent to-allergan-text-light/30"></div>
+            <p className="text-xs text-allergan-text-light font-medium">
+              © 2024 Allergan Aesthetics
+            </p>
+            <div className="w-8 h-px bg-gradient-to-l from-transparent to-allergan-text-light/30"></div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs">
+            <button className="text-allergan-text-light hover:text-allergan-text transition-all duration-200 px-3 py-1 rounded-md hover:bg-allergan-accent/10">
               Privacy Policy
             </button>
-            <span className="hidden sm:inline text-allergan-text-light">•</span>
-            <button className="text-allergan-text-light hover:text-allergan-text transition-colors">
+            <div className="hidden sm:block w-1 h-1 bg-allergan-text-light/30 rounded-full"></div>
+            <button className="text-allergan-text-light hover:text-allergan-text transition-all duration-200 px-3 py-1 rounded-md hover:bg-allergan-accent/10">
               Terms of Service
             </button>
+          </div>
+          
+          {/* Subtle PromoSense Branding */}
+          <div className="pt-2">
+            <p className="text-xs text-allergan-text-light/60">
+              Powered by PromoSense AI Analytics
+            </p>
           </div>
         </div>
       </div>
