@@ -5,21 +5,35 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import AllerganLogo from './AllerganLogo';
-import { Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, ArrowRight, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const demoCredentials = {
+    email: 'demo@allerganaesthetics.com',
+    password: 'demo123'
+  };
+
+  const handleDemoLogin = () => {
+    setEmail(demoCredentials.email);
+    setPassword(demoCredentials.password);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    
     // Simulate login process
     setTimeout(() => {
       setIsLoading(false);
-      console.log('Login attempt:', { email, password });
+      // Navigate to dashboard on successful login
+      navigate('/dashboard');
     }, 1500);
   };
 
@@ -99,12 +113,21 @@ const LoginPage = () => {
               </div>
 
               {/* Forgot Password Link */}
-              <div className="flex justify-end">
+              <div className="flex justify-between items-center">
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  className="flex items-center space-x-2 text-sm text-allergan-primary hover:text-allergan-primary/80 transition-colors group"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Use Demo Account</span>
+                </button>
+                
                 <button
                   type="button"
                   className="text-sm text-allergan-primary hover:text-allergan-primary/80 underline underline-offset-2 transition-colors"
                 >
-                  Forgot your password?
+                  Forgot password?
                 </button>
               </div>
 
