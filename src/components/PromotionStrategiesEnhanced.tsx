@@ -673,6 +673,5 @@ const PromotionStrategiesEnhanced = () => {
     </div>
   );
 };
-};
 
 export default PromotionStrategiesEnhanced;
