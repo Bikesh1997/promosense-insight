@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import AllerganLogo from './AllerganLogo';
+import allerganLogo from '@/assets/allergan-logo.png';
 import { Eye, EyeOff, ArrowRight, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -46,26 +46,14 @@ const LoginPage = () => {
       <div className="w-full max-w-md mx-auto">
         {/* Logo Section */}
         <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl shadow-lg mb-4">
-            <AllerganLogo />
+          <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl shadow-lg mb-4">
+            <img src={allerganLogo} alt="Allergan Aesthetics" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-semibold text-allergan-text mb-2">
-            Welcome Back
-          </h1>
-          <p className="text-allergan-text-light text-sm">
-            Sign in to access your account
-          </p>
         </div>
 
         {/* Login Card */}
         <Card className="shadow-2xl border-0 bg-card/95 backdrop-blur-sm relative z-10">
           <CardHeader className="space-y-1 pb-4 sm:pb-6 px-4 sm:px-6">
-            <CardTitle className="text-lg sm:text-xl text-center text-allergan-text">
-              Sign In
-            </CardTitle>
-            <CardDescription className="text-center text-allergan-text-light text-sm">
-              Enter your credentials to continue
-            </CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
@@ -155,33 +143,9 @@ const LoginPage = () => {
               </Button>
             </form>
 
-            <div className="pt-3 sm:pt-4">
-              <Separator className="mb-3 sm:mb-4" />
-              <p className="text-center text-xs sm:text-sm text-allergan-text-light">
-                Don't have an account?{' '}
-                <button className="text-allergan-primary hover:text-allergan-primary/80 font-medium underline underline-offset-2 transition-colors">
-                  Contact your administrator
-                </button>
-              </p>
-            </div>
           </CardContent>
         </Card>
 
-        {/* Footer */}
-        <div className="text-center mt-6 sm:mt-8 space-y-2 px-4">
-          <p className="text-xs text-allergan-text-light">
-            © 2024 Allergan Aesthetics
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center space-y-1 sm:space-y-0 sm:space-x-4 text-xs">
-            <button className="text-allergan-text-light hover:text-allergan-text transition-colors">
-              Privacy Policy
-            </button>
-            <span className="hidden sm:inline text-allergan-text-light">•</span>
-            <button className="text-allergan-text-light hover:text-allergan-text transition-colors">
-              Terms of Service
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
