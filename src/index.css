@@ -148,4 +148,10 @@ All colors MUST be HSL.
   .sidebar-item.active {
     @apply bg-primary text-primary-foreground shadow-sm scale-[1.02];
   }
+
+  /* Background grid pattern */
+  .bg-grid-pattern {
+    background-image: radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
 }

@@ -38,7 +38,11 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-allergan-secondary via-white to-allergan-accent flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-accent/10 rounded-full blur-2xl animate-pulse delay-1000"></div>
       <div className="w-full max-w-md mx-auto">
         {/* Logo Section */}
         <div className="text-center mb-6 sm:mb-8">
@@ -54,7 +58,7 @@ const LoginPage = () => {
         </div>
 
         {/* Login Card */}
-        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
+        <Card className="shadow-2xl border-0 bg-card/95 backdrop-blur-sm relative z-10">
           <CardHeader className="space-y-1 pb-4 sm:pb-6 px-4 sm:px-6">
             <CardTitle className="text-lg sm:text-xl text-center text-allergan-text">
               Sign In
