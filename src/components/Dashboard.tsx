@@ -45,16 +45,16 @@ const Dashboard = () => {
   const COLORS = ['#0ea5e9', '#06b6d4', '#10b981', '#22c55e', '#84cc16'];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total ROI</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Total ROI</CardTitle>
+            <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">+189%</div>
+            <div className="text-xl sm:text-2xl font-bold text-success">+189%</div>
             <div className="flex items-center text-xs text-success">
               <ArrowUpRight className="h-3 w-3 mr-1" />
               +12% from last month
@@ -64,11 +64,11 @@ const Dashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New Patients</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-xs sm:text-sm font-medium">New Patients</CardTitle>
+            <Users className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,847</div>
+            <div className="text-xl sm:text-2xl font-bold">1,847</div>
             <div className="flex items-center text-xs text-success">
               <ArrowUpRight className="h-3 w-3 mr-1" />
               +8% from last month
@@ -78,11 +78,11 @@ const Dashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Conversion Rate</CardTitle>
+            <Target className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">24.3%</div>
+            <div className="text-xl sm:text-2xl font-bold">24.3%</div>
             <div className="flex items-center text-xs text-destructive">
               <ArrowDownRight className="h-3 w-3 mr-1" />
               -2% from last month
@@ -92,11 +92,11 @@ const Dashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Promotions</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-xs sm:text-sm font-medium">Active Promotions</CardTitle>
+            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="text-xl sm:text-2xl font-bold">12</div>
             <div className="flex items-center text-xs text-warning">
               <AlertTriangle className="h-3 w-3 mr-1" />
               3 need attention
@@ -105,18 +105,18 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6">
         {/* ROI Trend */}
-        <Card className="lg:col-span-2">
+        <Card className="xl:col-span-2">
           <CardHeader>
-            <CardTitle>Promotion ROI Trend</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Promotion ROI Trend</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <AreaChart data={roiData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
+                <XAxis dataKey="month" fontSize={12} />
+                <YAxis fontSize={12} />
                 <Tooltip />
                 <Area 
                   type="monotone" 
@@ -132,16 +132,16 @@ const Dashboard = () => {
         {/* Funnel Visualization */}
         <Card>
           <CardHeader>
-            <CardTitle>Patient Acquisition Funnel</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Patient Acquisition Funnel</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
                   data={funnelData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={60}
                   dataKey="value"
                   label={({ name, value }) => `${name}: ${value}`}
                 >
@@ -159,51 +159,51 @@ const Dashboard = () => {
       {/* Active Promotions */}
       <Card>
         <CardHeader>
-          <CardTitle>Active Promotions Performance</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Active Promotions Performance</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {promotionData.map((promo, index) => (
-              <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+              <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border rounded-lg space-y-3 sm:space-y-0">
                 <div className="flex items-center space-x-4">
                   <div>
-                    <h4 className="font-medium">{promo.name}</h4>
-                    <p className="text-sm text-muted-foreground">{promo.leads} leads generated</p>
+                    <h4 className="font-medium text-sm sm:text-base">{promo.name}</h4>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{promo.leads} leads generated</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <Badge variant={promo.status === 'active' ? 'default' : 'secondary'}>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                  <Badge variant={promo.status === 'active' ? 'default' : 'secondary'} className="text-xs">
                     {promo.status}
                   </Badge>
-                  <div className="text-right">
-                    <div className="font-bold text-success">+{promo.roi}%</div>
-                    <div className="text-sm text-muted-foreground">ROI</div>
+                  <div className="text-left sm:text-right">
+                    <div className="font-bold text-success text-sm sm:text-base">+{promo.roi}%</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">ROI</div>
                   </div>
                   <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" onClick={() => handleViewDetails(promo)}>
+                      <Button variant="outline" size="sm" onClick={() => handleViewDetails(promo)} className="w-full sm:w-auto">
                         View Details
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-2xl">
+                    <DialogContent className="sm:max-w-2xl mx-4">
                       <DialogHeader>
-                        <DialogTitle>{selectedPromotion?.name} - Detailed Analytics</DialogTitle>
+                        <DialogTitle className="text-lg sm:text-xl">{selectedPromotion?.name} - Detailed Analytics</DialogTitle>
                       </DialogHeader>
                       {selectedPromotion && (
                         <div className="space-y-4">
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="p-4 bg-muted/50 rounded-lg">
-                              <div className="text-2xl font-bold text-success">+{selectedPromotion.roi}%</div>
-                              <div className="text-sm text-muted-foreground">ROI</div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
+                              <div className="text-xl sm:text-2xl font-bold text-success">+{selectedPromotion.roi}%</div>
+                              <div className="text-xs sm:text-sm text-muted-foreground">ROI</div>
                             </div>
-                            <div className="p-4 bg-muted/50 rounded-lg">
-                              <div className="text-2xl font-bold">{selectedPromotion.leads}</div>
-                              <div className="text-sm text-muted-foreground">Total Leads</div>
+                            <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
+                              <div className="text-xl sm:text-2xl font-bold">{selectedPromotion.leads}</div>
+                              <div className="text-xs sm:text-sm text-muted-foreground">Total Leads</div>
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <h4 className="font-medium">Performance Metrics</h4>
-                            <div className="text-sm space-y-1">
+                            <h4 className="font-medium text-sm sm:text-base">Performance Metrics</h4>
+                            <div className="text-xs sm:text-sm space-y-1">
                               <div>• Conversion Rate: {(selectedPromotion.leads * 0.24).toFixed(1)}%</div>
                               <div>• Cost per Lead: ${(250 - selectedPromotion.roi).toFixed(2)}</div>
                               <div>• Revenue Generated: ${(selectedPromotion.leads * 850).toLocaleString()}</div>

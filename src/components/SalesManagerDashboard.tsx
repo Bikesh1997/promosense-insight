@@ -89,21 +89,21 @@ const SalesManagerDashboard = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-3xl font-bold">Sales Manager Dashboard</h2>
-        <p className="text-muted-foreground">Regional performance analysis, rep productivity, and actionable insights</p>
+        <h2 className="text-2xl sm:text-3xl font-bold">Sales Manager Dashboard</h2>
+        <p className="text-sm sm:text-base text-muted-foreground">Regional performance analysis, rep productivity, and actionable insights</p>
       </div>
 
       {/* Regional Summary Cards */}
-      <div className="grid md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
         {Object.entries(regionalSummary).map(([region, data]) => (
           <Card key={region}>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm capitalize">{region.replace(/([A-Z])/g, ' $1').trim()}</CardTitle>
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm capitalize">{region.replace(/([A-Z])/g, ' $1').trim()}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="text-lg font-bold">${(data.revenue / 1000000).toFixed(1)}M</div>
+              <div className="text-base sm:text-lg font-bold">${(data.revenue / 1000000).toFixed(1)}M</div>
               <div className="text-xs text-muted-foreground">{data.patients} patients</div>
               <Badge variant={data.roi > 160 ? "default" : data.roi > 140 ? "secondary" : "destructive"} className="text-xs">
                 {data.roi}% ROI
@@ -121,129 +121,216 @@ const SalesManagerDashboard = () => {
       {/* At-Risk Clinics */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <AlertTriangle className="h-5 w-5 text-destructive" />
+          <CardTitle className="flex items-center space-x-2 text-lg sm:text-xl">
+            <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-destructive" />
             <span>At-Risk Clinics</span>
           </CardTitle>
           <CardDescription>Clinics with high leakage rates requiring immediate attention</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Clinic Name</TableHead>
-                <TableHead>Region</TableHead>
-                <TableHead>Leakage %</TableHead>
-                <TableHead>Problem Stage</TableHead>
-                <TableHead>Revenue Risk</TableHead>
-                <TableHead>Assigned Rep</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {atRiskClinics.map((clinic) => (
-                <TableRow key={clinic.clinic}>
-                  <TableCell className="font-medium">{clinic.clinic}</TableCell>
-                  <TableCell>{clinic.region}</TableCell>
-                  <TableCell>
-                    <Badge variant="destructive">{clinic.leakage}%</Badge>
-                  </TableCell>
-                  <TableCell className="text-sm">{clinic.stage}</TableCell>
-                  <TableCell>${clinic.revenue.toLocaleString()}</TableCell>
-                  <TableCell>{clinic.rep}</TableCell>
-                  <TableCell>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      onClick={() => handleInvestigateClinic(clinic)}
-                    >
-                      Investigate
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Rep Performance & AI Suggestions */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Rep Performance Analysis</CardTitle>
-            <CardDescription>Representative effectiveness by conversion metrics</CardDescription>
-          </CardHeader>
-          <CardContent>
+          {/* Mobile Card View */}
+          <div className="block sm:hidden space-y-3">
+            {atRiskClinics.map((clinic) => (
+              <div key={clinic.clinic} className="p-3 border rounded-lg space-y-2">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium text-sm">{clinic.clinic}</h4>
+                  <Badge variant="destructive" className="text-xs">{clinic.leakage}%</Badge>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span className="text-muted-foreground">Region: </span>
+                    <span>{clinic.region}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Revenue Risk: </span>
+                    <span>${clinic.revenue.toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Problem: </span>
+                    <span>{clinic.stage}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Rep: </span>
+                    <span>{clinic.rep}</span>
+                  </div>
+                </div>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => handleInvestigateClinic(clinic)}
+                  className="w-full"
+                >
+                  Investigate
+                </Button>
+              </div>
+            ))}
+          </div>
+          
+          {/* Desktop Table View */}
+          <div className="hidden sm:block overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Rep Name</TableHead>
+                  <TableHead>Clinic Name</TableHead>
                   <TableHead>Region</TableHead>
-                  <TableHead>Leads</TableHead>
-                  <TableHead>Conversion %</TableHead>
-                  <TableHead>Avg Follow-Up</TableHead>
-                  <TableHead>Hot Leads</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead>Leakage %</TableHead>
+                  <TableHead>Problem Stage</TableHead>
+                  <TableHead>Revenue Risk</TableHead>
+                  <TableHead>Assigned Rep</TableHead>
+                  <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {repPerformance.map((rep) => (
-                  <TableRow key={rep.rep}>
-                    <TableCell className="font-medium">{rep.rep}</TableCell>
-                    <TableCell>{rep.region}</TableCell>
-                    <TableCell>{rep.leadsAssigned}</TableCell>
+                {atRiskClinics.map((clinic) => (
+                  <TableRow key={clinic.clinic}>
+                    <TableCell className="font-medium">{clinic.clinic}</TableCell>
+                    <TableCell>{clinic.region}</TableCell>
                     <TableCell>
-                      <Badge variant={rep.conversion > 75 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"}>
-                        {rep.conversion}%
-                      </Badge>
+                      <Badge variant="destructive">{clinic.leakage}%</Badge>
                     </TableCell>
-                    <TableCell>{rep.avgFollowUp} days</TableCell>
+                    <TableCell className="text-sm">{clinic.stage}</TableCell>
+                    <TableCell>${clinic.revenue.toLocaleString()}</TableCell>
+                    <TableCell>{clinic.rep}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">{rep.hotLeads}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      {rep.conversion < 70 && (
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          onClick={() => handleOptimizeRep(rep.rep, rep.conversion)}
-                          title="Optimize Performance"
-                        >
-                          <Settings className="h-3 w-3" />
-                        </Button>
-                      )}
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => handleInvestigateClinic(clinic)}
+                      >
+                        Investigate
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Rep Performance & AI Suggestions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg sm:text-xl">Rep Performance Analysis</CardTitle>
+            <CardDescription>Representative effectiveness by conversion metrics</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {/* Mobile Card View */}
+            <div className="block sm:hidden space-y-3">
+              {repPerformance.map((rep) => (
+                <div key={rep.rep} className="p-3 border rounded-lg space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium text-sm">{rep.rep}</h4>
+                    <Badge variant={rep.conversion > 75 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"} className="text-xs">
+                      {rep.conversion}%
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <span className="text-muted-foreground">Region: </span>
+                      <span>{rep.region}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Leads: </span>
+                      <span>{rep.leadsAssigned}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Follow-up: </span>
+                      <span>{rep.avgFollowUp} days</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Hot Leads: </span>
+                      <Badge variant="outline" className="text-xs">{rep.hotLeads}</Badge>
+                    </div>
+                  </div>
+                  {rep.conversion < 70 && (
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      onClick={() => handleOptimizeRep(rep.rep, rep.conversion)}
+                      className="w-full"
+                    >
+                      <Settings className="h-3 w-3 mr-2" />
+                      Optimize Performance
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            {/* Desktop Table View */}
+            <div className="hidden sm:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Rep Name</TableHead>
+                    <TableHead>Region</TableHead>
+                    <TableHead>Leads</TableHead>
+                    <TableHead>Conversion %</TableHead>
+                    <TableHead>Avg Follow-Up</TableHead>
+                    <TableHead>Hot Leads</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {repPerformance.map((rep) => (
+                    <TableRow key={rep.rep}>
+                      <TableCell className="font-medium">{rep.rep}</TableCell>
+                      <TableCell>{rep.region}</TableCell>
+                      <TableCell>{rep.leadsAssigned}</TableCell>
+                      <TableCell>
+                        <Badge variant={rep.conversion > 75 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"}>
+                          {rep.conversion}%
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{rep.avgFollowUp} days</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{rep.hotLeads}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        {rep.conversion < 70 && (
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            onClick={() => handleOptimizeRep(rep.rep, rep.conversion)}
+                            title="Optimize Performance"
+                          >
+                            <Settings className="h-3 w-3" />
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>AI-Powered Suggestions</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">AI-Powered Suggestions</CardTitle>
             <CardDescription>Recommended actions prioritized by urgency</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {aiSuggestions.map((suggestion, index) => (
-                <div key={index} className={`p-4 rounded-lg border ${
+                <div key={index} className={`p-3 sm:p-4 rounded-lg border ${
                   suggestion.priority === 'high' ? 'bg-destructive/5 border-destructive' : 'bg-secondary/5 border-secondary'
                 }`}>
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between space-y-3 sm:space-y-0">
                     <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-1">
                         <span className="font-medium text-sm">{suggestion.clinic}</span>
-                        <Badge variant="destructive">{suggestion.risk}% risk</Badge>
+                        <Badge variant="destructive" className="text-xs w-fit">{suggestion.risk}% risk</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{suggestion.action}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-2">{suggestion.action}</p>
                       <Badge variant={suggestion.priority === 'high' ? "destructive" : "secondary"} className="text-xs">
                         {suggestion.priority.toUpperCase()} PRIORITY
                       </Badge>
                     </div>
-                    <div className="flex space-x-1 ml-4">
+                    <div className="flex space-x-1 sm:ml-4">
                       <Button 
                         size="sm" 
                         variant="ghost"
@@ -279,33 +366,33 @@ const SalesManagerDashboard = () => {
 
       {/* Investigation Modal */}
       <Dialog open={investigateModalOpen} onOpenChange={setInvestigateModalOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg mx-4">
           <DialogHeader>
-            <DialogTitle>Clinic Investigation: {selectedClinic?.clinic}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">Clinic Investigation: {selectedClinic?.clinic}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="p-3 border rounded">
-                <div className="text-sm text-muted-foreground">Leakage Rate</div>
-                <div className="text-xl font-bold text-destructive">{selectedClinic?.leakage}%</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Leakage Rate</div>
+                <div className="text-lg sm:text-xl font-bold text-destructive">{selectedClinic?.leakage}%</div>
               </div>
               <div className="p-3 border rounded">
-                <div className="text-sm text-muted-foreground">Problem Stage</div>
-                <div className="font-medium">{selectedClinic?.stage}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Problem Stage</div>
+                <div className="font-medium text-sm sm:text-base">{selectedClinic?.stage}</div>
               </div>
               <div className="p-3 border rounded">
-                <div className="text-sm text-muted-foreground">Revenue Risk</div>
-                <div className="font-bold">${selectedClinic?.revenue?.toLocaleString()}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Revenue Risk</div>
+                <div className="font-bold text-sm sm:text-base">${selectedClinic?.revenue?.toLocaleString()}</div>
               </div>
               <div className="p-3 border rounded">
-                <div className="text-sm text-muted-foreground">Assigned Rep</div>
-                <div className="font-medium">{selectedClinic?.rep}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Assigned Rep</div>
+                <div className="font-medium text-sm sm:text-base">{selectedClinic?.rep}</div>
               </div>
             </div>
             <div className="space-y-3">
               <div>
-                <h4 className="font-medium mb-2">Investigation Findings:</h4>
-                <ul className="text-sm space-y-1 text-muted-foreground">
+                <h4 className="font-medium mb-2 text-sm sm:text-base">Investigation Findings:</h4>
+                <ul className="text-xs sm:text-sm space-y-1 text-muted-foreground">
                   <li>• Patient follow-up rate 23% below target</li>
                   <li>• Average response time: 4.2 hours (target: 2 hours)</li>
                   <li>• Promotional email open rate: 34% (industry avg: 42%)</li>
@@ -313,8 +400,8 @@ const SalesManagerDashboard = () => {
                 </ul>
               </div>
               <div>
-                <h4 className="font-medium mb-2">Recommended Actions:</h4>
-                <ul className="text-sm space-y-1 text-muted-foreground">
+                <h4 className="font-medium mb-2 text-sm sm:text-base">Recommended Actions:</h4>
+                <ul className="text-xs sm:text-sm space-y-1 text-muted-foreground">
                   <li>• Implement automated follow-up system</li>
                   <li>• Increase rep training on treatment benefits</li>
                   <li>• Review and update promotional email templates</li>
@@ -322,12 +409,12 @@ const SalesManagerDashboard = () => {
                 </ul>
               </div>
             </div>
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setInvestigateModalOpen(false)}>Close</Button>
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+              <Button variant="outline" onClick={() => setInvestigateModalOpen(false)} className="w-full sm:w-auto">Close</Button>
               <Button onClick={() => {
                 toast.success('Investigation report generated and sent to stakeholders');
                 setInvestigateModalOpen(false);
-              }}>Generate Report</Button>
+              }} className="w-full sm:w-auto">Generate Report</Button>
             </div>
           </div>
         </DialogContent>
@@ -335,14 +422,14 @@ const SalesManagerDashboard = () => {
 
       {/* Call Rep Modal */}
       <Dialog open={callModalOpen} onOpenChange={setCallModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md mx-4">
           <DialogHeader>
-            <DialogTitle>Call {selectedRep?.name}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">Call {selectedRep?.name}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="p-3 bg-muted rounded">
-              <div className="text-sm text-muted-foreground">Regarding</div>
-              <div className="font-medium">{selectedRep?.clinic} Performance</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Regarding</div>
+              <div className="font-medium text-sm sm:text-base">{selectedRep?.clinic} Performance</div>
             </div>
             <div>
               <label className="text-sm font-medium">Call Notes</label>
@@ -351,11 +438,12 @@ const SalesManagerDashboard = () => {
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Document key discussion points, action items, and next steps..."
                 rows={4}
+                className="text-sm"
               />
             </div>
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setCallModalOpen(false)}>Cancel</Button>
-              <Button onClick={submitCall}>Complete Call</Button>
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+              <Button variant="outline" onClick={() => setCallModalOpen(false)} className="w-full sm:w-auto">Cancel</Button>
+              <Button onClick={submitCall} className="w-full sm:w-auto">Complete Call</Button>
             </div>
           </div>
         </DialogContent>
@@ -363,14 +451,14 @@ const SalesManagerDashboard = () => {
 
       {/* Message Rep Modal */}
       <Dialog open={messageModalOpen} onOpenChange={setMessageModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md mx-4">
           <DialogHeader>
-            <DialogTitle>Message {selectedRep?.name}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">Message {selectedRep?.name}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="p-3 bg-muted rounded">
-              <div className="text-sm text-muted-foreground">Subject</div>
-              <div className="font-medium">Performance Improvement - {selectedRep?.clinic}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Subject</div>
+              <div className="font-medium text-sm sm:text-base">Performance Improvement - {selectedRep?.clinic}</div>
             </div>
             <div>
               <label className="text-sm font-medium">Message</label>
@@ -379,10 +467,11 @@ const SalesManagerDashboard = () => {
                 onChange={(e) => setMessageContent(e.target.value)}
                 placeholder="Hi [Rep Name], I wanted to discuss the performance metrics for [Clinic]..."
                 rows={5}
+                className="text-sm"
               />
             </div>
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setMessageModalOpen(false)}>Cancel</Button>
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+              <Button variant="outline" onClick={() => setMessageModalOpen(false)} className="w-full sm:w-auto">Cancel</Button>
               <Button onClick={submitMessage}>Send Message</Button>
             </div>
           </div>
