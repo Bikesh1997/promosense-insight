@@ -459,44 +459,28 @@ const PromotionStrategiesEnhanced = () => {
               <CardContent>
                 <div className="space-y-4">
                   {paginatedCampaigns.map((campaign) => (
-                    <div key={campaign.id} className="p-4 border rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="secondary">{campaign.type}</Badge>
-                          <Badge variant={campaign.status === 'Active' ? "default" : "secondary"}>
-                            {campaign.status}
-                          </Badge>
+                    <div key={campaign.id} className="flex items-start justify-between p-4 border rounded-lg">
+                      <div className="flex-1">
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <Badge variant="secondary">{campaign.type}</Badge>
+                            <Badge variant={campaign.status === 'Active' ? "default" : "secondary"}>
+                              {campaign.status}
+                            </Badge>
+                          </div>
+                          <h4 className="font-medium">{campaign.name}</h4>
                         </div>
+                        <div className="grid grid-cols-4 gap-4 mt-2 text-sm text-muted-foreground">
+                          <span>Period: {campaign.startDate} to {campaign.endDate}</span>
+                          <span>Cost: ${campaign.cost.toLocaleString()}</span>
+                          <span>New Patients: {campaign.newPatients}</span>
+                          <span>Revenue: ${campaign.revenue.toLocaleString()}</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end space-y-2">
                         <Badge variant="outline" className="text-success border-success">
                           {campaign.roi}% ROI
                         </Badge>
-                      </div>
-                      
-                      <h4 className="font-medium text-lg mb-3">{campaign.name}</h4>
-                      
-                      {/* Campaign Details */}
-                      <div className="bg-muted/30 p-3 rounded-lg mb-3">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">Period:</span>
-                            <div className="font-medium">2025-09-01 to 2025-12-31</div>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Cost:</span>
-                            <div className="font-medium">$25,000</div>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">New Patients:</span>
-                            <div className="font-medium">425</div>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Revenue:</span>
-                            <div className="font-medium">$255,000</div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex justify-end">
                         <Dialog open={campaignDetailsOpen} onOpenChange={setCampaignDetailsOpen}>
                           <DialogTrigger asChild>
                             <Button 

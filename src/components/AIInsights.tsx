@@ -79,14 +79,9 @@ const AIInsights = () => {
     setLearnMoreModalOpen(true);
   };
 
-  const handleCreateCampaign = (opportunity = null) => {
-    if (opportunity) {
-      setSelectedOpportunity(opportunity);
-      setCampaignName(`${opportunity.title} Campaign`);
-    } else {
-      setSelectedOpportunity(null);
-      setCampaignName('New Campaign');
-    }
+  const handleCreateCampaign = (opportunity) => {
+    setSelectedOpportunity(opportunity);
+    setCampaignName(`${opportunity.title} Campaign`);
     setCreateCampaignModalOpen(true);
   };
   // AI Recommendations
@@ -565,26 +560,24 @@ const AIInsights = () => {
         <TabsContent value="opportunities">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center">
-                    <Zap className="h-5 w-5 mr-2" />
-                    Market Opportunities
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    AI-identified opportunities based on market trends and competitive analysis
-                  </p>
-                </div>
-                <Button onClick={() => handleCreateCampaign()}>Create Campaign</Button>
-              </div>
+              <CardTitle className="flex items-center">
+                <Zap className="h-5 w-5 mr-2" />
+                Market Opportunities
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                AI-identified opportunities based on market trends and competitive analysis
+              </p>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 {opportunities.map((opp, index) => (
                   <div key={index} className="border rounded-lg p-6">
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-lg">{opp.title}</h4>
-                      <p className="text-muted-foreground mt-1">{opp.description}</p>
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="font-semibold text-lg">{opp.title}</h4>
+                        <p className="text-muted-foreground mt-1">{opp.description}</p>
+                      </div>
+                      <Badge variant="outline">{opp.confidence}% confidence</Badge>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div className="p-3 bg-success/10 rounded-lg">
@@ -596,9 +589,9 @@ const AIInsights = () => {
                         <p className="font-semibold text-primary">{opp.action}</p>
                       </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <Badge variant="outline">{opp.confidence}% confidence</Badge>
+                    <div className="flex justify-end space-x-2">
                       <Button variant="outline" onClick={() => handleLearnMore(opp)}>Learn More</Button>
+                      <Button onClick={() => handleCreateCampaign(opp)}>Create Campaign</Button>
                     </div>
                   </div>
                 ))}
