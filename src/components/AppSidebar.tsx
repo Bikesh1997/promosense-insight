@@ -103,32 +103,31 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
                   isActive ? 'scale-110' : 'group-hover:scale-105'
                 )} />
                 
-                <div className="flex-1 flex items-center justify-between ml-3 min-w-0">
-                  <div className="min-w-0 flex-1">
+                <div className="flex-1 flex flex-col ml-3 min-w-0">
+                  <div className="flex items-center justify-between w-full">
                     <div className="font-medium text-sm truncate">
                       {item.title}
                     </div>
+                    {item.badge && (
+                      <Badge 
+                        variant={item.badge === "AI" ? "default" : "secondary"} 
+                        className="text-xs px-1.5 py-0.5 h-4 ml-2 flex-shrink-0"
+                      >
+                        {item.badge}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between w-full">
                     <div className={cn(
-                      "text-xs truncate mt-0.5",
+                      "text-xs truncate mt-0.5 flex-1",
                       isActive 
                         ? 'text-primary-foreground/80' 
                         : 'text-muted-foreground'
                     )}>
                       {item.subtitle}
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 ml-2">
-                    {item.badge && (
-                      <Badge 
-                        variant={item.badge === "AI" ? "default" : "secondary"} 
-                        className="text-xs px-2 py-0.5 h-5"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
                     <ChevronRight className={cn(
-                      "h-3 w-3 transition-transform duration-200",
+                      "h-3 w-3 transition-transform duration-200 flex-shrink-0",
                       isActive ? 'rotate-90' : 'group-hover:rotate-90',
                       isActive 
                         ? 'text-primary-foreground/70' 
