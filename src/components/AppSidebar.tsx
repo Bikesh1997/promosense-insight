@@ -16,6 +16,13 @@ import { cn } from '@/lib/utils';
 
 const sidebarItems = [
   {
+    title: "Promotion Strategies",
+    subtitle: "Campaign optimization",
+    id: "strategies-enhanced",
+    icon: Gift,
+    badge: "Top"
+  },
+  {
     title: "Promotion Effectiveness",
     subtitle: "8-strategy ROI analysis",
     id: "strategies",
