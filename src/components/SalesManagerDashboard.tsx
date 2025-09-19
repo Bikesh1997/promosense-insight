@@ -142,6 +142,10 @@ const SalesManagerDashboard = () => {
     { clinic: "Phoenix Beauty", risk: 61, action: "Increase follow-up frequency", priority: "medium" }
   ];
 
+  // Get unique values for filter options - defined before filtering to ensure availability
+  const uniqueRegions = [...new Set(atRiskClinics.map(clinic => clinic.region))];
+  const uniqueReps = [...new Set(atRiskClinics.map(clinic => clinic.rep))];
+
   // Filter data based on selected filters
   const filteredAtRiskClinics = atRiskClinics.filter(clinic => {
     const regionMatch = regionFilter === 'all' || clinic.region === regionFilter;
@@ -159,11 +163,7 @@ const SalesManagerDashboard = () => {
     return regionMatch && repMatch;
   });
 
-  // Get unique values for filter options
-  const uniqueRegions = [...new Set(atRiskClinics.map(clinic => clinic.region))];
-  const uniqueReps = [...new Set(atRiskClinics.map(clinic => clinic.rep))];
-
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
