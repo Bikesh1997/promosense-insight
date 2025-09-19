@@ -41,58 +41,55 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-allergan-secondary via-white to-allergan-accent flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-md mx-auto">
         {/* Enhanced Logo Section */}
-        <div className="text-center mb-6 sm:mb-8">
-          {/* Improved Logo Container */}
-          <div className="relative inline-flex items-center justify-center mb-6">
-            {/* Logo Background with Gradient */}
-            <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-white via-allergan-secondary to-allergan-accent rounded-3xl shadow-2xl border border-white/20 backdrop-blur-sm">
-              {/* Inner Logo Container */}
-              <div className="absolute inset-2 bg-white rounded-2xl shadow-inner flex items-center justify-center">
-                <div className="scale-125 sm:scale-150">
+        <div className="text-center mb-8 sm:mb-12">
+          {/* Premium Logo Container */}
+          <div className="relative inline-flex items-center justify-center mb-8">
+            {/* Enhanced Logo Background */}
+            <div className="relative w-28 h-28 sm:w-32 sm:h-32 bg-gradient-to-br from-primary via-white to-accent rounded-full shadow-2xl border-4 border-white/30 backdrop-blur-sm">
+              {/* Inner Logo Container with Premium Styling */}
+              <div className="absolute inset-3 bg-gradient-to-br from-white to-allergan-secondary rounded-full shadow-inner flex items-center justify-center border border-allergan-primary/10">
+                <div className="scale-150 sm:scale-175">
                   <AllerganLogo />
                 </div>
               </div>
-              {/* Subtle Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-allergan-primary/10 to-transparent rounded-3xl"></div>
+              {/* Dynamic Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 rounded-full animate-pulse"></div>
+              {/* Outer Ring */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-full opacity-20 blur-sm"></div>
             </div>
             
-            {/* Floating Badge */}
-            <div className="absolute -top-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-r from-allergan-primary to-primary rounded-full flex items-center justify-center shadow-lg">
-              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            {/* Premium Status Badge */}
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-success to-primary rounded-full flex items-center justify-center shadow-xl border-2 border-white">
+              <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
             </div>
           </div>
           
           {/* Enhanced Typography */}
-          <div className="space-y-2">
-            <h1 className="text-xl sm:text-2xl font-semibold text-allergan-text mb-1">
+          <div className="space-y-4">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-allergan-text to-primary bg-clip-text text-transparent mb-2">
               Welcome Back
             </h1>
-            <div className="flex items-center justify-center space-x-2 text-allergan-text-light">
-              <div className="w-8 h-px bg-gradient-to-r from-transparent to-allergan-primary/30"></div>
-              <p className="text-sm font-medium">PromoSense Portal</p>
-              <div className="w-8 h-px bg-gradient-to-l from-transparent to-allergan-primary/30"></div>
+            <div className="flex items-center justify-center space-x-3 text-allergan-text-light">
+              <div className="w-12 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+              <p className="text-base font-semibold text-primary">PromoSense Portal</p>
+              <div className="w-12 h-px bg-gradient-to-l from-transparent via-primary/50 to-transparent"></div>
             </div>
-            <p className="text-xs sm:text-sm text-allergan-text-light/80">
+            <p className="text-sm text-allergan-text-light/90 font-medium">
               AI-Powered Analytics Platform
             </p>
           </div>
         </div>
 
-        {/* Enhanced Login Card */}
-        <Card className="shadow-2xl border-0 bg-white/95 backdrop-blur-sm relative overflow-hidden">
-          {/* Subtle Pattern Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-allergan-primary/5 via-transparent to-allergan-accent/5 pointer-events-none"></div>
+        {/* Login Form - No Card Background */}
+        <div className="relative">
+          {/* Header Section */}
+          <div className="text-center mb-6">
+            <h2 className="text-xl sm:text-2xl font-semibold text-allergan-text mb-2">Sign In</h2>
+            <p className="text-allergan-text-light text-sm">Enter your credentials to continue</p>
+          </div>
           
-          <CardHeader className="space-y-1 pb-4 sm:pb-6 px-4 sm:px-6 relative">
-            <CardTitle className="text-lg sm:text-xl text-center text-allergan-text flex items-center justify-center space-x-2">
-              <span>Sign In</span>
-            </CardTitle>
-            <CardDescription className="text-center text-allergan-text-light text-sm">
-              Enter your credentials to continue
-            </CardDescription>
-          </CardHeader>
-          
-          <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6 relative">
+          {/* Form Content */}
+          <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email Field - Enhanced */}
               <div className="space-y-2">
@@ -186,24 +183,24 @@ const LoginPage = () => {
             </form>
 
             {/* Enhanced Contact Section - All functionality preserved */}
-            <div className="pt-3 sm:pt-4">
+            <div className="pt-6">
               <div className="relative">
-                <Separator className="mb-3 sm:mb-4" />
+                <Separator className="mb-4" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white px-3 text-xs text-allergan-text-light">or</div>
+                  <div className="bg-gradient-to-r from-allergan-secondary to-white px-4 text-xs text-allergan-text-light font-medium">or</div>
                 </div>
               </div>
-              <div className="text-center space-y-3">
-                <p className="text-xs sm:text-sm text-allergan-text-light">
+              <div className="text-center space-y-4">
+                <p className="text-sm text-allergan-text-light">
                   Don't have an account?
                 </p>
-                <button className="text-allergan-primary hover:text-allergan-primary/80 font-medium underline underline-offset-2 transition-all duration-200 text-sm px-4 py-2 rounded-lg hover:bg-allergan-accent/10 inline-flex items-center space-x-1">
+                <button className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2 transition-all duration-200 text-sm px-6 py-3 rounded-lg hover:bg-accent/10 inline-flex items-center space-x-1 border border-primary/20 hover:border-primary/40">
                   <span>Contact your administrator</span>
                 </button>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Enhanced Footer - All functionality preserved */}
         <div className="text-center mt-6 sm:mt-8 space-y-3 px-4">

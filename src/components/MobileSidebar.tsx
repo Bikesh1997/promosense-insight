@@ -14,12 +14,6 @@ interface MobileSidebarProps {
 const MobileSidebar = ({ isOpen, onClose, activeView, onViewChange }: MobileSidebarProps) => {
   const sidebarItems = [
     {
-      id: 'strategies-enhanced',
-      title: 'Promotion Strategies',
-      description: 'Campaign optimization',
-      badge: 'Top'
-    },
-    {
       id: 'strategies',
       title: 'Promotion Effectiveness',
       description: '8-strategy ROI analysis',

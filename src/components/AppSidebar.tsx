@@ -16,22 +16,8 @@ import { cn } from '@/lib/utils';
 
 const sidebarItems = [
   {
-    title: "Promotion Strategies",
-    subtitle: "Campaign optimization",
-    id: "strategies-enhanced",
-    icon: Gift,
-    badge: "Top"
-  },
-  {
-    title: "Promotion Effectiveness",
-    subtitle: "8-strategy ROI analysis",
-    id: "strategies",
-    icon: Target,
-    badge: "New"
-  },
-  {
     title: "Funnel Leakage Analysis", 
-    subtitle: "Patient journey insights",
+    subtitle: "Patient Journey Insights",
     id: "funnel",
     icon: TrendingDown,
     badge: null

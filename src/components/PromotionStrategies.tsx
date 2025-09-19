@@ -536,7 +536,10 @@ const PromotionStrategies = () => {
               {/* Patient Funnel */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Patient Journey Funnel</CardTitle>
+                  <CardTitle className="group cursor-pointer">
+                    <span className="group-hover:hidden">Patient Journey Funnel</span>
+                    <span className="hidden group-hover:inline">Patient Journey Funnel</span>
+                  </CardTitle>
                   <CardDescription>Track patient progression through the campaign funnel</CardDescription>
                 </CardHeader>
                 <CardContent>

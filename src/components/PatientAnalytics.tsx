@@ -238,7 +238,10 @@ const PatientAnalytics = () => {
             <Card className="lg:col-span-2">
               <CardHeader>
                 <CardTitle>Patient Acquisition Funnel</CardTitle>
-                <p className="text-sm text-muted-foreground">Track conversion at each stage of the patient journey</p>
+                <p className="text-sm text-muted-foreground group cursor-pointer">
+                  <span className="group-hover:hidden">Track conversion at each stage of the patient journey</span>
+                  <span className="hidden group-hover:inline">Track Conversion At Each Stage Of The Patient Journey</span>
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

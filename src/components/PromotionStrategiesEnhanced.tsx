@@ -283,17 +283,57 @@ const PromotionStrategiesEnhanced = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 lg:space-y-6">
-        {/* Mobile-responsive tabs with scrollable list */}
+        {/* Professional tabs with enhanced styling */}
         <div className="w-full overflow-x-auto">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 min-w-max lg:min-w-full">
-            <TabsTrigger value="alle" className="text-xs sm:text-sm">Allē</TabsTrigger>
-            <TabsTrigger value="refer-friend" className="text-xs sm:text-sm">Refer</TabsTrigger>
-            <TabsTrigger value="branded" className="text-xs sm:text-sm">Branded</TabsTrigger>
-            <TabsTrigger value="multi-service" className="text-xs sm:text-sm">Multi</TabsTrigger>
-            <TabsTrigger value="gift" className="text-xs sm:text-sm">Gift</TabsTrigger>
-            <TabsTrigger value="influencer" className="text-xs sm:text-sm">Influencer</TabsTrigger>
-            <TabsTrigger value="practice" className="text-xs sm:text-sm">Practice</TabsTrigger>
-            <TabsTrigger value="educational" className="text-xs sm:text-sm">Education</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 min-w-max lg:min-w-full bg-card border border-border shadow-sm rounded-lg p-1">
+            <TabsTrigger 
+              value="alle" 
+              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
+            >
+              Allē Loyalty
+            </TabsTrigger>
+            <TabsTrigger 
+              value="refer-friend" 
+              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
+            >
+              Referral Program
+            </TabsTrigger>
+            <TabsTrigger 
+              value="branded" 
+              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
+            >
+              Brand Partnerships
+            </TabsTrigger>
+            <TabsTrigger 
+              value="multi-service" 
+              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
+            >
+              Service Bundles
+            </TabsTrigger>
+            <TabsTrigger 
+              value="gift" 
+              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
+            >
+              Gift Programs
+            </TabsTrigger>
+            <TabsTrigger 
+              value="influencer" 
+              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
+            >
+              Influencer Marketing
+            </TabsTrigger>
+            <TabsTrigger 
+              value="practice" 
+              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
+            >
+              Practice Development
+            </TabsTrigger>
+            <TabsTrigger 
+              value="educational" 
+              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
+            >
+              Educational Content
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -604,7 +644,10 @@ const PromotionStrategiesEnhanced = () => {
               {/* Patient Journey Funnel */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Patient Journey</CardTitle>
+                  <CardTitle className="group cursor-pointer">
+                    <span className="group-hover:hidden">Patient Journey</span>
+                    <span className="hidden group-hover:inline">Patient Journey</span>
+                  </CardTitle>
                   <CardDescription>Conversion funnel analysis</CardDescription>
                 </CardHeader>
                 <CardContent>
