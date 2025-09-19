@@ -382,12 +382,14 @@ const PromotionStrategiesEnhanced = () => {
                   {paginatedCampaigns.map((campaign) => (
                     <div key={campaign.id} className="flex items-start justify-between p-4 border rounded-lg">
                       <div className="flex-1">
-                        <div className="flex items-center space-x-3">
-                          <Badge variant="secondary">{campaign.type}</Badge>
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <Badge variant="secondary">{campaign.type}</Badge>
+                            <Badge variant={campaign.status === 'Active' ? "default" : "secondary"}>
+                              {campaign.status}
+                            </Badge>
+                          </div>
                           <h4 className="font-medium">{campaign.name}</h4>
-                          <Badge variant={campaign.status === 'Active' ? "default" : "secondary"}>
-                            {campaign.status}
-                          </Badge>
                         </div>
                         <div className="grid grid-cols-4 gap-4 mt-2 text-sm text-muted-foreground">
                           <span>Period: {campaign.startDate} to {campaign.endDate}</span>
