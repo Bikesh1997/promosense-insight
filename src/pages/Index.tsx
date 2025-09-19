@@ -47,7 +47,7 @@ const Index = () => {
         <Header />
         <div className="flex">
           <AppSidebar activeView={activeView} onViewChange={setActiveView} />
-          <main className="flex-1 p-6 ml-64">
+          <main className="flex-1 p-6 ml-72">
             {renderContent()}
           </main>
         </div>

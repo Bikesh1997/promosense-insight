@@ -80,7 +80,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
   return (
-    <div className="w-64 bg-card border-r border-border h-screen fixed left-0 top-0 pt-16">
+    <div className="w-72 bg-card border-r border-border h-screen fixed left-0 top-0 pt-16">
       <nav className="px-4 py-4 h-full">
         {sidebarItems.map((item) => {
           const isActive = activeView === item.id;
