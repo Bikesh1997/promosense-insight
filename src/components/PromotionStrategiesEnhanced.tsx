@@ -47,10 +47,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'AL005', name: 'Loyalty Tier Upgrade', type: 'Points', startDate: '2025-08-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 412, revenue: 247200, roi: 724 }
       ],
       channelData: [
-        { name: 'Mobile App', value: 38, color: '#8884d8' },
-        { name: 'Social Media', value: 25, color: '#82ca9d' },
-        { name: 'Email Campaign', value: 20, color: '#ffc658' },
-        { name: 'In-Clinic', value: 17, color: '#ff7300' }
+        { name: 'Mobile App', value: 38, color: 'hsl(var(--primary))' },
+        { name: 'Social Media', value: 25, color: 'hsl(var(--accent))' },
+        { name: 'Email Campaign', value: 20, color: 'hsl(var(--success))' },
+        { name: 'In-Clinic', value: 17, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2400, active: 2200, converted: 1800, retained: 1600 },
@@ -74,10 +74,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'RF004', name: 'Referrer Rewards Program', type: 'Points', startDate: '2025-09-10', endDate: '2025-12-31', cost: 8000, status: 'Active', newPatients: 156, revenue: 93600, roi: 1070 }
       ],
       channelData: [
-        { name: 'Word of Mouth', value: 45, color: '#8884d8' },
-        { name: 'Social Sharing', value: 28, color: '#82ca9d' },
-        { name: 'Text Referrals', value: 15, color: '#ffc658' },
-        { name: 'Email Invites', value: 12, color: '#ff7300' }
+        { name: 'Word of Mouth', value: 45, color: 'hsl(var(--primary))' },
+        { name: 'Social Sharing', value: 28, color: 'hsl(var(--accent))' },
+        { name: 'Text Referrals', value: 15, color: 'hsl(var(--success))' },
+        { name: 'Email Invites', value: 12, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1800, active: 1600, converted: 1300, retained: 1100 },
@@ -100,10 +100,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'BR003', name: 'Lifestyle Influencer Partnership', type: 'Influencer', startDate: '2025-07-15', endDate: '2025-10-15', cost: 22000, status: 'Active', newPatients: 298, revenue: 178800, roi: 713 }
       ],
       channelData: [
-        { name: 'Brand Websites', value: 32, color: '#8884d8' },
-        { name: 'Co-Branded Content', value: 28, color: '#82ca9d' },
-        { name: 'Event Marketing', value: 25, color: '#ffc658' },
-        { name: 'Cross-Promotion', value: 15, color: '#ff7300' }
+        { name: 'Brand Websites', value: 32, color: 'hsl(var(--primary))' },
+        { name: 'Co-Branded Content', value: 28, color: 'hsl(var(--accent))' },
+        { name: 'Event Marketing', value: 25, color: 'hsl(var(--success))' },
+        { name: 'Cross-Promotion', value: 15, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2200, active: 1980, converted: 1650, retained: 1420 },
@@ -126,10 +126,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'MS003', name: 'Comprehensive Care Bundle', type: 'Package', startDate: '2025-07-20', endDate: '2025-11-20', cost: 25000, status: 'Active', newPatients: 312, revenue: 187200, roi: 649 }
       ],
       channelData: [
-        { name: 'Clinic Consultation', value: 40, color: '#8884d8' },
-        { name: 'Treatment Advisor', value: 30, color: '#82ca9d' },
-        { name: 'Package Brochures', value: 20, color: '#ffc658' },
-        { name: 'Online Booking', value: 10, color: '#ff7300' }
+        { name: 'Clinic Consultation', value: 40, color: 'hsl(var(--primary))' },
+        { name: 'Treatment Advisor', value: 30, color: 'hsl(var(--accent))' },
+        { name: 'Package Brochures', value: 20, color: 'hsl(var(--success))' },
+        { name: 'Online Booking', value: 10, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1600, active: 1450, converted: 1200, retained: 1050 },
@@ -152,10 +152,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'GF003', name: 'BOGO Gift Card Event', type: 'Buy One Get One', startDate: '2025-09-15', endDate: '2025-10-31', cost: 15000, status: 'Active', newPatients: 234, revenue: 140400, roi: 836 }
       ],
       channelData: [
-        { name: 'Online Store', value: 35, color: '#8884d8' },
-        { name: 'Clinic Purchase', value: 30, color: '#82ca9d' },
-        { name: 'Gift Recipients', value: 25, color: '#ffc658' },
-        { name: 'Corporate Sales', value: 10, color: '#ff7300' }
+        { name: 'Online Store', value: 35, color: 'hsl(var(--primary))' },
+        { name: 'Clinic Purchase', value: 30, color: 'hsl(var(--accent))' },
+        { name: 'Gift Recipients', value: 25, color: 'hsl(var(--success))' },
+        { name: 'Corporate Sales', value: 10, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1400, active: 1250, converted: 1050, retained: 900 },
@@ -178,10 +178,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'INF003', name: 'Beauty Blogger Partnerships', type: 'Content', startDate: '2025-07-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 445, revenue: 267000, roi: 790 }
       ],
       channelData: [
-        { name: 'Instagram', value: 42, color: '#8884d8' },
-        { name: 'TikTok', value: 28, color: '#82ca9d' },
-        { name: 'YouTube', value: 18, color: '#ffc658' },
-        { name: 'Blog Content', value: 12, color: '#ff7300' }
+        { name: 'Instagram', value: 42, color: 'hsl(var(--primary))' },
+        { name: 'TikTok', value: 28, color: 'hsl(var(--accent))' },
+        { name: 'YouTube', value: 18, color: 'hsl(var(--success))' },
+        { name: 'Blog Content', value: 12, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2000, active: 1800, converted: 1500, retained: 1300 },
@@ -204,10 +204,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'PR003', name: 'Marketing Support Package', type: 'Support', startDate: '2025-07-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 234, revenue: 280800, roi: 836 }
       ],
       channelData: [
-        { name: 'Training Sessions', value: 45, color: '#8884d8' },
-        { name: 'Online Courses', value: 25, color: '#82ca9d' },
-        { name: 'Certification Programs', value: 20, color: '#ffc658' },
-        { name: 'Workshops', value: 10, color: '#ff7300' }
+        { name: 'Training Sessions', value: 45, color: 'hsl(var(--primary))' },
+        { name: 'Online Courses', value: 25, color: 'hsl(var(--accent))' },
+        { name: 'Certification Programs', value: 20, color: 'hsl(var(--success))' },
+        { name: 'Workshops', value: 10, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 800, active: 720, converted: 600, retained: 520 },
@@ -230,10 +230,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'ED003', name: 'FAQ Video Library', type: 'Video Content', startDate: '2025-07-20', endDate: '2025-10-31', cost: 15000, status: 'Active', newPatients: 234, revenue: 140400, roi: 836 }
       ],
       channelData: [
-        { name: 'Website Blog', value: 35, color: '#8884d8' },
-        { name: 'Video Content', value: 30, color: '#82ca9d' },
-        { name: 'Social Posts', value: 25, color: '#ffc658' },
-        { name: 'Email Newsletters', value: 10, color: '#ff7300' }
+        { name: 'Website Blog', value: 35, color: 'hsl(var(--primary))' },
+        { name: 'Video Content', value: 30, color: 'hsl(var(--accent))' },
+        { name: 'Social Posts', value: 25, color: 'hsl(var(--success))' },
+        { name: 'Email Newsletters', value: 10, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1200, active: 1080, converted: 900, retained: 780 },
@@ -636,7 +636,7 @@ const PromotionStrategiesEnhanced = () => {
                         cx="50%"
                         cy="50%"
                         outerRadius={80}
-                        fill="#8884d8"
+                        fill="hsl(var(--primary))"
                         dataKey="value"
                         label={({ name, value }) => `${name}: ${value}%`}
                       >
@@ -644,7 +644,14 @@ const PromotionStrategiesEnhanced = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }}
+                        formatter={(value) => [`${value}%`, 'Acquisition']}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -697,14 +704,14 @@ const PromotionStrategiesEnhanced = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={data.active} margin={{ top: 20, right: 30, left: 40, bottom: 80 }}>
+                <ResponsiveContainer width="100%" height={380}>
+                  <BarChart data={filteredCampaigns} margin={{ top: 20, right: 30, left: 40, bottom: 60 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis 
                       dataKey="name" 
                       angle={0} 
                       textAnchor="middle" 
-                      height={80}
+                      height={60}
                       tick={{ 
                         fill: 'hsl(var(--muted-foreground))',
                         fontSize: 12
@@ -714,12 +721,16 @@ const PromotionStrategiesEnhanced = () => {
                     <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: 'transparent', 
-                        border: 'none',
+                        backgroundColor: 'hsl(var(--card))', 
+                        border: '1px solid hsl(var(--border))',
                         borderRadius: '8px',
-                        boxShadow: 'none'
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                       }}
-                      cursor={false}
+                      labelStyle={{ color: 'hsl(var(--foreground))' }}
+                      formatter={(value, name) => [
+                        `${value}%`,
+                        'ROI'
+                      ]}
                     />
                     <Bar 
                       dataKey="roi" 
