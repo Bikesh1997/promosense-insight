@@ -2,18 +2,22 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Bell, Search, User, X } from "lucide-react";
+import { Bell, Search, User, X, LogOut, Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import AllerganLogo from "./AllerganLogo";
 
 interface HeaderProps {
   onNavigate?: (view: string) => void;
   activeView?: string;
+  onMobileMenuToggle?: () => void;
 }
 
-const Header = ({ onNavigate, activeView }: HeaderProps) => {
+const Header = ({ onNavigate, activeView, onMobileMenuToggle }: HeaderProps) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
@@ -25,11 +29,15 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
     setNotificationsOpen(true);
   };
 
-  const handleProfile = () => {
+  const handleLogout = () => {
     toast({
-      title: "Profile",
-      description: "Dr. Sarah Johnson - Aesthetic Clinic Director",
+      title: "Logged out",
+      description: "You have been successfully logged out.",
     });
+    // Navigate to login page after a short delay
+    setTimeout(() => {
+      navigate('/');
+    }, 1000);
   };
 
   const notifications = [
@@ -42,6 +50,16 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
     <header className="bg-card border-b border-border sticky top-0 z-50 h-14 sm:h-16">
       <div className="flex items-center justify-between px-4 sm:px-6 py-3 h-full">
         <div className="flex items-center space-x-2 sm:space-x-4">
+          {/* Mobile menu button */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="lg:hidden"
+            onClick={onMobileMenuToggle}
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
+          
           <div className="h-8 sm:h-10">
             <AllerganLogo />
           </div>
@@ -97,9 +115,27 @@ const Header = ({ onNavigate, activeView }: HeaderProps) => {
             </DialogContent>
           </Dialog>
 
-          <Button variant="ghost" size="sm" onClick={handleProfile}>
-            <User className="h-4 w-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm">
+                <User className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem disabled>
+                <User className="mr-2 h-4 w-4" />
+                <div className="flex flex-col">
+                  <span className="font-medium">Dr. Sarah Johnson</span>
+                  <span className="text-xs text-muted-foreground">Aesthetic Clinic Director</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout} className="text-destructive">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
