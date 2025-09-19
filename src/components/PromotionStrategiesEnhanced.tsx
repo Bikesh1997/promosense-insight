@@ -410,6 +410,116 @@ const PromotionStrategiesEnhanced = () => {
                               View Details
                             </Button>
                           </DialogTrigger>
+                          <DialogContent className="sm:max-w-4xl">
+                            <DialogHeader>
+                              <DialogTitle>Campaign Details</DialogTitle>
+                              <DialogDescription>
+                                Detailed information about {selectedCampaign?.name}
+                              </DialogDescription>
+                            </DialogHeader>
+                            {selectedCampaign && (
+                              <div className="space-y-6">
+                                {/* Campaign Overview */}
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                  <Card>
+                                    <CardContent className="pt-4">
+                                      <div className="text-2xl font-bold">${selectedCampaign.cost.toLocaleString()}</div>
+                                      <p className="text-xs text-muted-foreground">Total Cost</p>
+                                    </CardContent>
+                                  </Card>
+                                  <Card>
+                                    <CardContent className="pt-4">
+                                      <div className="text-2xl font-bold">{selectedCampaign.newPatients}</div>
+                                      <p className="text-xs text-muted-foreground">New Patients</p>
+                                    </CardContent>
+                                  </Card>
+                                  <Card>
+                                    <CardContent className="pt-4">
+                                      <div className="text-2xl font-bold">${selectedCampaign.revenue.toLocaleString()}</div>
+                                      <p className="text-xs text-muted-foreground">Revenue Generated</p>
+                                    </CardContent>
+                                  </Card>
+                                  <Card>
+                                    <CardContent className="pt-4">
+                                      <div className="text-2xl font-bold text-success">{selectedCampaign.roi}%</div>
+                                      <p className="text-xs text-muted-foreground">ROI</p>
+                                    </CardContent>
+                                  </Card>
+                                </div>
+
+                                {/* Campaign Details */}
+                                <div className="grid md:grid-cols-2 gap-6">
+                                  <Card>
+                                    <CardHeader>
+                                      <CardTitle className="text-lg">Campaign Information</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-3">
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Campaign Type:</span>
+                                        <Badge variant="secondary">{selectedCampaign.type}</Badge>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Status:</span>
+                                        <Badge variant={selectedCampaign.status === 'Active' ? "default" : "secondary"}>
+                                          {selectedCampaign.status}
+                                        </Badge>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Start Date:</span>
+                                        <span>{selectedCampaign.startDate}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">End Date:</span>
+                                        <span>{selectedCampaign.endDate}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Campaign ID:</span>
+                                        <span className="font-mono text-sm">{selectedCampaign.id}</span>
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+
+                                  <Card>
+                                    <CardHeader>
+                                      <CardTitle className="text-lg">Performance Metrics</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-3">
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Cost Per Patient:</span>
+                                        <span>${Math.round(selectedCampaign.cost / selectedCampaign.newPatients)}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Revenue Per Patient:</span>
+                                        <span>${Math.round(selectedCampaign.revenue / selectedCampaign.newPatients)}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Profit Margin:</span>
+                                        <span className="text-success">
+                                          {Math.round(((selectedCampaign.revenue - selectedCampaign.cost) / selectedCampaign.revenue) * 100)}%
+                                        </span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Net Profit:</span>
+                                        <span className="font-bold text-success">
+                                          ${(selectedCampaign.revenue - selectedCampaign.cost).toLocaleString()}
+                                        </span>
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex justify-end space-x-2">
+                                  <Button variant="outline" onClick={() => setCampaignDetailsOpen(false)}>
+                                    Close
+                                  </Button>
+                                  <Button>
+                                    Edit Campaign
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </DialogContent>
                         </Dialog>
                       </div>
                     </div>
@@ -560,120 +670,9 @@ const PromotionStrategiesEnhanced = () => {
           </TabsContent>
         ))}
       </Tabs>
-      
-      {/* Campaign Details Modal */}
-      <DialogContent className="sm:max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>Campaign Details</DialogTitle>
-          <DialogDescription>
-            Detailed information about {selectedCampaign?.name}
-          </DialogDescription>
-        </DialogHeader>
-        {selectedCampaign && (
-          <div className="space-y-6">
-            {/* Campaign Overview */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card>
-                <CardContent className="pt-4">
-                  <div className="text-2xl font-bold">${selectedCampaign.cost.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">Total Cost</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="pt-4">
-                  <div className="text-2xl font-bold">{selectedCampaign.newPatients}</div>
-                  <p className="text-xs text-muted-foreground">New Patients</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="pt-4">
-                  <div className="text-2xl font-bold">${selectedCampaign.revenue.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">Revenue Generated</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="pt-4">
-                  <div className="text-2xl font-bold text-success">{selectedCampaign.roi}%</div>
-                  <p className="text-xs text-muted-foreground">ROI</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Campaign Details */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Campaign Information</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Campaign Type:</span>
-                    <Badge variant="secondary">{selectedCampaign.type}</Badge>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Status:</span>
-                    <Badge variant={selectedCampaign.status === 'Active' ? "default" : "secondary"}>
-                      {selectedCampaign.status}
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Start Date:</span>
-                    <span>{selectedCampaign.startDate}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">End Date:</span>
-                    <span>{selectedCampaign.endDate}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Campaign ID:</span>
-                    <span className="font-mono text-sm">{selectedCampaign.id}</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Performance Metrics</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Cost Per Patient:</span>
-                    <span>${Math.round(selectedCampaign.cost / selectedCampaign.newPatients)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Revenue Per Patient:</span>
-                    <span>${Math.round(selectedCampaign.revenue / selectedCampaign.newPatients)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Profit Margin:</span>
-                    <span className="text-success">
-                      {Math.round(((selectedCampaign.revenue - selectedCampaign.cost) / selectedCampaign.revenue) * 100)}%
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Net Profit:</span>
-                    <span className="font-bold text-success">
-                      ${(selectedCampaign.revenue - selectedCampaign.cost).toLocaleString()}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setCampaignDetailsOpen(false)}>
-                Close
-              </Button>
-              <Button>
-                Edit Campaign
-              </Button>
-            </div>
-          </div>
-        )}
-      </DialogContent>
     </div>
   );
+};
 };
 
 export default PromotionStrategiesEnhanced;
