@@ -44,6 +44,12 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 35 85% 55%;
+    --chart-4: 260 75% 60%;
+    --chart-5: 340 75% 55%;
+
     --allergan-primary: 240 5.9% 10%;
     --allergan-secondary: 0 0% 98%;
     --allergan-accent: 18 100% 97%;
@@ -89,6 +95,12 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 19 42% 67%;
+
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 35 85% 55%;
+    --chart-4: 260 75% 60%;
+    --chart-5: 340 75% 55%;
 
     --allergan-primary: 240 4.8% 95.9%;
     --allergan-secondary: 240 5.9% 10%;
