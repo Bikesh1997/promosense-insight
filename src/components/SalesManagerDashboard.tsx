@@ -20,6 +20,17 @@ const SalesManagerDashboard = () => {
   const [selectedRep, setSelectedRep] = useState(null);
   const [callNotes, setCallNotes] = useState('');
   const [messageContent, setMessageContent] = useState('');
+  const [regionFilter, setRegionFilter] = useState('all');
+  const [riskLevelFilter, setRiskLevelFilter] = useState('all');
+  const [repFilter, setRepFilter] = useState('all');
+  const [callStatus, setCallStatus] = useState('idle'); // idle, calling, connected, ended
+  const [callDuration, setCallDuration] = useState(0);
+  const [callAnalysis, setCallAnalysis] = useState({
+    sentiment: 'neutral',
+    keyTopics: [],
+    actionItems: [],
+    followUpRequired: false
+  });
 
   const handleInvestigateClinic = (clinic) => {
     setSelectedClinic(clinic);
@@ -28,7 +39,48 @@ const SalesManagerDashboard = () => {
 
   const handleCallRep = (repName: string, clinic: string) => {
     setSelectedRep({ name: repName, clinic });
+    setCallStatus('idle');
+    setCallDuration(0);
+    setCallAnalysis({
+      sentiment: 'neutral',
+      keyTopics: [],
+      actionItems: [],
+      followUpRequired: false
+    });
     setCallModalOpen(true);
+  };
+
+  const startCall = () => {
+    setCallStatus('calling');
+    // Simulate call progression
+    setTimeout(() => {
+      setCallStatus('connected');
+      const interval = setInterval(() => {
+        setCallDuration(prev => prev + 1);
+      }, 1000);
+      
+      // Simulate call analysis after 10 seconds
+      setTimeout(() => {
+        setCallAnalysis({
+          sentiment: 'positive',
+          keyTopics: ['campaign performance', 'client retention', 'Q4 goals'],
+          actionItems: ['Schedule follow-up training', 'Review client portfolio', 'Update CRM notes'],
+          followUpRequired: true
+        });
+      }, 10000);
+      
+      return () => clearInterval(interval);
+    }, 3000);
+  };
+
+  const endCall = () => {
+    setCallStatus('ended');
+    setTimeout(() => {
+      setCallModalOpen(false);
+      setCallStatus('idle');
+      setCallDuration(0);
+      toast.success(`Call completed with ${selectedRep?.name}`);
+    }, 2000);
   };
 
   const handleMessageRep = (repName: string, clinic: string) => {
@@ -57,6 +109,8 @@ const SalesManagerDashboard = () => {
     toast.success(`Optimization plan activated for ${selectedRep?.name}`);
     setOptimizeModalOpen(false);
   };
+
+  // Data definitions
   const regionalSummary = {
     northeast: { revenue: 4800000, patients: 1800, roi: 168, churnRisk: 22 },
     southeast: { revenue: 3200000, patients: 1200, roi: 152, churnRisk: 18 },
@@ -88,12 +142,103 @@ const SalesManagerDashboard = () => {
     { clinic: "Phoenix Beauty", risk: 61, action: "Increase follow-up frequency", priority: "medium" }
   ];
 
+  // Filter data based on selected filters
+  const filteredAtRiskClinics = atRiskClinics.filter(clinic => {
+    const regionMatch = regionFilter === 'all' || clinic.region === regionFilter;
+    const riskMatch = riskLevelFilter === 'all' || 
+      (riskLevelFilter === 'critical' && clinic.leakage >= 70) ||
+      (riskLevelFilter === 'high' && clinic.leakage >= 60 && clinic.leakage < 70) ||
+      (riskLevelFilter === 'medium' && clinic.leakage < 60);
+    const repMatch = repFilter === 'all' || clinic.rep === repFilter;
+    return regionMatch && riskMatch && repMatch;
+  });
+
+  const filteredRepPerformance = repPerformance.filter(rep => {
+    const regionMatch = regionFilter === 'all' || rep.region === regionFilter;
+    const repMatch = repFilter === 'all' || rep.rep === repFilter;
+    return regionMatch && repMatch;
+  });
+
+  // Get unique values for filter options
+  const uniqueRegions = [...new Set(atRiskClinics.map(clinic => clinic.region))];
+  const uniqueReps = [...new Set(atRiskClinics.map(clinic => clinic.rep))];
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="text-2xl sm:text-3xl font-bold">Sales Manager Dashboard</h2>
-        <p className="text-sm sm:text-base text-muted-foreground">Regional performance analysis, rep productivity, and actionable insights</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold">Sales Manager Dashboard</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">Regional performance analysis, rep productivity, and actionable insights</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Select value={regionFilter} onValueChange={setRegionFilter}>
+            <SelectTrigger className="w-40 bg-background">
+              <SelectValue placeholder="All Regions" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border z-50">
+              <SelectItem value="all">All Regions</SelectItem>
+              {uniqueRegions.map(region => (
+                <SelectItem key={region} value={region}>{region}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={riskLevelFilter} onValueChange={setRiskLevelFilter}>
+            <SelectTrigger className="w-40 bg-background">
+              <SelectValue placeholder="All Risk Levels" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border z-50">
+              <SelectItem value="all">All Risk Levels</SelectItem>
+              <SelectItem value="critical">Critical (70%+)</SelectItem>
+              <SelectItem value="high">High (60-69%)</SelectItem>
+              <SelectItem value="medium">Medium (&lt;60%)</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={repFilter} onValueChange={setRepFilter}>
+            <SelectTrigger className="w-40 bg-background">
+              <SelectValue placeholder="All Reps" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border z-50">
+              <SelectItem value="all">All Reps</SelectItem>
+              {uniqueReps.map(rep => (
+                <SelectItem key={rep} value={rep}>{rep}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
+
+      {/* Filter Results Summary */}
+      {(regionFilter !== 'all' || riskLevelFilter !== 'all' || repFilter !== 'all') && (
+        <Card className="bg-accent/10">
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">
+                Showing {filteredAtRiskClinics.length} of {atRiskClinics.length} at-risk clinics
+                {regionFilter !== 'all' && ` • Region: ${regionFilter}`}
+                {riskLevelFilter !== 'all' && ` • Risk: ${riskLevelFilter}`}
+                {repFilter !== 'all' && ` • Rep: ${repFilter}`}
+              </span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  setRegionFilter('all');
+                  setRiskLevelFilter('all');
+                  setRepFilter('all');
+                }}
+              >
+                Clear Filters
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Regional Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
@@ -130,7 +275,7 @@ const SalesManagerDashboard = () => {
         <CardContent>
           {/* Mobile Card View */}
           <div className="block sm:hidden space-y-3">
-            {atRiskClinics.map((clinic) => (
+            {filteredAtRiskClinics.map((clinic) => (
               <div key={clinic.clinic} className="p-3 border rounded-lg space-y-2">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium text-sm">{clinic.clinic}</h4>
@@ -181,7 +326,7 @@ const SalesManagerDashboard = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {atRiskClinics.map((clinic) => (
+                {filteredAtRiskClinics.map((clinic) => (
                   <TableRow key={clinic.clinic}>
                     <TableCell className="font-medium">{clinic.clinic}</TableCell>
                     <TableCell>{clinic.region}</TableCell>
@@ -218,7 +363,7 @@ const SalesManagerDashboard = () => {
           <CardContent>
             {/* Mobile Card View */}
             <div className="block sm:hidden space-y-3">
-              {repPerformance.map((rep) => (
+              {filteredRepPerformance.map((rep) => (
                 <div key={rep.rep} className="p-3 border rounded-lg space-y-2">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium text-sm">{rep.rep}</h4>
@@ -274,7 +419,7 @@ const SalesManagerDashboard = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {repPerformance.map((rep) => (
+                  {filteredRepPerformance.map((rep) => (
                     <TableRow key={rep.rep}>
                       <TableCell className="font-medium">{rep.rep}</TableCell>
                       <TableCell>{rep.region}</TableCell>
@@ -377,38 +522,39 @@ const SalesManagerDashboard = () => {
                 <div className="text-lg sm:text-xl font-bold text-destructive">{selectedClinic?.leakage}%</div>
               </div>
               <div className="p-3 border rounded">
-                <div className="text-xs sm:text-sm text-muted-foreground">Problem Stage</div>
-                <div className="font-medium text-sm sm:text-base">{selectedClinic?.stage}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Revenue at Risk</div>
+                <div className="text-lg sm:text-xl font-bold">${selectedClinic?.revenue?.toLocaleString()}</div>
               </div>
               <div className="p-3 border rounded">
-                <div className="text-xs sm:text-sm text-muted-foreground">Revenue Risk</div>
-                <div className="font-bold text-sm sm:text-base">${selectedClinic?.revenue?.toLocaleString()}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Problem Stage</div>
+                <div className="text-sm font-medium">{selectedClinic?.stage}</div>
               </div>
               <div className="p-3 border rounded">
                 <div className="text-xs sm:text-sm text-muted-foreground">Assigned Rep</div>
-                <div className="font-medium text-sm sm:text-base">{selectedClinic?.rep}</div>
+                <div className="text-sm font-medium">{selectedClinic?.rep}</div>
               </div>
             </div>
-            <div className="space-y-3">
-              <div>
-                <h4 className="font-medium mb-2 text-sm sm:text-base">Investigation Findings:</h4>
-                <ul className="text-xs sm:text-sm space-y-1 text-muted-foreground">
-                  <li>• Patient follow-up rate 23% below target</li>
-                  <li>• Average response time: 4.2 hours (target: 2 hours)</li>
-                  <li>• Promotional email open rate: 34% (industry avg: 42%)</li>
-                  <li>• Treatment education materials not being distributed</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2 text-sm sm:text-base">Recommended Actions:</h4>
-                <ul className="text-xs sm:text-sm space-y-1 text-muted-foreground">
-                  <li>• Implement automated follow-up system</li>
-                  <li>• Increase rep training on treatment benefits</li>
-                  <li>• Review and update promotional email templates</li>
-                  <li>• Schedule weekly check-ins with clinic staff</li>
-                </ul>
-              </div>
+            
+            <div className="space-y-2">
+              <h4 className="font-medium">Root Cause Analysis:</h4>
+              <ul className="text-sm space-y-1 text-muted-foreground">
+                <li>• Delayed follow-up on promotional offers (avg 3.2 days)</li>
+                <li>• Limited treatment availability during peak hours</li>
+                <li>• Price sensitivity in local market segment</li>
+                <li>• Competition offering aggressive pricing</li>
+              </ul>
             </div>
+            
+            <div className="space-y-2">
+              <h4 className="font-medium">Recommended Actions:</h4>
+              <ul className="text-sm space-y-1 text-success">
+                <li>• Implement same-day follow-up protocol</li>
+                <li>• Extend evening appointment slots</li>
+                <li>• Deploy targeted pricing strategy</li>
+                <li>• Increase rep visit frequency</li>
+              </ul>
+            </div>
+            
             <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
               <Button variant="outline" onClick={() => setInvestigateModalOpen(false)} className="w-full sm:w-auto">Close</Button>
               <Button onClick={() => {
@@ -420,32 +566,179 @@ const SalesManagerDashboard = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Call Rep Modal */}
+      {/* Call Rep Modal - Enhanced with realistic calling interface */}
       <Dialog open={callModalOpen} onOpenChange={setCallModalOpen}>
-        <DialogContent className="sm:max-w-md mx-4">
+        <DialogContent className="sm:max-w-lg mx-4">
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl">Call {selectedRep?.name}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl flex items-center space-x-2">
+              <Phone className="h-5 w-5" />
+              <span>Call {selectedRep?.name}</span>
+            </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="p-3 bg-muted rounded">
-              <div className="text-xs sm:text-sm text-muted-foreground">Regarding</div>
-              <div className="font-medium text-sm sm:text-base">{selectedRep?.clinic} Performance</div>
+          
+          {callStatus === 'idle' && (
+            <div className="space-y-4">
+              <div className="text-center space-y-4">
+                <div className="w-24 h-24 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                  <Users className="h-12 w-12 text-primary" />
+                </div>
+                <div>
+                  <div className="font-medium text-lg">{selectedRep?.name}</div>
+                  <div className="text-sm text-muted-foreground">Ready to call</div>
+                  <div className="text-xs text-muted-foreground mt-1">Regarding: {selectedRep?.clinic}</div>
+                </div>
+              </div>
+              
+              <div className="flex justify-center space-x-3">
+                <Button variant="outline" onClick={() => setCallModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={startCall} className="bg-green-600 hover:bg-green-700">
+                  <Phone className="h-4 w-4 mr-2" />
+                  Start Call
+                </Button>
+              </div>
             </div>
-            <div>
-              <label className="text-sm font-medium">Call Notes</label>
-              <Textarea
-                value={callNotes}
-                onChange={(e) => setCallNotes(e.target.value)}
-                placeholder="Document key discussion points, action items, and next steps..."
-                rows={4}
-                className="text-sm"
-              />
+          )}
+
+          {callStatus === 'calling' && (
+            <div className="space-y-4">
+              <div className="text-center space-y-4">
+                <div className="w-24 h-24 mx-auto bg-primary rounded-full flex items-center justify-center animate-pulse">
+                  <Phone className="h-12 w-12 text-primary-foreground animate-bounce" />
+                </div>
+                <div>
+                  <div className="font-medium text-lg">{selectedRep?.name}</div>
+                  <div className="text-sm text-primary animate-pulse">Calling...</div>
+                  <div className="text-xs text-muted-foreground">Please wait while we connect</div>
+                </div>
+              </div>
+              
+              <div className="flex justify-center">
+                <Button variant="destructive" onClick={() => {
+                  setCallStatus('idle');
+                  setCallModalOpen(false);
+                }}>
+                  Cancel Call
+                </Button>
+              </div>
             </div>
-            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
-              <Button variant="outline" onClick={() => setCallModalOpen(false)} className="w-full sm:w-auto">Cancel</Button>
-              <Button onClick={submitCall} className="w-full sm:w-auto">Complete Call</Button>
+          )}
+
+          {callStatus === 'connected' && (
+            <div className="space-y-4">
+              <div className="text-center space-y-4">
+                <div className="w-24 h-24 mx-auto bg-green-600 rounded-full flex items-center justify-center">
+                  <Phone className="h-12 w-12 text-white" />
+                </div>
+                <div>
+                  <div className="font-medium text-lg">{selectedRep?.name}</div>
+                  <div className="text-sm text-green-600">Connected</div>
+                  <div className="text-xs font-mono">{formatTime(callDuration)}</div>
+                </div>
+              </div>
+
+              {/* Live Call Analysis */}
+              {callAnalysis.sentiment !== 'neutral' && (
+                <div className="bg-accent/10 p-3 rounded-lg">
+                  <div className="text-xs font-medium mb-2">Live Call Analysis</div>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span>Sentiment:</span>
+                      <Badge variant={callAnalysis.sentiment === 'positive' ? 'default' : 'secondary'}>
+                        {callAnalysis.sentiment}
+                      </Badge>
+                    </div>
+                    {callAnalysis.keyTopics.length > 0 && (
+                      <div>
+                        <div className="text-muted-foreground mb-1">Key Topics:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {callAnalysis.keyTopics.map((topic, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {topic}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label className="text-sm font-medium">Call Notes</label>
+                <Textarea
+                  value={callNotes}
+                  onChange={(e) => setCallNotes(e.target.value)}
+                  placeholder="Document key discussion points, action items, and next steps..."
+                  rows={3}
+                  className="text-sm"
+                />
+              </div>
+              
+              <div className="flex justify-center">
+                <Button variant="destructive" onClick={endCall} className="bg-red-600 hover:bg-red-700">
+                  <Phone className="h-4 w-4 mr-2" />
+                  End Call
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {callStatus === 'ended' && (
+            <div className="space-y-4">
+              <div className="text-center space-y-4">
+                <div className="w-24 h-24 mx-auto bg-muted rounded-full flex items-center justify-center">
+                  <Phone className="h-12 w-12 text-muted-foreground" />
+                </div>
+                <div>
+                  <div className="font-medium text-lg">Call Ended</div>
+                  <div className="text-sm text-muted-foreground">Duration: {formatTime(callDuration)}</div>
+                </div>
+              </div>
+
+              {/* Post-Call Analysis */}
+              <div className="bg-accent/10 p-4 rounded-lg space-y-3">
+                <div className="font-medium text-sm">Call Summary & Analysis</div>
+                
+                <div className="grid grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <span className="text-muted-foreground">Duration:</span>
+                    <div className="font-medium">{formatTime(callDuration)}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Sentiment:</span>
+                    <div className="font-medium capitalize">{callAnalysis.sentiment}</div>
+                  </div>
+                </div>
+
+                {callAnalysis.actionItems.length > 0 && (
+                  <div>
+                    <div className="text-muted-foreground text-xs mb-2">Action Items:</div>
+                    <ul className="text-xs space-y-1">
+                      {callAnalysis.actionItems.map((item, index) => (
+                        <li key={index} className="flex items-start space-x-2">
+                          <span className="text-primary">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {callAnalysis.followUpRequired && (
+                  <div className="flex items-center space-x-2 text-xs">
+                    <Calendar className="h-3 w-3 text-warning" />
+                    <span className="text-warning">Follow-up recommended within 24 hours</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="text-center text-sm text-muted-foreground">
+                Call completed successfully. Report saved to CRM.
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
@@ -499,75 +792,32 @@ const SalesManagerDashboard = () => {
                   <li>• CRM usage optimization needed</li>
                 </ul>
               </div>
+              
               <div>
-                <h4 className="font-medium mb-2">Optimization Plan:</h4>
+                <h4 className="font-medium mb-2">Recommended Training:</h4>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">1-on-1 Coaching Session</span>
-                    <Button size="sm" variant="outline">Schedule</Button>
+                  <div className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                    <span>Advanced Objection Handling</span>
+                    <Badge variant="secondary">2 hrs</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">Product Training Module</span>
-                    <Button size="sm" variant="outline">Assign</Button>
+                  <div className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                    <span>CRM Mastery Workshop</span>
+                    <Badge variant="secondary">1 hr</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">Shadow Top Performer</span>
-                    <Button size="sm" variant="outline">Arrange</Button>
+                  <div className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                    <span>Product Deep Dive Session</span>
+                    <Badge variant="secondary">3 hrs</Badge>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex justify-end space-x-2">
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
               <Button variant="outline" onClick={() => setOptimizeModalOpen(false)}>Cancel</Button>
               <Button onClick={submitOptimization}>Activate Plan</Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Funnel Drop-Off Analysis */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Regional Funnel Drop-Offs (Last Month)</CardTitle>
-          <CardDescription>Stage-wise conversion analysis by region</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {[
-              { region: "Northeast", stages: [5200, 3300, 2100, 1050] },
-              { region: "Southeast", stages: [3400, 2000, 1200, 600] },
-              { region: "Midwest", stages: [2600, 1500, 900, 450] },
-              { region: "West Coast", stages: [6000, 3800, 2400, 1200] },
-              { region: "Southwest", stages: [3200, 1900, 1100, 550] }
-            ].map((region) => (
-              <div key={region.region} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">{region.region}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {Math.round((region.stages[3] / region.stages[0]) * 100)}% end-to-end conversion
-                  </span>
-                </div>
-                <div className="grid grid-cols-4 gap-2">
-                  {region.stages.map((count, index) => (
-                    <div key={index} className="text-center">
-                      <div className="text-sm font-medium">{count.toLocaleString()}</div>
-                      <div className="h-2 bg-muted rounded">
-                        <div 
-                          className="h-2 bg-primary rounded transition-all"
-                          style={{ width: `${Math.max((count / region.stages[0]) * 100, 10)}%` }}
-                        />
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {['Leads', 'Promo', 'Treatment', 'Repeat'][index]}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
