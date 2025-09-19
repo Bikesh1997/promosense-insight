@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertTriangle, TrendingUp, Users, Target, Phone, Mail, Settings, Search, Calendar, FileText } from 'lucide-react';
+import { AlertTriangle, TrendingUp, Users, Target, Phone, Mail, Settings, Search, Calendar, FileText, Mic, PhoneOff, Volume2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const SalesManagerDashboard = () => {
@@ -602,25 +602,72 @@ const SalesManagerDashboard = () => {
           )}
 
           {callStatus === 'calling' && (
-            <div className="space-y-4">
-              <div className="text-center space-y-4">
-                <div className="w-24 h-24 mx-auto bg-primary rounded-full flex items-center justify-center animate-pulse">
-                  <Phone className="h-12 w-12 text-primary-foreground animate-bounce" />
+            <div className="space-y-6">
+              <div className="text-center space-y-6">
+                {/* Enhanced calling animation */}
+                <div className="relative">
+                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-2xl">
+                    <Phone className="h-16 w-16 text-white animate-pulse" />
+                  </div>
+                  {/* Pulsing rings */}
+                  <div className="absolute inset-0 w-32 h-32 mx-auto rounded-full border-4 border-green-400 animate-ping opacity-30"></div>
+                  <div className="absolute inset-0 w-40 h-40 mx-auto rounded-full border-2 border-green-300 animate-ping opacity-20 -top-4 -left-4"></div>
                 </div>
-                <div>
-                  <div className="font-medium text-lg">{selectedRep?.name}</div>
-                  <div className="text-sm text-primary animate-pulse">Calling...</div>
-                  <div className="text-xs text-muted-foreground">Please wait while we connect</div>
+                
+                <div className="space-y-2">
+                  <div className="font-semibold text-xl">{selectedRep?.name}</div>
+                  <div className="text-primary font-medium animate-pulse flex items-center justify-center space-x-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce"></div>
+                    <span>Calling</span>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce delay-100"></div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">Connecting to {selectedRep?.clinic}</div>
+                  <div className="text-xs text-muted-foreground opacity-70">
+                    Mobile: +1 (555) 0123 • Ring {Math.ceil(callDuration / 3)}
+                  </div>
                 </div>
               </div>
               
-              <div className="flex justify-center">
-                <Button variant="destructive" onClick={() => {
-                  setCallStatus('idle');
-                  setCallModalOpen(false);
-                }}>
-                  Cancel Call
+              <div className="bg-muted/30 p-4 rounded-lg">
+                <div className="text-xs text-muted-foreground text-center space-y-1">
+                  <div>Call Duration: {formatTime(callDuration)}</div>
+                  <div className="flex items-center justify-center space-x-4 text-green-600">
+                    <div className="flex items-center space-x-1">
+                      <div className="w-1 h-4 bg-green-500 rounded animate-pulse"></div>
+                      <div className="w-1 h-6 bg-green-500 rounded animate-pulse delay-75"></div>
+                      <div className="w-1 h-5 bg-green-500 rounded animate-pulse delay-150"></div>
+                      <div className="w-1 h-7 bg-green-500 rounded animate-pulse delay-200"></div>
+                      <div className="w-1 h-4 bg-green-500 rounded animate-pulse delay-300"></div>
+                    </div>
+                    <span className="text-xs">Audio Active</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-center space-x-4">
+                <Button variant="outline" size="lg" className="rounded-full w-14 h-14">
+                  <Mic className="h-5 w-5" />
                 </Button>
+                <Button 
+                  variant="destructive" 
+                  size="lg" 
+                  onClick={() => {
+                    setCallStatus('idle');
+                    setCallModalOpen(false);
+                    setCallDuration(0);
+                    toast.error('Call cancelled');
+                  }}
+                  className="bg-red-600 hover:bg-red-700 rounded-full w-16 h-16"
+                >
+                  <PhoneOff className="h-6 w-6" />
+                </Button>
+                <Button variant="outline" size="lg" className="rounded-full w-14 h-14">
+                  <Volume2 className="h-5 w-5" />
+                </Button>
+              </div>
+              
+              <div className="text-center text-xs text-muted-foreground">
+                Tip: Call will automatically connect after a few seconds
               </div>
             </div>
           )}

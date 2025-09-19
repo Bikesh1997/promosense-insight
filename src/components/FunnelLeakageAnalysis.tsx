@@ -400,36 +400,6 @@ const FunnelLeakageAnalysis = () => {
                     </div>
                   ))}
                 </div>
-                
-                {/* Regional Leakage Chart */}
-                <div className="mt-6 pt-6 border-t">
-                  <h4 className="text-lg font-semibold mb-4">Regional Leakage Comparison</h4>
-                  <ResponsiveContainer width="100%" height={400}>
-                    <BarChart data={leakageChartData} margin={{ top: 20, right: 30, left: 20, bottom: 80 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis 
-                        dataKey="region" 
-                        angle={-45} 
-                        textAnchor="end" 
-                        height={80}
-                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                      />
-                      <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'hsl(var(--card))', 
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px'
-                        }}
-                        formatter={(value, name) => [`${value}%`, name]}
-                      />
-                      <Bar dataKey="Exposed → Interest" stackId="a" fill="hsl(var(--destructive))" />
-                      <Bar dataKey="Interest → Accepted" stackId="a" fill="hsl(var(--warning))" />
-                      <Bar dataKey="Accepted → Treatment" stackId="a" fill="hsl(var(--primary))" />
-                      <Bar dataKey="Treatment → Repeat" stackId="a" fill="hsl(var(--accent))" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
               </CardContent>
             </Card>
           </div>
