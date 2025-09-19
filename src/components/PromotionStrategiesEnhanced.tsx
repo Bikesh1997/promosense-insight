@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PaginationTable } from '@/components/ui/pagination-table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { 
   TrendingUp, 
@@ -26,6 +27,8 @@ const PromotionStrategiesEnhanced = () => {
   const [patientsPage, setPatientsPage] = useState(1);
   const [campaignsPage, setCampaignsPage] = useState(1);
   const [showMoreCampaigns, setShowMoreCampaigns] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState(null);
+  const [campaignDetailsOpen, setCampaignDetailsOpen] = useState(false);
   const itemsPerPage = 4;
 
   // Enhanced mock data for all promotion categories
@@ -377,7 +380,7 @@ const PromotionStrategiesEnhanced = () => {
               <CardContent>
                 <div className="space-y-4">
                   {paginatedCampaigns.map((campaign) => (
-                    <div key={campaign.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div key={campaign.id} className="flex items-start justify-between p-4 border rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3">
                           <Badge variant="secondary">{campaign.type}</Badge>
@@ -393,11 +396,21 @@ const PromotionStrategiesEnhanced = () => {
                           <span>Revenue: ${campaign.revenue.toLocaleString()}</span>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex flex-col items-end space-y-2">
                         <Badge variant="outline" className="text-success border-success">
                           {campaign.roi}% ROI
                         </Badge>
-                        <Button size="sm" variant="outline">View Details</Button>
+                        <Dialog open={campaignDetailsOpen} onOpenChange={setCampaignDetailsOpen}>
+                          <DialogTrigger asChild>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => setSelectedCampaign(campaign)}
+                            >
+                              View Details
+                            </Button>
+                          </DialogTrigger>
+                        </Dialog>
                       </div>
                     </div>
                   ))}
@@ -547,6 +560,118 @@ const PromotionStrategiesEnhanced = () => {
           </TabsContent>
         ))}
       </Tabs>
+      
+      {/* Campaign Details Modal */}
+      <DialogContent className="sm:max-w-4xl">
+        <DialogHeader>
+          <DialogTitle>Campaign Details</DialogTitle>
+          <DialogDescription>
+            Detailed information about {selectedCampaign?.name}
+          </DialogDescription>
+        </DialogHeader>
+        {selectedCampaign && (
+          <div className="space-y-6">
+            {/* Campaign Overview */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="text-2xl font-bold">${selectedCampaign.cost.toLocaleString()}</div>
+                  <p className="text-xs text-muted-foreground">Total Cost</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="text-2xl font-bold">{selectedCampaign.newPatients}</div>
+                  <p className="text-xs text-muted-foreground">New Patients</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="text-2xl font-bold">${selectedCampaign.revenue.toLocaleString()}</div>
+                  <p className="text-xs text-muted-foreground">Revenue Generated</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <div className="text-2xl font-bold text-success">{selectedCampaign.roi}%</div>
+                  <p className="text-xs text-muted-foreground">ROI</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Campaign Details */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Campaign Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Campaign Type:</span>
+                    <Badge variant="secondary">{selectedCampaign.type}</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Status:</span>
+                    <Badge variant={selectedCampaign.status === 'Active' ? "default" : "secondary"}>
+                      {selectedCampaign.status}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Start Date:</span>
+                    <span>{selectedCampaign.startDate}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">End Date:</span>
+                    <span>{selectedCampaign.endDate}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Campaign ID:</span>
+                    <span className="font-mono text-sm">{selectedCampaign.id}</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Performance Metrics</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Cost Per Patient:</span>
+                    <span>${Math.round(selectedCampaign.cost / selectedCampaign.newPatients)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Revenue Per Patient:</span>
+                    <span>${Math.round(selectedCampaign.revenue / selectedCampaign.newPatients)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Profit Margin:</span>
+                    <span className="text-success">
+                      {Math.round(((selectedCampaign.revenue - selectedCampaign.cost) / selectedCampaign.revenue) * 100)}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Net Profit:</span>
+                    <span className="font-bold text-success">
+                      ${(selectedCampaign.revenue - selectedCampaign.cost).toLocaleString()}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setCampaignDetailsOpen(false)}>
+                Close
+              </Button>
+              <Button>
+                Edit Campaign
+              </Button>
+            </div>
+          </div>
+        )}
+      </DialogContent>
     </div>
   );
 };
