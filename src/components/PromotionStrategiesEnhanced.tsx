@@ -392,20 +392,20 @@ const PromotionStrategiesEnhanced = () => {
                             </div>
                             <h4 className="font-medium text-lg">{campaign.name}</h4>
                           </div>
-                           <div className="flex items-center justify-center space-x-8 text-sm">
-                             <div className="text-center">
-                               <div className="font-semibold text-foreground text-base">${campaign.cost.toLocaleString()}</div>
-                               <div className="text-xs text-muted-foreground">Cost</div>
-                             </div>
-                             <div className="text-center">
-                               <div className="font-semibold text-foreground text-base">{campaign.newPatients}</div>
-                               <div className="text-xs text-muted-foreground">New Patients</div>
-                             </div>
-                             <div className="text-center">
-                               <div className="font-semibold text-foreground text-base">${campaign.revenue.toLocaleString()}</div>
-                               <div className="text-xs text-muted-foreground">Revenue</div>
-                             </div>
-                           </div>
+                          <div className="flex items-center space-x-6 text-sm">
+                            <div className="text-center">
+                              <div className="font-semibold text-foreground">${campaign.cost.toLocaleString()}</div>
+                              <div className="text-xs text-muted-foreground">Cost</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="font-semibold text-foreground">{campaign.newPatients}</div>
+                              <div className="text-xs text-muted-foreground">New Patients</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="font-semibold text-foreground">${campaign.revenue.toLocaleString()}</div>
+                              <div className="text-xs text-muted-foreground">Revenue</div>
+                            </div>
+                          </div>
                         </div>
                         <div className="mt-2 text-sm text-muted-foreground">
                           Period: {campaign.startDate} to {campaign.endDate}
@@ -587,36 +587,20 @@ const PromotionStrategiesEnhanced = () => {
               {/* Patient Journey Funnel */}
               <Card>
                 <CardHeader>
-                  <CardTitle>
-                    <span className="group cursor-default">
-                      <span className="group-hover:hidden">Patient Journey</span>
-                      <span className="hidden group-hover:inline">Patient Journey</span>
-                    </span>
-                  </CardTitle>
+                  <CardTitle>Patient Journey</CardTitle>
                   <CardDescription>Conversion funnel analysis</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <AreaChart data={data.patientJourneyData}>
-                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                      <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip 
-                        contentStyle={{
-                          backgroundColor: 'hsl(var(--background))',
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '6px',
-                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                        }}
-                        formatter={(value, name) => [
-                          value,
-                          String(name).charAt(0).toUpperCase() + String(name).slice(1)
-                        ]}
-                      />
-                      <Area type="monotone" dataKey="enrolled" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.8} />
-                      <Area type="monotone" dataKey="active" stackId="2" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" fillOpacity={0.7} />
-                      <Area type="monotone" dataKey="converted" stackId="3" stroke="hsl(var(--chart-3))" fill="hsl(var(--chart-3))" fillOpacity={0.6} />
-                      <Area type="monotone" dataKey="retained" stackId="4" stroke="hsl(var(--chart-4))" fill="hsl(var(--chart-4))" fillOpacity={0.5} />
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="enrolled" stackId="1" stroke="hsl(220, 70%, 50%)" fill="hsl(220, 70%, 50%)" fillOpacity={0.6} />
+                      <Area type="monotone" dataKey="active" stackId="2" stroke="hsl(160, 60%, 45%)" fill="hsl(160, 60%, 45%)" fillOpacity={0.6} />
+                      <Area type="monotone" dataKey="converted" stackId="3" stroke="hsl(35, 85%, 55%)" fill="hsl(35, 85%, 55%)" fillOpacity={0.6} />
+                      <Area type="monotone" dataKey="retained" stackId="4" stroke="hsl(260, 75%, 60%)" fill="hsl(260, 75%, 60%)" fillOpacity={0.6} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -636,24 +620,11 @@ const PromotionStrategiesEnhanced = () => {
               <CardContent>
                 <ResponsiveContainer width="100%" height={400}>
                   <BarChart data={data.active} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                    <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip 
-                      contentStyle={{
-                        backgroundColor: 'hsl(var(--background))',
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '6px',
-                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                      }}
-                    />
-                    <Bar 
-                      dataKey="roi" 
-                      fill="hsl(var(--chart-1))" 
-                      radius={[4, 4, 0, 0]}
-                      stroke="hsl(var(--chart-1))"
-                      strokeWidth={1}
-                    />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="roi" fill="hsl(220, 70%, 50%)" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
