@@ -44,10 +44,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'AL005', name: 'Loyalty Tier Upgrade', type: 'Points', startDate: '2025-08-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 412, revenue: 247200, roi: 724 }
       ],
       channelData: [
-        { name: 'Mobile App', value: 38, color: 'hsl(220, 70%, 50%)' },
-        { name: 'Social Media', value: 25, color: 'hsl(160, 60%, 45%)' },
-        { name: 'Email Campaign', value: 20, color: 'hsl(35, 85%, 55%)' },
-        { name: 'In-Clinic', value: 17, color: 'hsl(260, 75%, 60%)' }
+        { name: 'Mobile App', value: 38, color: '#8884d8' },
+        { name: 'Social Media', value: 25, color: '#82ca9d' },
+        { name: 'Email Campaign', value: 20, color: '#ffc658' },
+        { name: 'In-Clinic', value: 17, color: '#ff7300' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2400, active: 2200, converted: 1800, retained: 1600 },
@@ -71,10 +71,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'RF004', name: 'Referrer Rewards Program', type: 'Points', startDate: '2025-09-10', endDate: '2025-12-31', cost: 8000, status: 'Active', newPatients: 156, revenue: 93600, roi: 1070 }
       ],
       channelData: [
-        { name: 'Word of Mouth', value: 45, color: 'hsl(220, 70%, 50%)' },
-        { name: 'Social Sharing', value: 28, color: 'hsl(160, 60%, 45%)' },
-        { name: 'Text Referrals', value: 15, color: 'hsl(35, 85%, 55%)' },
-        { name: 'Email Invites', value: 12, color: 'hsl(260, 75%, 60%)' }
+        { name: 'Word of Mouth', value: 45, color: '#8884d8' },
+        { name: 'Social Sharing', value: 28, color: '#82ca9d' },
+        { name: 'Text Referrals', value: 15, color: '#ffc658' },
+        { name: 'Email Invites', value: 12, color: '#ff7300' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1800, active: 1600, converted: 1300, retained: 1100 },
@@ -97,10 +97,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'BR003', name: 'Lifestyle Influencer Partnership', type: 'Influencer', startDate: '2025-07-15', endDate: '2025-10-15', cost: 22000, status: 'Active', newPatients: 298, revenue: 178800, roi: 713 }
       ],
       channelData: [
-        { name: 'Brand Websites', value: 32, color: 'hsl(220, 70%, 50%)' },
-        { name: 'Co-Branded Content', value: 28, color: 'hsl(160, 60%, 45%)' },
-        { name: 'Event Marketing', value: 25, color: 'hsl(35, 85%, 55%)' },
-        { name: 'Cross-Promotion', value: 15, color: 'hsl(260, 75%, 60%)' }
+        { name: 'Brand Websites', value: 32, color: '#8884d8' },
+        { name: 'Co-Branded Content', value: 28, color: '#82ca9d' },
+        { name: 'Event Marketing', value: 25, color: '#ffc658' },
+        { name: 'Cross-Promotion', value: 15, color: '#ff7300' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2200, active: 1980, converted: 1650, retained: 1420 },
@@ -123,10 +123,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'MS003', name: 'Comprehensive Care Bundle', type: 'Package', startDate: '2025-07-20', endDate: '2025-11-20', cost: 25000, status: 'Active', newPatients: 312, revenue: 187200, roi: 649 }
       ],
       channelData: [
-        { name: 'Clinic Consultation', value: 40, color: 'hsl(220, 70%, 50%)' },
-        { name: 'Treatment Advisor', value: 30, color: 'hsl(160, 60%, 45%)' },
-        { name: 'Package Brochures', value: 20, color: 'hsl(35, 85%, 55%)' },
-        { name: 'Online Booking', value: 10, color: 'hsl(260, 75%, 60%)' }
+        { name: 'Clinic Consultation', value: 40, color: '#8884d8' },
+        { name: 'Treatment Advisor', value: 30, color: '#82ca9d' },
+        { name: 'Package Brochures', value: 20, color: '#ffc658' },
+        { name: 'Online Booking', value: 10, color: '#ff7300' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1600, active: 1450, converted: 1200, retained: 1050 },
@@ -149,10 +149,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'GF003', name: 'BOGO Gift Card Event', type: 'Buy One Get One', startDate: '2025-09-15', endDate: '2025-10-31', cost: 15000, status: 'Active', newPatients: 234, revenue: 140400, roi: 836 }
       ],
       channelData: [
-        { name: 'Online Store', value: 35, color: 'hsl(220, 70%, 50%)' },
-        { name: 'Clinic Purchase', value: 30, color: 'hsl(160, 60%, 45%)' },
-        { name: 'Gift Recipients', value: 25, color: 'hsl(35, 85%, 55%)' },
-        { name: 'Corporate Sales', value: 10, color: 'hsl(260, 75%, 60%)' }
+        { name: 'Online Store', value: 35, color: '#8884d8' },
+        { name: 'Clinic Purchase', value: 30, color: '#82ca9d' },
+        { name: 'Gift Recipients', value: 25, color: '#ffc658' },
+        { name: 'Corporate Sales', value: 10, color: '#ff7300' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1400, active: 1250, converted: 1050, retained: 900 },
@@ -175,10 +175,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'INF003', name: 'Beauty Blogger Partnerships', type: 'Content', startDate: '2025-07-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 445, revenue: 267000, roi: 790 }
       ],
       channelData: [
-        { name: 'Instagram', value: 42, color: 'hsl(220, 70%, 50%)' },
-        { name: 'TikTok', value: 28, color: 'hsl(160, 60%, 45%)' },
-        { name: 'YouTube', value: 18, color: 'hsl(35, 85%, 55%)' },
-        { name: 'Blog Content', value: 12, color: 'hsl(260, 75%, 60%)' }
+        { name: 'Instagram', value: 42, color: '#8884d8' },
+        { name: 'TikTok', value: 28, color: '#82ca9d' },
+        { name: 'YouTube', value: 18, color: '#ffc658' },
+        { name: 'Blog Content', value: 12, color: '#ff7300' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2000, active: 1800, converted: 1500, retained: 1300 },
@@ -201,10 +201,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'PR003', name: 'Marketing Support Package', type: 'Support', startDate: '2025-07-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 234, revenue: 280800, roi: 836 }
       ],
       channelData: [
-        { name: 'Training Sessions', value: 45, color: 'hsl(220, 70%, 50%)' },
-        { name: 'Online Courses', value: 25, color: 'hsl(160, 60%, 45%)' },
-        { name: 'Certification Programs', value: 20, color: 'hsl(35, 85%, 55%)' },
-        { name: 'Workshops', value: 10, color: 'hsl(260, 75%, 60%)' }
+        { name: 'Training Sessions', value: 45, color: '#8884d8' },
+        { name: 'Online Courses', value: 25, color: '#82ca9d' },
+        { name: 'Certification Programs', value: 20, color: '#ffc658' },
+        { name: 'Workshops', value: 10, color: '#ff7300' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 800, active: 720, converted: 600, retained: 520 },
@@ -227,10 +227,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'ED003', name: 'FAQ Video Library', type: 'Video Content', startDate: '2025-07-20', endDate: '2025-10-31', cost: 15000, status: 'Active', newPatients: 234, revenue: 140400, roi: 836 }
       ],
       channelData: [
-        { name: 'Website Blog', value: 35, color: 'hsl(220, 70%, 50%)' },
-        { name: 'Video Content', value: 30, color: 'hsl(160, 60%, 45%)' },
-        { name: 'Social Posts', value: 25, color: 'hsl(35, 85%, 55%)' },
-        { name: 'Email Newsletters', value: 10, color: 'hsl(260, 75%, 60%)' }
+        { name: 'Website Blog', value: 35, color: '#8884d8' },
+        { name: 'Video Content', value: 30, color: '#82ca9d' },
+        { name: 'Social Posts', value: 25, color: '#ffc658' },
+        { name: 'Email Newsletters', value: 10, color: '#ff7300' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1200, active: 1080, converted: 900, retained: 780 },
@@ -380,35 +380,22 @@ const PromotionStrategiesEnhanced = () => {
               <CardContent>
                 <div className="space-y-4">
                   {paginatedCampaigns.map((campaign) => (
-                    <div key={campaign.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div key={campaign.id} className="flex items-start justify-between p-4 border rounded-lg">
                       <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-2">
-                            <div className="flex items-center space-x-2">
-                              <Badge variant="secondary">{campaign.type}</Badge>
-                              <Badge variant={campaign.status === 'Active' ? "default" : "secondary"}>
-                                {campaign.status}
-                              </Badge>
-                            </div>
-                            <h4 className="font-medium text-lg">{campaign.name}</h4>
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <Badge variant="secondary">{campaign.type}</Badge>
+                            <Badge variant={campaign.status === 'Active' ? "default" : "secondary"}>
+                              {campaign.status}
+                            </Badge>
                           </div>
-                          <div className="flex items-center space-x-6 text-sm">
-                            <div className="text-center">
-                              <div className="font-semibold text-foreground">${campaign.cost.toLocaleString()}</div>
-                              <div className="text-xs text-muted-foreground">Cost</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="font-semibold text-foreground">{campaign.newPatients}</div>
-                              <div className="text-xs text-muted-foreground">New Patients</div>
-                            </div>
-                            <div className="text-center">
-                              <div className="font-semibold text-foreground">${campaign.revenue.toLocaleString()}</div>
-                              <div className="text-xs text-muted-foreground">Revenue</div>
-                            </div>
-                          </div>
+                          <h4 className="font-medium">{campaign.name}</h4>
                         </div>
-                        <div className="mt-2 text-sm text-muted-foreground">
-                          Period: {campaign.startDate} to {campaign.endDate}
+                        <div className="grid grid-cols-4 gap-4 mt-2 text-sm text-muted-foreground">
+                          <span>Period: {campaign.startDate} to {campaign.endDate}</span>
+                          <span>Cost: ${campaign.cost.toLocaleString()}</span>
+                          <span>New Patients: {campaign.newPatients}</span>
+                          <span>Revenue: ${campaign.revenue.toLocaleString()}</span>
                         </div>
                       </div>
                       <div className="flex flex-col items-end space-y-2">
@@ -597,10 +584,10 @@ const PromotionStrategiesEnhanced = () => {
                       <XAxis dataKey="month" />
                       <YAxis />
                       <Tooltip />
-                      <Area type="monotone" dataKey="enrolled" stackId="1" stroke="hsl(220, 70%, 50%)" fill="hsl(220, 70%, 50%)" fillOpacity={0.6} />
-                      <Area type="monotone" dataKey="active" stackId="2" stroke="hsl(160, 60%, 45%)" fill="hsl(160, 60%, 45%)" fillOpacity={0.6} />
-                      <Area type="monotone" dataKey="converted" stackId="3" stroke="hsl(35, 85%, 55%)" fill="hsl(35, 85%, 55%)" fillOpacity={0.6} />
-                      <Area type="monotone" dataKey="retained" stackId="4" stroke="hsl(260, 75%, 60%)" fill="hsl(260, 75%, 60%)" fillOpacity={0.6} />
+                      <Area type="monotone" dataKey="enrolled" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                      <Area type="monotone" dataKey="active" stackId="2" stroke="#82ca9d" fill="#82ca9d" />
+                      <Area type="monotone" dataKey="converted" stackId="3" stroke="#ffc658" fill="#ffc658" />
+                      <Area type="monotone" dataKey="retained" stackId="4" stroke="#ff7300" fill="#ff7300" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -624,7 +611,7 @@ const PromotionStrategiesEnhanced = () => {
                     <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="roi" fill="hsl(220, 70%, 50%)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="roi" fill="#8884d8" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
