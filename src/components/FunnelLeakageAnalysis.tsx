@@ -547,7 +547,7 @@ const FunnelLeakageAnalysis = () => {
                   </TableHeader>
                   <TableBody>
                     {funnelData.reps.map((rep) => (
-                      <TableRow key={rep.rep}>
+                      <TableRow key={rep.rep} className={funnelData.reps.indexOf(rep) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                         <TableCell className="font-medium">{rep.rep}</TableCell>
                         <TableCell>{rep.region}</TableCell>
                         <TableCell>{rep.patients}</TableCell>

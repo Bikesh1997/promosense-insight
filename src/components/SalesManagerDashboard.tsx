@@ -604,50 +604,75 @@ const SalesManagerDashboard = () => {
           {callStatus === 'calling' && (
             <div className="space-y-6">
               <div className="text-center space-y-6">
-                {/* Enhanced calling animation */}
+                {/* Profile Section */}
                 <div className="relative">
-                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-2xl">
-                    <Phone className="h-16 w-16 text-white animate-pulse" />
+                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center shadow-2xl border-4 border-white">
+                    <div className="w-24 h-24 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center">
+                      <Users className="h-12 w-12 text-gray-600" />
+                    </div>
                   </div>
-                  {/* Pulsing rings */}
+                  {/* Pulsing call rings */}
                   <div className="absolute inset-0 w-32 h-32 mx-auto rounded-full border-4 border-green-400 animate-ping opacity-30"></div>
-                  <div className="absolute inset-0 w-40 h-40 mx-auto rounded-full border-2 border-green-300 animate-ping opacity-20 -top-4 -left-4"></div>
+                  <div className="absolute inset-0 w-40 h-40 mx-auto rounded-full border-2 border-green-300 animate-ping opacity-20 -top-4 -left-4 animate-delay-150"></div>
+                  <div className="absolute inset-0 w-48 h-48 mx-auto rounded-full border border-green-200 animate-ping opacity-10 -top-8 -left-8 animate-delay-300"></div>
+                  
+                  {/* Call status indicator */}
+                  <div className="absolute bottom-2 right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-bounce shadow-lg">
+                    <Phone className="h-4 w-4 text-white" />
+                  </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <div className="font-semibold text-xl">{selectedRep?.name}</div>
-                  <div className="text-primary font-medium animate-pulse flex items-center justify-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce"></div>
-                    <span>Calling</span>
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce delay-100"></div>
-                  </div>
-                  <div className="text-sm text-muted-foreground">Connecting to {selectedRep?.clinic}</div>
-                  <div className="text-xs text-muted-foreground opacity-70">
-                    Mobile: +1 (555) 0123 • Ring {Math.ceil(callDuration / 3)}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-muted/30 p-4 rounded-lg">
-                <div className="text-xs text-muted-foreground text-center space-y-1">
-                  <div>Call Duration: {formatTime(callDuration)}</div>
-                  <div className="flex items-center justify-center space-x-4 text-green-600">
-                    <div className="flex items-center space-x-1">
-                      <div className="w-1 h-4 bg-green-500 rounded animate-pulse"></div>
-                      <div className="w-1 h-6 bg-green-500 rounded animate-pulse delay-75"></div>
-                      <div className="w-1 h-5 bg-green-500 rounded animate-pulse delay-150"></div>
-                      <div className="w-1 h-7 bg-green-500 rounded animate-pulse delay-200"></div>
-                      <div className="w-1 h-4 bg-green-500 rounded animate-pulse delay-300"></div>
+                <div className="space-y-3">
+                  <div className="font-bold text-2xl text-gray-900">{selectedRep?.name}</div>
+                  <div className="text-green-600 font-semibold animate-pulse flex items-center justify-center space-x-3">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce animate-delay-75"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce animate-delay-150"></div>
                     </div>
-                    <span className="text-xs">Audio Active</span>
+                    <span className="text-lg">Calling...</span>
+                  </div>
+                  <div className="text-sm text-gray-600">{selectedRep?.clinic}</div>
+                  <div className="text-xs text-gray-500 space-y-1">
+                    <div>📱 Mobile: +1 (555) 0123</div>
+                    <div>🔊 Ring {Math.ceil(callDuration / 3)}</div>
                   </div>
                 </div>
               </div>
               
-              <div className="flex justify-center space-x-4">
-                <Button variant="outline" size="lg" className="rounded-full w-14 h-14">
-                  <Mic className="h-5 w-5" />
+              {/* Call controls */}
+              <div className="bg-gray-50 p-6 rounded-2xl space-y-4">
+                <div className="text-xs text-gray-500 text-center space-y-2">
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span>Call Duration: {formatTime(callDuration)}</span>
+                  </div>
+                  
+                  {/* Audio visualization */}
+                  <div className="flex items-center justify-center space-x-1">
+                    <div className="w-1 h-4 bg-green-500 rounded animate-pulse"></div>
+                    <div className="w-1 h-6 bg-green-500 rounded animate-pulse animate-delay-75"></div>
+                    <div className="w-1 h-5 bg-green-500 rounded animate-pulse animate-delay-150"></div>
+                    <div className="w-1 h-7 bg-green-500 rounded animate-pulse animate-delay-200"></div>
+                    <div className="w-1 h-4 bg-green-500 rounded animate-pulse animate-delay-300"></div>
+                    <div className="w-1 h-6 bg-green-500 rounded animate-pulse animate-delay-75"></div>
+                    <div className="w-1 h-3 bg-green-500 rounded animate-pulse animate-delay-150"></div>
+                  </div>
+                  <span className="text-xs text-green-600 font-medium">📞 Audio Active</span>
+                </div>
+              </div>
+              
+              {/* Action buttons */}
+              <div className="flex justify-center space-x-6">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="rounded-full w-16 h-16 bg-white hover:bg-gray-50 border-2 hover-scale"
+                  disabled
+                >
+                  <Mic className="h-6 w-6 text-gray-600" />
                 </Button>
+                
                 <Button 
                   variant="destructive" 
                   size="lg" 
@@ -657,17 +682,24 @@ const SalesManagerDashboard = () => {
                     setCallDuration(0);
                     toast.error('Call cancelled');
                   }}
-                  className="bg-red-600 hover:bg-red-700 rounded-full w-16 h-16"
+                  className="bg-red-500 hover:bg-red-600 rounded-full w-20 h-20 shadow-xl hover-scale transform-gpu"
                 >
-                  <PhoneOff className="h-6 w-6" />
+                  <PhoneOff className="h-8 w-8" />
                 </Button>
-                <Button variant="outline" size="lg" className="rounded-full w-14 h-14">
-                  <Volume2 className="h-5 w-5" />
+                
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="rounded-full w-16 h-16 bg-white hover:bg-gray-50 border-2 hover-scale"
+                  disabled
+                >
+                  <Volume2 className="h-6 w-6 text-gray-600" />
                 </Button>
               </div>
               
-              <div className="text-center text-xs text-muted-foreground">
-                Tip: Call will automatically connect after a few seconds
+              <div className="text-center text-xs text-gray-400 space-y-1">
+                <div>💡 Call will connect automatically</div>
+                <div>Swipe down to minimize</div>
               </div>
             </div>
           )}

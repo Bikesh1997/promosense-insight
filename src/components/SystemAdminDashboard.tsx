@@ -389,7 +389,7 @@ const SystemAdminDashboard = () => {
             </TableHeader>
             <TableBody>
               {auditLogs.map((log, index) => (
-                <TableRow key={index}>
+                <TableRow key={index} className={index % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                   <TableCell className="text-sm">{log.timestamp}</TableCell>
                   <TableCell className="text-sm font-medium">{log.user}</TableCell>
                   <TableCell className="text-sm">{log.action}</TableCell>
