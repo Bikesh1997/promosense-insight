@@ -51,100 +51,94 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* Login Card */}
-        <Card className="shadow-2xl border-0 bg-card/95 backdrop-blur-sm relative z-10">
-          <CardHeader className="space-y-1 pb-4 sm:pb-6 px-4 sm:px-6">
-          </CardHeader>
-          
-          <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Email Field */}
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-allergan-text">
-                  Email Address
-                </Label>
+        {/* Login Form */}
+        <div className="space-y-4 sm:space-y-6 px-4 sm:px-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium text-allergan-text">
+                Email Address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-11 sm:h-12 px-3 sm:px-4 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base"
+                required
+              />
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-sm font-medium text-allergan-text">
+                Password
+              </Label>
+              <div className="relative">
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 sm:h-12 px-3 sm:px-4 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base"
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-11 sm:h-12 px-3 sm:px-4 pr-10 sm:pr-12 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base"
                   required
                 />
-              </div>
-
-              {/* Password Field */}
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-allergan-text">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="h-11 sm:h-12 px-3 sm:px-4 pr-10 sm:pr-12 border-border/50 bg-white focus:border-allergan-primary focus:ring-allergan-primary/20 transition-all duration-200 text-sm sm:text-base"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-allergan-text-light hover:text-allergan-text transition-colors"
-                    tabIndex={-1}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Demo and Forgot Password Links */}
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
                 <button
                   type="button"
-                  onClick={handleDemoLogin}
-                  className="flex items-center space-x-2 text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 transition-colors group"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-allergan-text-light hover:text-allergan-text transition-colors"
+                  tabIndex={-1}
                 >
-                  <User className="w-4 h-4" />
-                  <span>Use Demo Account</span>
-                </button>
-                
-                <button
-                  type="button"
-                  className="text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 underline underline-offset-2 transition-colors"
-                >
-                  Forgot password?
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
+            </div>
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={isLoading || !email || !password}
-                className="w-full h-11 sm:h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-lg hover:shadow-xl transition-all duration-200 group text-sm sm:text-base"
+            {/* Demo and Forgot Password Links */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
+              <button
+                type="button"
+                onClick={handleDemoLogin}
+                className="flex items-center space-x-2 text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 transition-colors group"
               >
-                {isLoading ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                    <span>Signing in...</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <span>Sign In</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-                  </div>
-                )}
-              </Button>
-            </form>
+                <User className="w-4 h-4" />
+                <span>Use Demo Account</span>
+              </button>
+              
+              <button
+                type="button"
+                className="text-xs sm:text-sm text-allergan-primary hover:text-allergan-primary/80 underline underline-offset-2 transition-colors"
+              >
+                Forgot password?
+              </button>
+            </div>
 
-          </CardContent>
-        </Card>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={isLoading || !email || !password}
+              className="w-full h-11 sm:h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-lg hover:shadow-xl transition-all duration-200 group text-sm sm:text-base"
+            >
+              {isLoading ? (
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  <span>Signing in...</span>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <span>Sign In</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+                </div>
+              )}
+            </Button>
+          </form>
+        </div>
 
       </div>
     </div>
