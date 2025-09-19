@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import allerganLogo from '@/assets/allergan-logo.png';
+import allerganLogo from '@/assets/allergan-logo-new.png';
 import { Eye, EyeOff, ArrowRight, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
