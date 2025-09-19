@@ -704,14 +704,14 @@ const PromotionStrategiesEnhanced = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={380}>
-                  <BarChart data={filteredCampaigns} margin={{ top: 20, right: 30, left: 40, bottom: 60 }}>
+                <ResponsiveContainer width="100%" height={350}>
+                  <BarChart data={filteredCampaigns} margin={{ top: 20, right: 20, left: 20, bottom: 40 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis 
                       dataKey="name" 
                       angle={0} 
                       textAnchor="middle" 
-                      height={60}
+                      height={40}
                       tick={{ 
                         fill: 'hsl(var(--muted-foreground))',
                         fontSize: 12
