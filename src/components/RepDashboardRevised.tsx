@@ -25,7 +25,8 @@ import {
   XCircle,
   Plus,
   PhoneCall,
-  Brain
+  Brain,
+  FileText
 } from 'lucide-react';
 
 const RepDashboardRevised = () => {
@@ -82,12 +83,78 @@ const RepDashboardRevised = () => {
     }
   };
 
-  const analyzeCallWithAI = () => {
-    if (callNotes.trim()) {
-      toast.success('AI analysis completed! Key insights: Patient showed high interest, recommend follow-up in 2 days.');
-    } else {
+  const [callStatus, setCallStatus] = useState('idle'); // idle, calling, connected, ended
+  const [callDuration, setCallDuration] = useState(0);
+  const [aiAnalysisResults, setAiAnalysisResults] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [callRecording, setCallRecording] = useState(false);
+
+  const analyzeCallWithAI = async () => {
+    if (!callNotes.trim()) {
       toast.error('Please add call notes to analyze');
+      return;
     }
+
+    setIsAnalyzing(true);
+    
+    // Simulate AI analysis
+    setTimeout(() => {
+      const analysisResults = {
+        sentiment: Math.random() > 0.3 ? 'positive' : Math.random() > 0.6 ? 'neutral' : 'negative',
+        keyTopics: ['Treatment Interest', 'Pricing Discussion', 'Scheduling', 'Competitor Comparison'],
+        actionItems: [
+          'Send treatment brochure and pricing information',
+          'Schedule follow-up consultation within 3 days',
+          'Provide testimonials and before/after photos',
+          'Address pricing concerns with payment plan options'
+        ],
+        nextBestAction: 'Schedule consultation appointment',
+        urgencyLevel: Math.random() > 0.5 ? 'high' : Math.random() > 0.7 ? 'medium' : 'low',
+        conversionProbability: Math.floor(Math.random() * 40) + 60, // 60-100%
+        recommendedFollowUp: '2-3 days',
+        concerns: ['Budget constraints', 'Treatment timeline'],
+        interests: ['Botox treatment', 'Dermal fillers', 'Consultation booking']
+      };
+      
+      setAiAnalysisResults(analysisResults);
+      setIsAnalyzing(false);
+      toast.success('AI analysis completed successfully!');
+    }, 2000);
+  };
+
+  const startCall = () => {
+    setCallStatus('calling');
+    setCallDuration(0);
+    
+    // Simulate call progression
+    setTimeout(() => {
+      setCallStatus('connected');
+      setCallRecording(true);
+      
+      // Start call duration timer
+      const timer = setInterval(() => {
+        setCallDuration(prev => prev + 1);
+      }, 1000);
+      
+      // Auto-end call after some time for demo
+      setTimeout(() => {
+        clearInterval(timer);
+        setCallStatus('ended');
+        setCallRecording(false);
+      }, 15000);
+      
+    }, 3000);
+  };
+
+  const endCall = () => {
+    setCallStatus('ended');
+    setCallRecording(false);
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const comprehensiveLeads = [
@@ -464,7 +531,7 @@ const RepDashboardRevised = () => {
                 </TableHeader>
                 <TableBody>
                   {paginatedLeads.map((lead) => (
-                    <TableRow key={lead.id} className="hover:bg-muted/50">
+                    <TableRow key={lead.id} className={`hover:bg-muted/50 ${paginatedLeads.indexOf(lead) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}`}>
                       <TableCell>
                         <div>
                           <div className="font-medium">{lead.leadName}</div>
@@ -572,47 +639,263 @@ const RepDashboardRevised = () => {
             </CardContent>
           </Card>
 
-          {/* Call Dialog */}
+          {/* Professional Call Dialog */}
           <Dialog open={showCallDialog} onOpenChange={setShowCallDialog}>
-            <DialogContent className="sm:max-w-lg">
+            <DialogContent className="sm:max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="flex items-center">
-                  <PhoneCall className="h-5 w-5 mr-2" />
-                  Call with {selectedLead?.leadName}
+                <DialogTitle className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+                      <PhoneCall className={`h-6 w-6 ${callStatus === 'connected' ? 'text-green-600' : 'text-blue-600'}`} />
+                    </div>
+                    <div>
+                      <div className="text-lg font-semibold">{selectedLead?.leadName}</div>
+                      <div className="text-sm text-muted-foreground flex items-center space-x-2">
+                        <span>{selectedLead?.phone}</span>
+                        {callStatus === 'connected' && (
+                          <>
+                            <span>•</span>
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                              <span className="text-green-600">Connected</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {callStatus === 'connected' && (
+                    <div className="text-right">
+                      <div className="text-lg font-mono">{formatTime(callDuration)}</div>
+                      <div className="text-xs text-muted-foreground">Duration</div>
+                    </div>
+                  )}
                 </DialogTitle>
               </DialogHeader>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div><strong>Phone:</strong> {selectedLead?.phone}</div>
-                  <div><strong>Treatment:</strong> {selectedLead?.treatment}</div>
-                  <div><strong>Stage:</strong> {selectedLead?.stage}</div>
-                  <div><strong>Value:</strong> ${selectedLead?.value}</div>
+
+              <div className="space-y-6">
+                {/* Lead Information Panel */}
+                <div className="bg-muted/30 p-4 rounded-lg">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Treatment:</span>
+                      <div className="font-medium">{selectedLead?.treatment}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Stage:</span>
+                      <div className="font-medium">{selectedLead?.stage}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Value:</span>
+                      <div className="font-medium">${selectedLead?.value}</div>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Priority:</span>
+                      <div className="font-medium">{selectedLead?.priority}</div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium">Call Notes & Summary</label>
-                  <Textarea 
-                    value={callNotes}
-                    onChange={(e) => setCallNotes(e.target.value)}
-                    placeholder="Document call details, patient concerns, next steps..."
-                    rows={4}
-                    className="mt-1"
-                  />
-                </div>
-                <div className="flex space-x-2">
-                  <Button 
-                    onClick={analyzeCallWithAI} 
-                    variant="outline" 
-                    className="flex-1"
-                    disabled={!callNotes.trim()}
-                  >
-                    <Brain className="h-4 w-4 mr-2" />
-                    Analyze call summary with AI
-                  </Button>
-                </div>
-                <div className="flex space-x-2">
-                  <Button onClick={handleCallComplete} className="flex-1">Complete Call</Button>
-                  <Button variant="outline" onClick={() => setShowCallDialog(false)} className="flex-1">Cancel</Button>
-                </div>
+
+                {/* Call Status & Controls */}
+                {callStatus === 'idle' && (
+                  <div className="text-center space-y-4">
+                    <div className="space-y-2">
+                      <div className="text-lg font-medium">Ready to call {selectedLead?.leadName}</div>
+                      <div className="text-sm text-muted-foreground">Click start to begin the call</div>
+                    </div>
+                    <div className="flex justify-center space-x-3">
+                      <Button variant="outline" onClick={() => setShowCallDialog(false)}>
+                        Cancel
+                      </Button>
+                      <Button onClick={startCall} className="bg-green-600 hover:bg-green-700">
+                        <PhoneCall className="h-4 w-4 mr-2" />
+                        Start Call
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {callStatus === 'calling' && (
+                  <div className="text-center space-y-4">
+                    <div className="w-20 h-20 mx-auto bg-blue-500 rounded-full flex items-center justify-center animate-pulse">
+                      <PhoneCall className="h-10 w-10 text-white" />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="text-lg font-medium animate-pulse">Calling...</div>
+                      <div className="text-sm text-muted-foreground">Connecting to {selectedLead?.leadName}</div>
+                    </div>
+                    <Button variant="destructive" onClick={() => setCallStatus('idle')}>
+                      Cancel Call
+                    </Button>
+                  </div>
+                )}
+
+                {callStatus === 'connected' && (
+                  <div className="space-y-4">
+                    <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                          <div>
+                            <div className="font-medium text-green-800">Call Active</div>
+                            <div className="text-sm text-green-600">Duration: {formatTime(callDuration)}</div>
+                          </div>
+                        </div>
+                        {callRecording && (
+                          <div className="flex items-center space-x-2 text-sm text-green-600">
+                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                            <span>Recording</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <Button variant="destructive" onClick={endCall} className="w-full">
+                      <PhoneCall className="h-4 w-4 mr-2" />
+                      End Call
+                    </Button>
+                  </div>
+                )}
+
+                {(callStatus === 'connected' || callStatus === 'ended') && (
+                  <>
+                    {/* Call Notes Section */}
+                    <div className="space-y-3">
+                      <label className="text-sm font-semibold">Call Notes & Summary</label>
+                      <Textarea 
+                        value={callNotes}
+                        onChange={(e) => setCallNotes(e.target.value)}
+                        placeholder="Document key discussion points:
+• Patient's main concerns and questions
+• Treatment interests and preferences  
+• Budget considerations discussed
+• Objections or hesitations raised
+• Next steps agreed upon
+• Follow-up requirements"
+                        rows={6}
+                        className="text-sm"
+                      />
+                    </div>
+
+                    {/* AI Analysis Section */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold">AI Call Analysis</h3>
+                        <Button 
+                          onClick={analyzeCallWithAI} 
+                          variant="outline"
+                          disabled={!callNotes.trim() || isAnalyzing}
+                          className="min-w-[160px]"
+                        >
+                          {isAnalyzing ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2" />
+                              Analyzing...
+                            </>
+                          ) : (
+                            <>
+                              <Brain className="h-4 w-4 mr-2" />
+                              Analyze Call
+                            </>
+                          )}
+                        </Button>
+                      </div>
+
+                      {aiAnalysisResults && (
+                        <div className="bg-accent/10 p-6 rounded-lg border space-y-4">
+                          <div className="grid md:grid-cols-2 gap-6">
+                            {/* Sentiment & Probability */}
+                            <div className="space-y-3">
+                              <div>
+                                <span className="text-sm font-medium text-muted-foreground">Call Sentiment:</span>
+                                <div className={`inline-block ml-2 px-2 py-1 rounded-full text-xs font-medium ${
+                                  aiAnalysisResults.sentiment === 'positive' ? 'bg-green-100 text-green-800' :
+                                  aiAnalysisResults.sentiment === 'neutral' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}>
+                                  {aiAnalysisResults.sentiment.charAt(0).toUpperCase() + aiAnalysisResults.sentiment.slice(1)}
+                                </div>
+                              </div>
+                              
+                              <div>
+                                <span className="text-sm font-medium text-muted-foreground">Conversion Probability:</span>
+                                <div className="flex items-center space-x-2 mt-1">
+                                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                    <div 
+                                      className="bg-primary h-2 rounded-full transition-all duration-500"
+                                      style={{ width: `${aiAnalysisResults.conversionProbability}%` }}
+                                    ></div>
+                                  </div>
+                                  <span className="text-sm font-medium">{aiAnalysisResults.conversionProbability}%</span>
+                                </div>
+                              </div>
+
+                              <div>
+                                <span className="text-sm font-medium text-muted-foreground">Urgency Level:</span>
+                                <div className={`inline-block ml-2 px-2 py-1 rounded-full text-xs font-medium ${
+                                  aiAnalysisResults.urgencyLevel === 'high' ? 'bg-red-100 text-red-800' :
+                                  aiAnalysisResults.urgencyLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-green-100 text-green-800'
+                                }`}>
+                                  {aiAnalysisResults.urgencyLevel.charAt(0).toUpperCase() + aiAnalysisResults.urgencyLevel.slice(1)}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Key Topics */}
+                            <div>
+                              <span className="text-sm font-medium text-muted-foreground">Key Discussion Topics:</span>
+                              <div className="flex flex-wrap gap-1 mt-2">
+                                {aiAnalysisResults.keyTopics.map((topic, index) => (
+                                  <span key={index} className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
+                                    {topic}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Action Items */}
+                          <div>
+                            <span className="text-sm font-medium text-muted-foreground">Recommended Action Items:</span>
+                            <ul className="mt-2 space-y-1">
+                              {aiAnalysisResults.actionItems.map((item, index) => (
+                                <li key={index} className="flex items-start space-x-2 text-sm">
+                                  <span className="text-primary mt-1">•</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Next Best Action */}
+                          <div className="bg-primary/5 p-4 rounded-lg border-l-4 border-primary">
+                            <div className="flex items-start space-x-3">
+                              <Target className="h-5 w-5 text-primary mt-0.5" />
+                              <div>
+                                <div className="font-medium text-primary">Next Best Action</div>
+                                <div className="text-sm text-muted-foreground mt-1">{aiAnalysisResults.nextBestAction}</div>
+                                <div className="text-xs text-muted-foreground mt-2">
+                                  Recommended follow-up: {aiAnalysisResults.recommendedFollowUp}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex space-x-3 pt-4 border-t">
+                      <Button onClick={handleCallComplete} className="flex-1">
+                        <FileText className="h-4 w-4 mr-2" />
+                        Complete Call
+                      </Button>
+                      <Button variant="outline" onClick={() => setShowCallDialog(false)} className="flex-1">
+                        Save & Close
+                      </Button>
+                    </div>
+                  </>
+                )}
               </div>
             </DialogContent>
           </Dialog>

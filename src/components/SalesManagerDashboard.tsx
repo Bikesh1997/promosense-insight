@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertTriangle, TrendingUp, Users, Target, Phone, Mail, Settings, Search, Calendar, FileText } from 'lucide-react';
+import { AlertTriangle, TrendingUp, Users, Target, Phone, Mail, Settings, Search, Calendar, FileText, Mic, PhoneOff, Volume2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const SalesManagerDashboard = () => {
@@ -20,6 +20,17 @@ const SalesManagerDashboard = () => {
   const [selectedRep, setSelectedRep] = useState(null);
   const [callNotes, setCallNotes] = useState('');
   const [messageContent, setMessageContent] = useState('');
+  const [regionFilter, setRegionFilter] = useState('all');
+  const [riskLevelFilter, setRiskLevelFilter] = useState('all');
+  const [repFilter, setRepFilter] = useState('all');
+  const [callStatus, setCallStatus] = useState('idle'); // idle, calling, connected, ended
+  const [callDuration, setCallDuration] = useState(0);
+  const [callAnalysis, setCallAnalysis] = useState({
+    sentiment: 'neutral',
+    keyTopics: [],
+    actionItems: [],
+    followUpRequired: false
+  });
 
   const handleInvestigateClinic = (clinic) => {
     setSelectedClinic(clinic);
@@ -28,7 +39,48 @@ const SalesManagerDashboard = () => {
 
   const handleCallRep = (repName: string, clinic: string) => {
     setSelectedRep({ name: repName, clinic });
+    setCallStatus('idle');
+    setCallDuration(0);
+    setCallAnalysis({
+      sentiment: 'neutral',
+      keyTopics: [],
+      actionItems: [],
+      followUpRequired: false
+    });
     setCallModalOpen(true);
+  };
+
+  const startCall = () => {
+    setCallStatus('calling');
+    // Simulate call progression
+    setTimeout(() => {
+      setCallStatus('connected');
+      const interval = setInterval(() => {
+        setCallDuration(prev => prev + 1);
+      }, 1000);
+      
+      // Simulate call analysis after 10 seconds
+      setTimeout(() => {
+        setCallAnalysis({
+          sentiment: 'positive',
+          keyTopics: ['campaign performance', 'client retention', 'Q4 goals'],
+          actionItems: ['Schedule follow-up training', 'Review client portfolio', 'Update CRM notes'],
+          followUpRequired: true
+        });
+      }, 10000);
+      
+      return () => clearInterval(interval);
+    }, 3000);
+  };
+
+  const endCall = () => {
+    setCallStatus('ended');
+    setTimeout(() => {
+      setCallModalOpen(false);
+      setCallStatus('idle');
+      setCallDuration(0);
+      toast.success(`Call completed with ${selectedRep?.name}`);
+    }, 2000);
   };
 
   const handleMessageRep = (repName: string, clinic: string) => {
@@ -57,6 +109,8 @@ const SalesManagerDashboard = () => {
     toast.success(`Optimization plan activated for ${selectedRep?.name}`);
     setOptimizeModalOpen(false);
   };
+
+  // Data definitions
   const regionalSummary = {
     northeast: { revenue: 4800000, patients: 1800, roi: 168, churnRisk: 22 },
     southeast: { revenue: 3200000, patients: 1200, roi: 152, churnRisk: 18 },
@@ -88,22 +142,113 @@ const SalesManagerDashboard = () => {
     { clinic: "Phoenix Beauty", risk: 61, action: "Increase follow-up frequency", priority: "medium" }
   ];
 
+  // Get unique values for filter options - defined before filtering to ensure availability
+  const uniqueRegions = [...new Set(atRiskClinics.map(clinic => clinic.region))];
+  const uniqueReps = [...new Set(atRiskClinics.map(clinic => clinic.rep))];
+
+  // Filter data based on selected filters
+  const filteredAtRiskClinics = atRiskClinics.filter(clinic => {
+    const regionMatch = regionFilter === 'all' || clinic.region === regionFilter;
+    const riskMatch = riskLevelFilter === 'all' || 
+      (riskLevelFilter === 'critical' && clinic.leakage >= 70) ||
+      (riskLevelFilter === 'high' && clinic.leakage >= 60 && clinic.leakage < 70) ||
+      (riskLevelFilter === 'medium' && clinic.leakage < 60);
+    const repMatch = repFilter === 'all' || clinic.rep === repFilter;
+    return regionMatch && riskMatch && repMatch;
+  });
+
+  const filteredRepPerformance = repPerformance.filter(rep => {
+    const regionMatch = regionFilter === 'all' || rep.region === regionFilter;
+    const repMatch = repFilter === 'all' || rep.rep === repFilter;
+    return regionMatch && repMatch;
+  });
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold">Sales Manager Dashboard</h2>
-        <p className="text-muted-foreground">Regional performance analysis, rep productivity, and actionable insights</p>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold">Sales Manager Dashboard</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">Regional performance analysis, rep productivity, and actionable insights</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Select value={regionFilter} onValueChange={setRegionFilter}>
+            <SelectTrigger className="w-40 bg-background">
+              <SelectValue placeholder="All Regions" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border z-50">
+              <SelectItem value="all">All Regions</SelectItem>
+              {uniqueRegions.map(region => (
+                <SelectItem key={region} value={region}>{region}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={riskLevelFilter} onValueChange={setRiskLevelFilter}>
+            <SelectTrigger className="w-40 bg-background">
+              <SelectValue placeholder="All Risk Levels" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border z-50">
+              <SelectItem value="all">All Risk Levels</SelectItem>
+              <SelectItem value="critical">Critical (70%+)</SelectItem>
+              <SelectItem value="high">High (60-69%)</SelectItem>
+              <SelectItem value="medium">Medium (&lt;60%)</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={repFilter} onValueChange={setRepFilter}>
+            <SelectTrigger className="w-40 bg-background">
+              <SelectValue placeholder="All Reps" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border-border z-50">
+              <SelectItem value="all">All Reps</SelectItem>
+              {uniqueReps.map(rep => (
+                <SelectItem key={rep} value={rep}>{rep}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
+      {/* Filter Results Summary */}
+      {(regionFilter !== 'all' || riskLevelFilter !== 'all' || repFilter !== 'all') && (
+        <Card className="bg-accent/10">
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">
+                Showing {filteredAtRiskClinics.length} of {atRiskClinics.length} at-risk clinics
+                {regionFilter !== 'all' && ` • Region: ${regionFilter}`}
+                {riskLevelFilter !== 'all' && ` • Risk: ${riskLevelFilter}`}
+                {repFilter !== 'all' && ` • Rep: ${repFilter}`}
+              </span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => {
+                  setRegionFilter('all');
+                  setRiskLevelFilter('all');
+                  setRepFilter('all');
+                }}
+              >
+                Clear Filters
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Regional Summary Cards */}
-      <div className="grid md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
         {Object.entries(regionalSummary).map(([region, data]) => (
           <Card key={region}>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm capitalize">{region.replace(/([A-Z])/g, ' $1').trim()}</CardTitle>
+            <CardHeader className="pb-2 sm:pb-3">
+              <CardTitle className="text-xs sm:text-sm capitalize">{region.replace(/([A-Z])/g, ' $1').trim()}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="text-lg font-bold">${(data.revenue / 1000000).toFixed(1)}M</div>
+              <div className="text-base sm:text-lg font-bold">${(data.revenue / 1000000).toFixed(1)}M</div>
               <div className="text-xs text-muted-foreground">{data.patients} patients</div>
               <Badge variant={data.roi > 160 ? "default" : data.roi > 140 ? "secondary" : "destructive"} className="text-xs">
                 {data.roi}% ROI
@@ -121,129 +266,216 @@ const SalesManagerDashboard = () => {
       {/* At-Risk Clinics */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <AlertTriangle className="h-5 w-5 text-destructive" />
+          <CardTitle className="flex items-center space-x-2 text-lg sm:text-xl">
+            <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-destructive" />
             <span>At-Risk Clinics</span>
           </CardTitle>
           <CardDescription>Clinics with high leakage rates requiring immediate attention</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Clinic Name</TableHead>
-                <TableHead>Region</TableHead>
-                <TableHead>Leakage %</TableHead>
-                <TableHead>Problem Stage</TableHead>
-                <TableHead>Revenue Risk</TableHead>
-                <TableHead>Assigned Rep</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {atRiskClinics.map((clinic) => (
-                <TableRow key={clinic.clinic}>
-                  <TableCell className="font-medium">{clinic.clinic}</TableCell>
-                  <TableCell>{clinic.region}</TableCell>
-                  <TableCell>
-                    <Badge variant="destructive">{clinic.leakage}%</Badge>
-                  </TableCell>
-                  <TableCell className="text-sm">{clinic.stage}</TableCell>
-                  <TableCell>${clinic.revenue.toLocaleString()}</TableCell>
-                  <TableCell>{clinic.rep}</TableCell>
-                  <TableCell>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      onClick={() => handleInvestigateClinic(clinic)}
-                    >
-                      Investigate
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Rep Performance & AI Suggestions */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Rep Performance Analysis</CardTitle>
-            <CardDescription>Representative effectiveness by conversion metrics</CardDescription>
-          </CardHeader>
-          <CardContent>
+          {/* Mobile Card View */}
+          <div className="block sm:hidden space-y-3">
+            {filteredAtRiskClinics.map((clinic) => (
+              <div key={clinic.clinic} className="p-3 border rounded-lg space-y-2">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium text-sm">{clinic.clinic}</h4>
+                  <Badge variant="destructive" className="text-xs">{clinic.leakage}%</Badge>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span className="text-muted-foreground">Region: </span>
+                    <span>{clinic.region}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Revenue Risk: </span>
+                    <span>${clinic.revenue.toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Problem: </span>
+                    <span>{clinic.stage}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Rep: </span>
+                    <span>{clinic.rep}</span>
+                  </div>
+                </div>
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  onClick={() => handleInvestigateClinic(clinic)}
+                  className="w-full"
+                >
+                  Investigate
+                </Button>
+              </div>
+            ))}
+          </div>
+          
+          {/* Desktop Table View */}
+          <div className="hidden sm:block overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Rep Name</TableHead>
+                  <TableHead>Clinic Name</TableHead>
                   <TableHead>Region</TableHead>
-                  <TableHead>Leads</TableHead>
-                  <TableHead>Conversion %</TableHead>
-                  <TableHead>Avg Follow-Up</TableHead>
-                  <TableHead>Hot Leads</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead>Leakage %</TableHead>
+                  <TableHead>Problem Stage</TableHead>
+                  <TableHead>Revenue Risk</TableHead>
+                  <TableHead>Assigned Rep</TableHead>
+                  <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {repPerformance.map((rep) => (
-                  <TableRow key={rep.rep}>
-                    <TableCell className="font-medium">{rep.rep}</TableCell>
-                    <TableCell>{rep.region}</TableCell>
-                    <TableCell>{rep.leadsAssigned}</TableCell>
+                {filteredAtRiskClinics.map((clinic) => (
+                  <TableRow key={clinic.clinic} className={filteredAtRiskClinics.indexOf(clinic) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
+                    <TableCell className="font-medium">{clinic.clinic}</TableCell>
+                    <TableCell>{clinic.region}</TableCell>
                     <TableCell>
-                      <Badge variant={rep.conversion > 75 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"}>
-                        {rep.conversion}%
-                      </Badge>
+                      <Badge variant="destructive">{clinic.leakage}%</Badge>
                     </TableCell>
-                    <TableCell>{rep.avgFollowUp} days</TableCell>
+                    <TableCell className="text-sm">{clinic.stage}</TableCell>
+                    <TableCell>${clinic.revenue.toLocaleString()}</TableCell>
+                    <TableCell>{clinic.rep}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">{rep.hotLeads}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      {rep.conversion < 70 && (
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          onClick={() => handleOptimizeRep(rep.rep, rep.conversion)}
-                          title="Optimize Performance"
-                        >
-                          <Settings className="h-3 w-3" />
-                        </Button>
-                      )}
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => handleInvestigateClinic(clinic)}
+                      >
+                        Investigate
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Rep Performance & AI Suggestions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg sm:text-xl">Rep Performance Analysis</CardTitle>
+            <CardDescription>Representative effectiveness by conversion metrics</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {/* Mobile Card View */}
+            <div className="block sm:hidden space-y-3">
+              {filteredRepPerformance.map((rep) => (
+                <div key={rep.rep} className="p-3 border rounded-lg space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium text-sm">{rep.rep}</h4>
+                    <Badge variant={rep.conversion > 75 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"} className="text-xs">
+                      {rep.conversion}%
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <span className="text-muted-foreground">Region: </span>
+                      <span>{rep.region}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Leads: </span>
+                      <span>{rep.leadsAssigned}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Follow-up: </span>
+                      <span>{rep.avgFollowUp} days</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Hot Leads: </span>
+                      <Badge variant="outline" className="text-xs">{rep.hotLeads}</Badge>
+                    </div>
+                  </div>
+                  {rep.conversion < 70 && (
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      onClick={() => handleOptimizeRep(rep.rep, rep.conversion)}
+                      className="w-full"
+                    >
+                      <Settings className="h-3 w-3 mr-2" />
+                      Optimize Performance
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            {/* Desktop Table View */}
+            <div className="hidden sm:block overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Rep Name</TableHead>
+                    <TableHead>Region</TableHead>
+                    <TableHead>Leads</TableHead>
+                    <TableHead>Conversion %</TableHead>
+                    <TableHead>Avg Follow-Up</TableHead>
+                    <TableHead>Hot Leads</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredRepPerformance.map((rep) => (
+                    <TableRow key={rep.rep}>
+                      <TableCell className="font-medium">{rep.rep}</TableCell>
+                      <TableCell>{rep.region}</TableCell>
+                      <TableCell>{rep.leadsAssigned}</TableCell>
+                      <TableCell>
+                        <Badge variant={rep.conversion > 75 ? "default" : rep.conversion > 60 ? "secondary" : "destructive"}>
+                          {rep.conversion}%
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{rep.avgFollowUp} days</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{rep.hotLeads}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        {rep.conversion < 70 && (
+                          <Button 
+                            size="sm" 
+                            variant="ghost" 
+                            onClick={() => handleOptimizeRep(rep.rep, rep.conversion)}
+                            title="Optimize Performance"
+                          >
+                            <Settings className="h-3 w-3" />
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>AI-Powered Suggestions</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">AI-Powered Suggestions</CardTitle>
             <CardDescription>Recommended actions prioritized by urgency</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {aiSuggestions.map((suggestion, index) => (
-                <div key={index} className={`p-4 rounded-lg border ${
+                <div key={index} className={`p-3 sm:p-4 rounded-lg border ${
                   suggestion.priority === 'high' ? 'bg-destructive/5 border-destructive' : 'bg-secondary/5 border-secondary'
                 }`}>
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between space-y-3 sm:space-y-0">
                     <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 mb-1">
                         <span className="font-medium text-sm">{suggestion.clinic}</span>
-                        <Badge variant="destructive">{suggestion.risk}% risk</Badge>
+                        <Badge variant="destructive" className="text-xs w-fit">{suggestion.risk}% risk</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{suggestion.action}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-2">{suggestion.action}</p>
                       <Badge variant={suggestion.priority === 'high' ? "destructive" : "secondary"} className="text-xs">
                         {suggestion.priority.toUpperCase()} PRIORITY
                       </Badge>
                     </div>
-                    <div className="flex space-x-1 ml-4">
+                    <div className="flex space-x-1 sm:ml-4">
                       <Button 
                         size="sm" 
                         variant="ghost"
@@ -279,98 +511,326 @@ const SalesManagerDashboard = () => {
 
       {/* Investigation Modal */}
       <Dialog open={investigateModalOpen} onOpenChange={setInvestigateModalOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg mx-4">
           <DialogHeader>
-            <DialogTitle>Clinic Investigation: {selectedClinic?.clinic}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">Clinic Investigation: {selectedClinic?.clinic}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="p-3 border rounded">
-                <div className="text-sm text-muted-foreground">Leakage Rate</div>
-                <div className="text-xl font-bold text-destructive">{selectedClinic?.leakage}%</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Leakage Rate</div>
+                <div className="text-lg sm:text-xl font-bold text-destructive">{selectedClinic?.leakage}%</div>
               </div>
               <div className="p-3 border rounded">
-                <div className="text-sm text-muted-foreground">Problem Stage</div>
-                <div className="font-medium">{selectedClinic?.stage}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Revenue at Risk</div>
+                <div className="text-lg sm:text-xl font-bold">${selectedClinic?.revenue?.toLocaleString()}</div>
               </div>
               <div className="p-3 border rounded">
-                <div className="text-sm text-muted-foreground">Revenue Risk</div>
-                <div className="font-bold">${selectedClinic?.revenue?.toLocaleString()}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Problem Stage</div>
+                <div className="text-sm font-medium">{selectedClinic?.stage}</div>
               </div>
               <div className="p-3 border rounded">
-                <div className="text-sm text-muted-foreground">Assigned Rep</div>
-                <div className="font-medium">{selectedClinic?.rep}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Assigned Rep</div>
+                <div className="text-sm font-medium">{selectedClinic?.rep}</div>
               </div>
             </div>
-            <div className="space-y-3">
-              <div>
-                <h4 className="font-medium mb-2">Investigation Findings:</h4>
-                <ul className="text-sm space-y-1 text-muted-foreground">
-                  <li>• Patient follow-up rate 23% below target</li>
-                  <li>• Average response time: 4.2 hours (target: 2 hours)</li>
-                  <li>• Promotional email open rate: 34% (industry avg: 42%)</li>
-                  <li>• Treatment education materials not being distributed</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2">Recommended Actions:</h4>
-                <ul className="text-sm space-y-1 text-muted-foreground">
-                  <li>• Implement automated follow-up system</li>
-                  <li>• Increase rep training on treatment benefits</li>
-                  <li>• Review and update promotional email templates</li>
-                  <li>• Schedule weekly check-ins with clinic staff</li>
-                </ul>
-              </div>
+            
+            <div className="space-y-2">
+              <h4 className="font-medium">Root Cause Analysis:</h4>
+              <ul className="text-sm space-y-1 text-muted-foreground">
+                <li>• Delayed follow-up on promotional offers (avg 3.2 days)</li>
+                <li>• Limited treatment availability during peak hours</li>
+                <li>• Price sensitivity in local market segment</li>
+                <li>• Competition offering aggressive pricing</li>
+              </ul>
             </div>
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setInvestigateModalOpen(false)}>Close</Button>
+            
+            <div className="space-y-2">
+              <h4 className="font-medium">Recommended Actions:</h4>
+              <ul className="text-sm space-y-1 text-success">
+                <li>• Implement same-day follow-up protocol</li>
+                <li>• Extend evening appointment slots</li>
+                <li>• Deploy targeted pricing strategy</li>
+                <li>• Increase rep visit frequency</li>
+              </ul>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+              <Button variant="outline" onClick={() => setInvestigateModalOpen(false)} className="w-full sm:w-auto">Close</Button>
               <Button onClick={() => {
                 toast.success('Investigation report generated and sent to stakeholders');
                 setInvestigateModalOpen(false);
-              }}>Generate Report</Button>
+              }} className="w-full sm:w-auto">Generate Report</Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Call Rep Modal */}
+      {/* Call Rep Modal - Enhanced with realistic calling interface */}
       <Dialog open={callModalOpen} onOpenChange={setCallModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg mx-4">
           <DialogHeader>
-            <DialogTitle>Call {selectedRep?.name}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl flex items-center space-x-2">
+              <Phone className="h-5 w-5" />
+              <span>Call {selectedRep?.name}</span>
+            </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="p-3 bg-muted rounded">
-              <div className="text-sm text-muted-foreground">Regarding</div>
-              <div className="font-medium">{selectedRep?.clinic} Performance</div>
+          
+          {callStatus === 'idle' && (
+            <div className="space-y-4">
+              <div className="text-center space-y-4">
+                <div className="w-24 h-24 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                  <Users className="h-12 w-12 text-primary" />
+                </div>
+                <div>
+                  <div className="font-medium text-lg">{selectedRep?.name}</div>
+                  <div className="text-sm text-muted-foreground">Ready to call</div>
+                  <div className="text-xs text-muted-foreground mt-1">Regarding: {selectedRep?.clinic}</div>
+                </div>
+              </div>
+              
+              <div className="flex justify-center space-x-3">
+                <Button variant="outline" onClick={() => setCallModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={startCall} className="bg-green-600 hover:bg-green-700">
+                  <Phone className="h-4 w-4 mr-2" />
+                  Start Call
+                </Button>
+              </div>
             </div>
-            <div>
-              <label className="text-sm font-medium">Call Notes</label>
-              <Textarea
-                value={callNotes}
-                onChange={(e) => setCallNotes(e.target.value)}
-                placeholder="Document key discussion points, action items, and next steps..."
-                rows={4}
-              />
+          )}
+
+          {callStatus === 'calling' && (
+            <div className="space-y-6">
+              <div className="text-center space-y-6">
+                {/* Profile Section */}
+                <div className="relative">
+                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center shadow-2xl border-4 border-white">
+                    <div className="w-24 h-24 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center">
+                      <Users className="h-12 w-12 text-gray-600" />
+                    </div>
+                  </div>
+                  {/* Pulsing call rings */}
+                  <div className="absolute inset-0 w-32 h-32 mx-auto rounded-full border-4 border-green-400 animate-ping opacity-30"></div>
+                  <div className="absolute inset-0 w-40 h-40 mx-auto rounded-full border-2 border-green-300 animate-ping opacity-20 -top-4 -left-4 animate-delay-150"></div>
+                  <div className="absolute inset-0 w-48 h-48 mx-auto rounded-full border border-green-200 animate-ping opacity-10 -top-8 -left-8 animate-delay-300"></div>
+                  
+                  {/* Call status indicator */}
+                  <div className="absolute bottom-2 right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-bounce shadow-lg">
+                    <Phone className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <div className="font-bold text-2xl text-gray-900">{selectedRep?.name}</div>
+                  <div className="text-green-600 font-semibold animate-pulse flex items-center justify-center space-x-3">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce animate-delay-75"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce animate-delay-150"></div>
+                    </div>
+                    <span className="text-lg">Calling...</span>
+                  </div>
+                  <div className="text-sm text-gray-600">{selectedRep?.clinic}</div>
+                  <div className="text-xs text-gray-500 space-y-1">
+                    <div>📱 Mobile: +1 (555) 0123</div>
+                    <div>🔊 Ring {Math.ceil(callDuration / 3)}</div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Call controls */}
+              <div className="bg-gray-50 p-6 rounded-2xl space-y-4">
+                <div className="text-xs text-gray-500 text-center space-y-2">
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span>Call Duration: {formatTime(callDuration)}</span>
+                  </div>
+                  
+                  {/* Audio visualization */}
+                  <div className="flex items-center justify-center space-x-1">
+                    <div className="w-1 h-4 bg-green-500 rounded animate-pulse"></div>
+                    <div className="w-1 h-6 bg-green-500 rounded animate-pulse animate-delay-75"></div>
+                    <div className="w-1 h-5 bg-green-500 rounded animate-pulse animate-delay-150"></div>
+                    <div className="w-1 h-7 bg-green-500 rounded animate-pulse animate-delay-200"></div>
+                    <div className="w-1 h-4 bg-green-500 rounded animate-pulse animate-delay-300"></div>
+                    <div className="w-1 h-6 bg-green-500 rounded animate-pulse animate-delay-75"></div>
+                    <div className="w-1 h-3 bg-green-500 rounded animate-pulse animate-delay-150"></div>
+                  </div>
+                  <span className="text-xs text-green-600 font-medium">📞 Audio Active</span>
+                </div>
+              </div>
+              
+              {/* Action buttons */}
+              <div className="flex justify-center space-x-6">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="rounded-full w-16 h-16 bg-white hover:bg-gray-50 border-2 hover-scale"
+                  disabled
+                >
+                  <Mic className="h-6 w-6 text-gray-600" />
+                </Button>
+                
+                <Button 
+                  variant="destructive" 
+                  size="lg" 
+                  onClick={() => {
+                    setCallStatus('idle');
+                    setCallModalOpen(false);
+                    setCallDuration(0);
+                    toast.error('Call cancelled');
+                  }}
+                  className="bg-red-500 hover:bg-red-600 rounded-full w-20 h-20 shadow-xl hover-scale transform-gpu"
+                >
+                  <PhoneOff className="h-8 w-8" />
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="rounded-full w-16 h-16 bg-white hover:bg-gray-50 border-2 hover-scale"
+                  disabled
+                >
+                  <Volume2 className="h-6 w-6 text-gray-600" />
+                </Button>
+              </div>
+              
+              <div className="text-center text-xs text-gray-400 space-y-1">
+                <div>💡 Call will connect automatically</div>
+                <div>Swipe down to minimize</div>
+              </div>
             </div>
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setCallModalOpen(false)}>Cancel</Button>
-              <Button onClick={submitCall}>Complete Call</Button>
+          )}
+
+          {callStatus === 'connected' && (
+            <div className="space-y-4">
+              <div className="text-center space-y-4">
+                <div className="w-24 h-24 mx-auto bg-green-600 rounded-full flex items-center justify-center">
+                  <Phone className="h-12 w-12 text-white" />
+                </div>
+                <div>
+                  <div className="font-medium text-lg">{selectedRep?.name}</div>
+                  <div className="text-sm text-green-600">Connected</div>
+                  <div className="text-xs font-mono">{formatTime(callDuration)}</div>
+                </div>
+              </div>
+
+              {/* Live Call Analysis */}
+              {callAnalysis.sentiment !== 'neutral' && (
+                <div className="bg-accent/10 p-3 rounded-lg">
+                  <div className="text-xs font-medium mb-2">Live Call Analysis</div>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span>Sentiment:</span>
+                      <Badge variant={callAnalysis.sentiment === 'positive' ? 'default' : 'secondary'}>
+                        {callAnalysis.sentiment}
+                      </Badge>
+                    </div>
+                    {callAnalysis.keyTopics.length > 0 && (
+                      <div>
+                        <div className="text-muted-foreground mb-1">Key Topics:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {callAnalysis.keyTopics.map((topic, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {topic}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label className="text-sm font-medium">Call Notes</label>
+                <Textarea
+                  value={callNotes}
+                  onChange={(e) => setCallNotes(e.target.value)}
+                  placeholder="Document key discussion points, action items, and next steps..."
+                  rows={3}
+                  className="text-sm"
+                />
+              </div>
+              
+              <div className="flex justify-center">
+                <Button variant="destructive" onClick={endCall} className="bg-red-600 hover:bg-red-700">
+                  <Phone className="h-4 w-4 mr-2" />
+                  End Call
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {callStatus === 'ended' && (
+            <div className="space-y-4">
+              <div className="text-center space-y-4">
+                <div className="w-24 h-24 mx-auto bg-muted rounded-full flex items-center justify-center">
+                  <Phone className="h-12 w-12 text-muted-foreground" />
+                </div>
+                <div>
+                  <div className="font-medium text-lg">Call Ended</div>
+                  <div className="text-sm text-muted-foreground">Duration: {formatTime(callDuration)}</div>
+                </div>
+              </div>
+
+              {/* Post-Call Analysis */}
+              <div className="bg-accent/10 p-4 rounded-lg space-y-3">
+                <div className="font-medium text-sm">Call Summary & Analysis</div>
+                
+                <div className="grid grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <span className="text-muted-foreground">Duration:</span>
+                    <div className="font-medium">{formatTime(callDuration)}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Sentiment:</span>
+                    <div className="font-medium capitalize">{callAnalysis.sentiment}</div>
+                  </div>
+                </div>
+
+                {callAnalysis.actionItems.length > 0 && (
+                  <div>
+                    <div className="text-muted-foreground text-xs mb-2">Action Items:</div>
+                    <ul className="text-xs space-y-1">
+                      {callAnalysis.actionItems.map((item, index) => (
+                        <li key={index} className="flex items-start space-x-2">
+                          <span className="text-primary">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {callAnalysis.followUpRequired && (
+                  <div className="flex items-center space-x-2 text-xs">
+                    <Calendar className="h-3 w-3 text-warning" />
+                    <span className="text-warning">Follow-up recommended within 24 hours</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="text-center text-sm text-muted-foreground">
+                Call completed successfully. Report saved to CRM.
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
       {/* Message Rep Modal */}
       <Dialog open={messageModalOpen} onOpenChange={setMessageModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md mx-4">
           <DialogHeader>
-            <DialogTitle>Message {selectedRep?.name}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">Message {selectedRep?.name}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="p-3 bg-muted rounded">
-              <div className="text-sm text-muted-foreground">Subject</div>
-              <div className="font-medium">Performance Improvement - {selectedRep?.clinic}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Subject</div>
+              <div className="font-medium text-sm sm:text-base">Performance Improvement - {selectedRep?.clinic}</div>
             </div>
             <div>
               <label className="text-sm font-medium">Message</label>
@@ -379,10 +839,11 @@ const SalesManagerDashboard = () => {
                 onChange={(e) => setMessageContent(e.target.value)}
                 placeholder="Hi [Rep Name], I wanted to discuss the performance metrics for [Clinic]..."
                 rows={5}
+                className="text-sm"
               />
             </div>
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setMessageModalOpen(false)}>Cancel</Button>
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+              <Button variant="outline" onClick={() => setMessageModalOpen(false)} className="w-full sm:w-auto">Cancel</Button>
               <Button onClick={submitMessage}>Send Message</Button>
             </div>
           </div>
@@ -410,75 +871,32 @@ const SalesManagerDashboard = () => {
                   <li>• CRM usage optimization needed</li>
                 </ul>
               </div>
+              
               <div>
-                <h4 className="font-medium mb-2">Optimization Plan:</h4>
+                <h4 className="font-medium mb-2">Recommended Training:</h4>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">1-on-1 Coaching Session</span>
-                    <Button size="sm" variant="outline">Schedule</Button>
+                  <div className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                    <span>Advanced Objection Handling</span>
+                    <Badge variant="secondary">2 hrs</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">Product Training Module</span>
-                    <Button size="sm" variant="outline">Assign</Button>
+                  <div className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                    <span>CRM Mastery Workshop</span>
+                    <Badge variant="secondary">1 hr</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-2 border rounded">
-                    <span className="text-sm">Shadow Top Performer</span>
-                    <Button size="sm" variant="outline">Arrange</Button>
+                  <div className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                    <span>Product Deep Dive Session</span>
+                    <Badge variant="secondary">3 hrs</Badge>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex justify-end space-x-2">
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
               <Button variant="outline" onClick={() => setOptimizeModalOpen(false)}>Cancel</Button>
               <Button onClick={submitOptimization}>Activate Plan</Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Funnel Drop-Off Analysis */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Regional Funnel Drop-Offs (Last Month)</CardTitle>
-          <CardDescription>Stage-wise conversion analysis by region</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {[
-              { region: "Northeast", stages: [5200, 3300, 2100, 1050] },
-              { region: "Southeast", stages: [3400, 2000, 1200, 600] },
-              { region: "Midwest", stages: [2600, 1500, 900, 450] },
-              { region: "West Coast", stages: [6000, 3800, 2400, 1200] },
-              { region: "Southwest", stages: [3200, 1900, 1100, 550] }
-            ].map((region) => (
-              <div key={region.region} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">{region.region}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {Math.round((region.stages[3] / region.stages[0]) * 100)}% end-to-end conversion
-                  </span>
-                </div>
-                <div className="grid grid-cols-4 gap-2">
-                  {region.stages.map((count, index) => (
-                    <div key={index} className="text-center">
-                      <div className="text-sm font-medium">{count.toLocaleString()}</div>
-                      <div className="h-2 bg-muted rounded">
-                        <div 
-                          className="h-2 bg-primary rounded transition-all"
-                          style={{ width: `${Math.max((count / region.stages[0]) * 100, 10)}%` }}
-                        />
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {['Leads', 'Promo', 'Treatment', 'Repeat'][index]}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };

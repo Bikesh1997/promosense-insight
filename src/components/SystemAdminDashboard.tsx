@@ -293,7 +293,7 @@ const SystemAdminDashboard = () => {
               </TableHeader>
               <TableBody>
                 {dataQualityMetrics.map((metric) => (
-                  <TableRow key={metric.metric}>
+                  <TableRow key={metric.metric} className={dataQualityMetrics.indexOf(metric) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                     <TableCell className="font-medium">{metric.metric}</TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-2">
@@ -389,7 +389,7 @@ const SystemAdminDashboard = () => {
             </TableHeader>
             <TableBody>
               {auditLogs.map((log, index) => (
-                <TableRow key={index}>
+                <TableRow key={index} className={index % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                   <TableCell className="text-sm">{log.timestamp}</TableCell>
                   <TableCell className="text-sm font-medium">{log.user}</TableCell>
                   <TableCell className="text-sm">{log.action}</TableCell>

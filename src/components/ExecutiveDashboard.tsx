@@ -64,17 +64,17 @@ const ExecutiveDashboard = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold">Executive Dashboard</h2>
-          <p className="text-muted-foreground">Strategic overview of promotion effectiveness and business performance</p>
+          <h2 className="text-2xl sm:text-3xl font-bold">Executive Dashboard</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">Strategic overview of promotion effectiveness and business performance</p>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+          <div className="flex items-center space-x-2 w-full sm:w-auto">
             <Filter className="h-4 w-4 text-muted-foreground" />
             <Select value={selectedProduct} onValueChange={setSelectedProduct}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-full sm:w-40">
                 <SelectValue placeholder="Select Product" />
               </SelectTrigger>
               <SelectContent>
@@ -86,10 +86,10 @@ const ExecutiveDashboard = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 w-full sm:w-auto">
             <Calendar className="h-4 w-4 text-muted-foreground" />
             <Select value={selectedTimeline} onValueChange={setSelectedTimeline}>
-              <SelectTrigger className="w-44">
+              <SelectTrigger className="w-full sm:w-44">
                 <SelectValue placeholder="Select Timeline" />
               </SelectTrigger>
               <SelectContent>
@@ -105,72 +105,72 @@ const ExecutiveDashboard = () => {
       </div>
 
       {/* Key Performance Indicators */}
-      <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <DollarSign className="h-4 w-4 mr-2" />
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-xs sm:text-sm font-medium flex items-center">
+              <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               Total ROI
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">{executiveMetrics.totalROI}%</div>
+            <div className="text-xl sm:text-2xl font-bold text-success">{executiveMetrics.totalROI}%</div>
             <p className="text-xs text-muted-foreground">vs 420% target</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-xs sm:text-sm font-medium">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${(executiveMetrics.totalRevenue / 1000000).toFixed(1)}M</div>
+            <div className="text-xl sm:text-2xl font-bold">${(executiveMetrics.totalRevenue / 1000000).toFixed(1)}M</div>
             <p className="text-xs text-muted-foreground">+18% vs Q2</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <Users className="h-4 w-4 mr-2" />
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-xs sm:text-sm font-medium flex items-center">
+              <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               New Patients
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{executiveMetrics.newPatients.toLocaleString()}</div>
+            <div className="text-xl sm:text-2xl font-bold">{executiveMetrics.newPatients.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">+22% growth</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-xs sm:text-sm font-medium">Conversion Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{executiveMetrics.conversionRate}%</div>
+            <div className="text-xl sm:text-2xl font-bold">{executiveMetrics.conversionRate}%</div>
             <p className="text-xs text-muted-foreground">Industry avg: 8.5%</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <AlertTriangle className="h-4 w-4 mr-2" />
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-xs sm:text-sm font-medium flex items-center">
+              <AlertTriangle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               Churn Risk
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">{executiveMetrics.churnRisk}%</div>
+            <div className="text-xl sm:text-2xl font-bold text-destructive">{executiveMetrics.churnRisk}%</div>
             <p className="text-xs text-muted-foreground">Target: &lt;15%</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Avg Treatment Value</CardTitle>
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="text-xs sm:text-sm font-medium">Avg Treatment Value</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${executiveMetrics.avgTreatmentValue}</div>
+            <div className="text-xl sm:text-2xl font-bold">${executiveMetrics.avgTreatmentValue}</div>
             <p className="text-xs text-muted-foreground">+12% uplift</p>
           </CardContent>
         </Card>
@@ -179,26 +179,26 @@ const ExecutiveDashboard = () => {
       {/* Regional Performance */}
       <Card>
         <CardHeader>
-          <CardTitle>Regional Performance Analysis</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">Regional Performance Analysis</CardTitle>
           <CardDescription>Revenue, ROI, and risk metrics by geographic region</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {regionalPerformance.map((region) => (
-              <div key={region.region} className="flex items-center justify-between p-4 border rounded-lg">
+              <div key={region.region} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border rounded-lg space-y-3 sm:space-y-0">
                 <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium">{region.region}</h4>
-                    <div className="flex items-center space-x-3">
-                      <Badge variant={region.roi > 450 ? "default" : region.roi > 400 ? "secondary" : "destructive"}>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 space-y-2 sm:space-y-0">
+                    <h4 className="font-medium text-sm sm:text-base">{region.region}</h4>
+                    <div className="flex flex-wrap items-center gap-2 sm:space-x-3">
+                      <Badge variant={region.roi > 450 ? "default" : region.roi > 400 ? "secondary" : "destructive"} className="text-xs">
                         {region.roi}% ROI
                       </Badge>
-                      <Badge variant={region.risk < 20 ? "default" : "destructive"}>
+                      <Badge variant={region.risk < 20 ? "default" : "destructive"} className="text-xs">
                         {region.risk}% Risk
                       </Badge>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
                     <div>
                       <span className="text-muted-foreground">Revenue: </span>
                       <span className="font-medium">${(region.revenue / 1000000).toFixed(1)}M</span>
@@ -220,23 +220,23 @@ const ExecutiveDashboard = () => {
       </Card>
 
       {/* Campaign Performance & Alerts */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Campaign Performance Summary</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Campaign Performance Summary</CardTitle>
             <CardDescription>ROI and spend analysis for active campaigns</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {campaignSummary.map((campaign) => (
                 <div key={campaign.campaign} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-sm">{campaign.campaign}</span>
-                    <Badge variant={campaign.roi > 600 ? "default" : campaign.roi > 450 ? "secondary" : "destructive"}>
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <span className="font-medium text-xs sm:text-sm">{campaign.campaign}</span>
+                    <Badge variant={campaign.roi > 600 ? "default" : campaign.roi > 450 ? "secondary" : "destructive"} className="text-xs">
                       {campaign.roi}% ROI
                     </Badge>
                   </div>
-                  <div className="flex justify-between text-xs text-muted-foreground">
+                  <div className="flex flex-col sm:flex-row justify-between text-xs text-muted-foreground gap-1 sm:gap-0">
                     <span>Spend: ${(campaign.spend / 1000000).toFixed(1)}M</span>
                     <span>Revenue: ${(campaign.revenue / 1000000).toFixed(1)}M</span>
                   </div>
@@ -249,11 +249,11 @@ const ExecutiveDashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Strategic Alerts</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Strategic Alerts</CardTitle>
             <CardDescription>Critical issues requiring executive attention</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {alerts.map((alert, index) => (
                 <div key={index} className={`p-3 rounded-lg border ${
                   alert.severity === 'high' ? 'bg-destructive/5 border-destructive' :
@@ -261,11 +261,11 @@ const ExecutiveDashboard = () => {
                   'bg-muted/5 border-muted'
                 }`}>
                   <div className="flex items-start space-x-2">
-                    {alert.severity === 'high' && <AlertTriangle className="h-4 w-4 text-destructive mt-0.5" />}
-                    {alert.severity === 'medium' && <TrendingDown className="h-4 w-4 text-secondary-foreground mt-0.5" />}
-                    {alert.severity === 'low' && <TrendingUp className="h-4 w-4 text-success mt-0.5" />}
+                    {alert.severity === 'high' && <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />}
+                    {alert.severity === 'medium' && <TrendingDown className="h-4 w-4 text-secondary-foreground mt-0.5 flex-shrink-0" />}
+                    {alert.severity === 'low' && <TrendingUp className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />}
                     <div className="flex-1">
-                      <p className="text-sm font-medium">{alert.message}</p>
+                      <p className="text-xs sm:text-sm font-medium">{alert.message}</p>
                       <Badge variant="outline" className="mt-1 text-xs">
                         {alert.severity.toUpperCase()} PRIORITY
                       </Badge>

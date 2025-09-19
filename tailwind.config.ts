@@ -55,6 +55,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        allergan: {
+          primary: "hsl(var(--allergan-primary))",
+          secondary: "hsl(var(--allergan-secondary))",
+          accent: "hsl(var(--allergan-accent))",
+          warm: "hsl(var(--allergan-warm))",
+          text: "hsl(var(--allergan-text))",
+          "text-light": "hsl(var(--allergan-text-light))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

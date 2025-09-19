@@ -29,6 +29,9 @@ const PromotionStrategiesEnhanced = () => {
   const [showMoreCampaigns, setShowMoreCampaigns] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [campaignDetailsOpen, setCampaignDetailsOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
   const itemsPerPage = 4;
 
   // Enhanced mock data for all promotion categories
@@ -44,10 +47,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'AL005', name: 'Loyalty Tier Upgrade', type: 'Points', startDate: '2025-08-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 412, revenue: 247200, roi: 724 }
       ],
       channelData: [
-        { name: 'Mobile App', value: 38, color: '#8884d8' },
-        { name: 'Social Media', value: 25, color: '#82ca9d' },
-        { name: 'Email Campaign', value: 20, color: '#ffc658' },
-        { name: 'In-Clinic', value: 17, color: '#ff7300' }
+        { name: 'Mobile App', value: 38, color: 'hsl(var(--primary))' },
+        { name: 'Social Media', value: 25, color: 'hsl(var(--accent))' },
+        { name: 'Email Campaign', value: 20, color: 'hsl(var(--success))' },
+        { name: 'In-Clinic', value: 17, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2400, active: 2200, converted: 1800, retained: 1600 },
@@ -71,10 +74,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'RF004', name: 'Referrer Rewards Program', type: 'Points', startDate: '2025-09-10', endDate: '2025-12-31', cost: 8000, status: 'Active', newPatients: 156, revenue: 93600, roi: 1070 }
       ],
       channelData: [
-        { name: 'Word of Mouth', value: 45, color: '#8884d8' },
-        { name: 'Social Sharing', value: 28, color: '#82ca9d' },
-        { name: 'Text Referrals', value: 15, color: '#ffc658' },
-        { name: 'Email Invites', value: 12, color: '#ff7300' }
+        { name: 'Word of Mouth', value: 45, color: 'hsl(var(--primary))' },
+        { name: 'Social Sharing', value: 28, color: 'hsl(var(--accent))' },
+        { name: 'Text Referrals', value: 15, color: 'hsl(var(--success))' },
+        { name: 'Email Invites', value: 12, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1800, active: 1600, converted: 1300, retained: 1100 },
@@ -97,10 +100,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'BR003', name: 'Lifestyle Influencer Partnership', type: 'Influencer', startDate: '2025-07-15', endDate: '2025-10-15', cost: 22000, status: 'Active', newPatients: 298, revenue: 178800, roi: 713 }
       ],
       channelData: [
-        { name: 'Brand Websites', value: 32, color: '#8884d8' },
-        { name: 'Co-Branded Content', value: 28, color: '#82ca9d' },
-        { name: 'Event Marketing', value: 25, color: '#ffc658' },
-        { name: 'Cross-Promotion', value: 15, color: '#ff7300' }
+        { name: 'Brand Websites', value: 32, color: 'hsl(var(--primary))' },
+        { name: 'Co-Branded Content', value: 28, color: 'hsl(var(--accent))' },
+        { name: 'Event Marketing', value: 25, color: 'hsl(var(--success))' },
+        { name: 'Cross-Promotion', value: 15, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2200, active: 1980, converted: 1650, retained: 1420 },
@@ -123,10 +126,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'MS003', name: 'Comprehensive Care Bundle', type: 'Package', startDate: '2025-07-20', endDate: '2025-11-20', cost: 25000, status: 'Active', newPatients: 312, revenue: 187200, roi: 649 }
       ],
       channelData: [
-        { name: 'Clinic Consultation', value: 40, color: '#8884d8' },
-        { name: 'Treatment Advisor', value: 30, color: '#82ca9d' },
-        { name: 'Package Brochures', value: 20, color: '#ffc658' },
-        { name: 'Online Booking', value: 10, color: '#ff7300' }
+        { name: 'Clinic Consultation', value: 40, color: 'hsl(var(--primary))' },
+        { name: 'Treatment Advisor', value: 30, color: 'hsl(var(--accent))' },
+        { name: 'Package Brochures', value: 20, color: 'hsl(var(--success))' },
+        { name: 'Online Booking', value: 10, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1600, active: 1450, converted: 1200, retained: 1050 },
@@ -149,10 +152,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'GF003', name: 'BOGO Gift Card Event', type: 'Buy One Get One', startDate: '2025-09-15', endDate: '2025-10-31', cost: 15000, status: 'Active', newPatients: 234, revenue: 140400, roi: 836 }
       ],
       channelData: [
-        { name: 'Online Store', value: 35, color: '#8884d8' },
-        { name: 'Clinic Purchase', value: 30, color: '#82ca9d' },
-        { name: 'Gift Recipients', value: 25, color: '#ffc658' },
-        { name: 'Corporate Sales', value: 10, color: '#ff7300' }
+        { name: 'Online Store', value: 35, color: 'hsl(var(--primary))' },
+        { name: 'Clinic Purchase', value: 30, color: 'hsl(var(--accent))' },
+        { name: 'Gift Recipients', value: 25, color: 'hsl(var(--success))' },
+        { name: 'Corporate Sales', value: 10, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1400, active: 1250, converted: 1050, retained: 900 },
@@ -175,10 +178,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'INF003', name: 'Beauty Blogger Partnerships', type: 'Content', startDate: '2025-07-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 445, revenue: 267000, roi: 790 }
       ],
       channelData: [
-        { name: 'Instagram', value: 42, color: '#8884d8' },
-        { name: 'TikTok', value: 28, color: '#82ca9d' },
-        { name: 'YouTube', value: 18, color: '#ffc658' },
-        { name: 'Blog Content', value: 12, color: '#ff7300' }
+        { name: 'Instagram', value: 42, color: 'hsl(var(--primary))' },
+        { name: 'TikTok', value: 28, color: 'hsl(var(--accent))' },
+        { name: 'YouTube', value: 18, color: 'hsl(var(--success))' },
+        { name: 'Blog Content', value: 12, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 2000, active: 1800, converted: 1500, retained: 1300 },
@@ -201,10 +204,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'PR003', name: 'Marketing Support Package', type: 'Support', startDate: '2025-07-01', endDate: '2025-12-31', cost: 30000, status: 'Active', newPatients: 234, revenue: 280800, roi: 836 }
       ],
       channelData: [
-        { name: 'Training Sessions', value: 45, color: '#8884d8' },
-        { name: 'Online Courses', value: 25, color: '#82ca9d' },
-        { name: 'Certification Programs', value: 20, color: '#ffc658' },
-        { name: 'Workshops', value: 10, color: '#ff7300' }
+        { name: 'Training Sessions', value: 45, color: 'hsl(var(--primary))' },
+        { name: 'Online Courses', value: 25, color: 'hsl(var(--accent))' },
+        { name: 'Certification Programs', value: 20, color: 'hsl(var(--success))' },
+        { name: 'Workshops', value: 10, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 800, active: 720, converted: 600, retained: 520 },
@@ -227,10 +230,10 @@ const PromotionStrategiesEnhanced = () => {
         { id: 'ED003', name: 'FAQ Video Library', type: 'Video Content', startDate: '2025-07-20', endDate: '2025-10-31', cost: 15000, status: 'Active', newPatients: 234, revenue: 140400, roi: 836 }
       ],
       channelData: [
-        { name: 'Website Blog', value: 35, color: '#8884d8' },
-        { name: 'Video Content', value: 30, color: '#82ca9d' },
-        { name: 'Social Posts', value: 25, color: '#ffc658' },
-        { name: 'Email Newsletters', value: 10, color: '#ff7300' }
+        { name: 'Website Blog', value: 35, color: 'hsl(var(--primary))' },
+        { name: 'Video Content', value: 30, color: 'hsl(var(--accent))' },
+        { name: 'Social Posts', value: 25, color: 'hsl(var(--success))' },
+        { name: 'Email Newsletters', value: 10, color: 'hsl(var(--warning))' }
       ],
       patientJourneyData: [
         { month: 'Jul', enrolled: 1200, active: 1080, converted: 900, retained: 780 },
@@ -248,10 +251,21 @@ const PromotionStrategiesEnhanced = () => {
 
   const data = alleCampaigns[activeTab as keyof typeof alleCampaigns] || alleCampaigns.alle;
   
+  // Filter campaigns based on filters
+  const filteredCampaigns = data.active.filter(campaign => {
+    const statusMatch = statusFilter === 'all' || campaign.status.toLowerCase() === statusFilter;
+    const typeMatch = typeFilter === 'all' || campaign.type.toLowerCase() === typeFilter;
+    return statusMatch && typeMatch;
+  });
+  
+  // Get unique types and statuses for filter options
+  const uniqueTypes = Array.from(new Set(data.active.map(c => c.type)));
+  const uniqueStatuses = Array.from(new Set(data.active.map(c => c.status)));
+  
   // Pagination logic
-  const totalCampaigns = showMoreCampaigns ? data.active.length : Math.min(4, data.active.length);
+  const totalCampaigns = showMoreCampaigns ? filteredCampaigns.length : Math.min(4, filteredCampaigns.length);
   const campaignTotalPages = Math.ceil(totalCampaigns / itemsPerPage);
-  const paginatedCampaigns = data.active.slice(
+  const paginatedCampaigns = filteredCampaigns.slice(
     (campaignsPage - 1) * itemsPerPage,
     Math.min(campaignsPage * itemsPerPage, totalCampaigns)
   );
@@ -270,10 +284,75 @@ const PromotionStrategiesEnhanced = () => {
           <p className="text-muted-foreground">Comprehensive promotion management and performance analytics</p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
-            <Filter className="h-4 w-4 mr-2" />
-            Filter
-          </Button>
+          <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Filter className="h-4 w-4 mr-2" />
+                Filter
+                {(statusFilter !== 'all' || typeFilter !== 'all') && (
+                  <Badge variant="secondary" className="ml-2 h-4 px-1 text-xs">
+                    {[statusFilter !== 'all' ? 1 : 0, typeFilter !== 'all' ? 1 : 0].reduce((a, b) => a + b)}
+                  </Badge>
+                )}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Filter Campaigns</DialogTitle>
+                <DialogDescription>
+                  Filter campaigns by status and type
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Status</label>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      {uniqueStatuses.map(status => (
+                        <SelectItem key={status} value={status.toLowerCase()}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Type</label>
+                  <Select value={typeFilter} onValueChange={setTypeFilter}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      {uniqueTypes.map(type => (
+                        <SelectItem key={type} value={type.toLowerCase()}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setStatusFilter('all');
+                      setTypeFilter('all');
+                    }}
+                  >
+                    Clear All
+                  </Button>
+                  <Button onClick={() => setFilterOpen(false)}>
+                    Apply Filters
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Export
@@ -305,7 +384,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{data.active.reduce((sum, campaign) => sum + campaign.newPatients, 0).toLocaleString()}</div>
+                  <div className="text-2xl font-bold">{filteredCampaigns.reduce((sum, campaign) => sum + campaign.newPatients, 0).toLocaleString()}</div>
                   <p className="text-xs text-muted-foreground">+18% from last month</p>
                 </CardContent>
               </Card>
@@ -317,7 +396,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">${(data.active.reduce((sum, campaign) => sum + campaign.revenue, 0) / 1000).toFixed(0)}K</div>
+                  <div className="text-2xl font-bold">${(filteredCampaigns.reduce((sum, campaign) => sum + campaign.revenue, 0) / 1000).toFixed(0)}K</div>
                   <p className="text-xs text-muted-foreground">+22% growth</p>
                 </CardContent>
               </Card>
@@ -329,7 +408,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-success">{Math.round(data.active.reduce((sum, campaign) => sum + campaign.roi, 0) / data.active.length)}%</div>
+                  <div className="text-2xl font-bold text-success">{Math.round(filteredCampaigns.reduce((sum, campaign) => sum + campaign.roi, 0) / Math.max(filteredCampaigns.length, 1))}%</div>
                   <p className="text-xs text-muted-foreground">Above target</p>
                 </CardContent>
               </Card>
@@ -341,7 +420,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{data.active.length}</div>
+                  <div className="text-2xl font-bold">{filteredCampaigns.length}</div>
                   <p className="text-xs text-muted-foreground">Running now</p>
                 </CardContent>
               </Card>
@@ -353,7 +432,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">${(data.active.reduce((sum, campaign) => sum + campaign.cost, 0) / 1000).toFixed(0)}K</div>
+                  <div className="text-2xl font-bold">${(filteredCampaigns.reduce((sum, campaign) => sum + campaign.cost, 0) / 1000).toFixed(0)}K</div>
                   <p className="text-xs text-muted-foreground">This period</p>
                 </CardContent>
               </Card>
@@ -557,7 +636,7 @@ const PromotionStrategiesEnhanced = () => {
                         cx="50%"
                         cy="50%"
                         outerRadius={80}
-                        fill="#8884d8"
+                        fill="hsl(var(--primary))"
                         dataKey="value"
                         label={({ name, value }) => `${name}: ${value}%`}
                       >
@@ -565,7 +644,14 @@ const PromotionStrategiesEnhanced = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }}
+                        formatter={(value) => [`${value}%`, 'Acquisition']}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -580,14 +666,27 @@ const PromotionStrategiesEnhanced = () => {
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <AreaChart data={data.patientJourneyData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip />
-                      <Area type="monotone" dataKey="enrolled" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                      <Area type="monotone" dataKey="active" stackId="2" stroke="#82ca9d" fill="#82ca9d" />
-                      <Area type="monotone" dataKey="converted" stackId="3" stroke="#ffc658" fill="#ffc658" />
-                      <Area type="monotone" dataKey="retained" stackId="4" stroke="#ff7300" fill="#ff7300" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis 
+                        dataKey="month" 
+                        tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                      />
+                      <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }}
+                        formatter={(value, name) => [
+                          value, 
+                          String(name).charAt(0).toUpperCase() + String(name).slice(1)
+                        ]}
+                      />
+                      <Area type="monotone" dataKey="enrolled" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.8)" />
+                      <Area type="monotone" dataKey="active" stackId="2" stroke="hsl(var(--accent))" fill="hsl(var(--accent)/0.8)" />
+                      <Area type="monotone" dataKey="converted" stackId="3" stroke="hsl(var(--success))" fill="hsl(var(--success)/0.8)" />
+                      <Area type="monotone" dataKey="retained" stackId="4" stroke="hsl(var(--warning))" fill="hsl(var(--warning)/0.8)" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -605,13 +704,39 @@ const PromotionStrategiesEnhanced = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={data.active} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="roi" fill="#8884d8" />
+                <ResponsiveContainer width="100%" height={350}>
+                  <BarChart data={filteredCampaigns} margin={{ top: 20, right: 20, left: 20, bottom: 40 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis 
+                      dataKey="name" 
+                      angle={0} 
+                      textAnchor="middle" 
+                      height={40}
+                      tick={{ 
+                        fill: 'hsl(var(--muted-foreground))',
+                        fontSize: 12
+                      }}
+                      interval={0}
+                    />
+                    <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      }}
+                      labelStyle={{ color: 'hsl(var(--foreground))' }}
+                      formatter={(value, name) => [
+                        `${value}%`,
+                        'ROI'
+                      ]}
+                    />
+                    <Bar 
+                      dataKey="roi" 
+                      fill="hsl(var(--primary))" 
+                      radius={[4, 4, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -637,7 +762,7 @@ const PromotionStrategiesEnhanced = () => {
                   </TableHeader>
                   <TableBody>
                     {paginatedPatients.map((patient) => (
-                      <TableRow key={patient.name}>
+                      <TableRow key={patient.name} className={paginatedPatients.indexOf(patient) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                         <TableCell className="font-medium">{patient.name}</TableCell>
                         <TableCell>{patient.pointsRedeemed}</TableCell>
                         <TableCell>{patient.treatments}</TableCell>

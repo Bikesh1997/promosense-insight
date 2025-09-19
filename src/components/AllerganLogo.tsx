@@ -1,4 +1,5 @@
 import React from 'react';
+import allerganLogo from '@/assets/allergan-logo-new.png';
 
 const AllerganLogo = () => {
   return (

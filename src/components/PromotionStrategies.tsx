@@ -443,7 +443,7 @@ const PromotionStrategies = () => {
                     </TableHeader>
                     <TableBody>
                       {getDashboardData(key).offers.map((offer) => (
-                        <TableRow key={offer.id}>
+                        <TableRow key={offer.id} className={getDashboardData(key).offers.indexOf(offer) % 2 === 0 ? 'bg-muted/20' : 'bg-background'}>
                           <TableCell className="font-medium">{offer.id}</TableCell>
                           <TableCell>{offer.name}</TableCell>
                           <TableCell>

@@ -442,7 +442,7 @@ const PatientAnalytics = () => {
                   </thead>
                   <tbody>
                     {treatmentData.map((treatment, index) => (
-                      <tr key={index} className="border-b hover:bg-muted/50">
+                      <tr key={index} className={`border-b hover:bg-muted/50 ${index % 2 === 0 ? 'bg-muted/20' : 'bg-background'}`}>
                         <td className="p-4 font-medium">{treatment.treatment}</td>
                         <td className="p-4 text-right">{treatment.patients.toLocaleString()}</td>
                         <td className="p-4 text-right">${treatment.revenue.toLocaleString()}</td>

@@ -430,7 +430,7 @@ const PromotionManagement = () => {
                   </thead>
                   <tbody>
                     {channelPerformance.map((channel, index) => (
-                      <tr key={index} className="border-b hover:bg-muted/50">
+                      <tr key={index} className={`border-b hover:bg-muted/50 ${index % 2 === 0 ? 'bg-muted/20' : 'bg-background'}`}>
                         <td className="p-4 font-medium">{channel.channel}</td>
                         <td className="p-4 text-right">${channel.spend.toLocaleString()}</td>
                         <td className="p-4 text-right">{channel.leads.toLocaleString()}</td>

@@ -44,6 +44,13 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    --allergan-primary: 240 5.9% 10%;
+    --allergan-secondary: 0 0% 98%;
+    --allergan-accent: 18 100% 97%;
+    --allergan-warm: 18 30% 85%;
+    --allergan-text: 240 10% 3.9%;
+    --allergan-text-light: 240 3.8% 46.1%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 19 52% 57%;
@@ -82,6 +89,14 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 19 42% 67%;
+
+    --allergan-primary: 240 4.8% 95.9%;
+    --allergan-secondary: 240 5.9% 10%;
+    --allergan-accent: 240 3.7% 15.9%;
+    --allergan-warm: 18 20% 25%;
+    --allergan-text: 240 4.8% 95.9%;
+    --allergan-text-light: 240 20.2% 65.1%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 19 42% 67%;
@@ -132,5 +147,11 @@ All colors MUST be HSL.
 
   .sidebar-item.active {
     @apply bg-primary text-primary-foreground shadow-sm scale-[1.02];
+  }
+
+  /* Background grid pattern */
+  .bg-grid-pattern {
+    background-image: radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px);
+    background-size: 50px 50px;
   }
 }
