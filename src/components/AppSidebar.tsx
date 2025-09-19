@@ -107,7 +107,7 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
                   {item.badge && (
                     <Badge 
                       variant={item.badge === "AI" ? "default" : "secondary"} 
-                      className="text-xs px-1.5 py-0.5 h-4 mb-1 self-start"
+                      className="text-xs px-1.5 py-0.5 h-4 mb-1 self-end"
                     >
                       {item.badge}
                     </Badge>
