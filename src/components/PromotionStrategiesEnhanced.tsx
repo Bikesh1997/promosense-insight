@@ -263,84 +263,40 @@ const PromotionStrategiesEnhanced = () => {
   );
 
   return (
-    <div className="space-y-4 p-4 lg:p-6">
-      {/* Mobile-optimized header */}
-      <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl lg:text-3xl font-bold">Promotion Strategies</h2>
-          <p className="text-sm lg:text-base text-muted-foreground">Comprehensive promotion management and performance analytics</p>
+          <h2 className="text-3xl font-bold">Promotion Strategies</h2>
+          <p className="text-muted-foreground">Comprehensive promotion management and performance analytics</p>
         </div>
-        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
-          <Button variant="outline" size="sm" className="w-full sm:w-auto">
+        <div className="flex items-center space-x-2">
+          <Button variant="outline" size="sm">
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
-          <Button variant="outline" size="sm" className="w-full sm:w-auto">
+          <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 lg:space-y-6">
-        {/* Professional tabs with enhanced styling */}
-        <div className="w-full overflow-x-auto">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 min-w-max lg:min-w-full bg-card border border-border shadow-sm rounded-lg p-1">
-            <TabsTrigger 
-              value="alle" 
-              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
-            >
-              Promotion Strategies
-            </TabsTrigger>
-            <TabsTrigger 
-              value="refer-friend" 
-              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
-            >
-              Referral Program
-            </TabsTrigger>
-            <TabsTrigger 
-              value="branded" 
-              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
-            >
-              Brand Partnerships
-            </TabsTrigger>
-            <TabsTrigger 
-              value="multi-service" 
-              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
-            >
-              Service Bundles
-            </TabsTrigger>
-            <TabsTrigger 
-              value="gift" 
-              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
-            >
-              Gift Programs
-            </TabsTrigger>
-            <TabsTrigger 
-              value="influencer" 
-              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
-            >
-              Influencer Marketing
-            </TabsTrigger>
-            <TabsTrigger 
-              value="practice" 
-              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
-            >
-              Practice Development
-            </TabsTrigger>
-            <TabsTrigger 
-              value="educational" 
-              className="text-xs sm:text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm hover:bg-accent/50"
-            >
-              Educational Content
-            </TabsTrigger>
-          </TabsList>
-        </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
+          <TabsTrigger value="alle">Allē</TabsTrigger>
+          <TabsTrigger value="refer-friend">Refer-a-Friend</TabsTrigger>
+          <TabsTrigger value="branded">Branded</TabsTrigger>
+          <TabsTrigger value="multi-service">Multi-service</TabsTrigger>
+          <TabsTrigger value="gift">Gift</TabsTrigger>
+          <TabsTrigger value="influencer">Influencer/User</TabsTrigger>
+          <TabsTrigger value="practice">Practice</TabsTrigger>
+          <TabsTrigger value="educational">Educational</TabsTrigger>
+        </TabsList>
 
         {Object.entries(alleCampaigns).map(([key, data]) => (
-          <TabsContent key={key} value={key} className="space-y-4 lg:space-y-6">
-            {/* Mobile-optimized KPI Dashboard */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <TabsContent key={key} value={key} className="space-y-6">
+            {/* KPI Dashboard */}
+            <div className="grid md:grid-cols-5 gap-4">
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium flex items-center">
@@ -349,7 +305,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl lg:text-2xl font-bold">{data.active.reduce((sum, campaign) => sum + campaign.newPatients, 0).toLocaleString()}</div>
+                  <div className="text-2xl font-bold">{data.active.reduce((sum, campaign) => sum + campaign.newPatients, 0).toLocaleString()}</div>
                   <p className="text-xs text-muted-foreground">+18% from last month</p>
                 </CardContent>
               </Card>
@@ -361,7 +317,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl lg:text-2xl font-bold">${(data.active.reduce((sum, campaign) => sum + campaign.revenue, 0) / 1000).toFixed(0)}K</div>
+                  <div className="text-2xl font-bold">${(data.active.reduce((sum, campaign) => sum + campaign.revenue, 0) / 1000).toFixed(0)}K</div>
                   <p className="text-xs text-muted-foreground">+22% growth</p>
                 </CardContent>
               </Card>
@@ -373,7 +329,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl lg:text-2xl font-bold text-success">{Math.round(data.active.reduce((sum, campaign) => sum + campaign.roi, 0) / data.active.length)}%</div>
+                  <div className="text-2xl font-bold text-success">{Math.round(data.active.reduce((sum, campaign) => sum + campaign.roi, 0) / data.active.length)}%</div>
                   <p className="text-xs text-muted-foreground">Above target</p>
                 </CardContent>
               </Card>
@@ -385,7 +341,7 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl lg:text-2xl font-bold">{data.active.length}</div>
+                  <div className="text-2xl font-bold">{data.active.length}</div>
                   <p className="text-xs text-muted-foreground">Running now</p>
                 </CardContent>
               </Card>
@@ -397,25 +353,24 @@ const PromotionStrategiesEnhanced = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl lg:text-2xl font-bold">${(data.active.reduce((sum, campaign) => sum + campaign.cost, 0) / 1000).toFixed(0)}K</div>
+                  <div className="text-2xl font-bold">${(data.active.reduce((sum, campaign) => sum + campaign.cost, 0) / 1000).toFixed(0)}K</div>
                   <p className="text-xs text-muted-foreground">This period</p>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Mobile-optimized Active Campaigns */}
+            {/* Active Campaigns */}
             <Card>
               <CardHeader>
-                <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                <div className="flex items-center justify-between">
                   <div>
                     <CardTitle>Active Campaigns</CardTitle>
-                    <CardDescription className="text-sm">{data.name} - Current promotion activities</CardDescription>
+                    <CardDescription>{data.name} - Current promotion activities</CardDescription>
                   </div>
                   <Button 
                     variant="ghost" 
                     size="sm" 
                     onClick={() => setShowMoreCampaigns(!showMoreCampaigns)}
-                    className="w-full sm:w-auto"
                   >
                     {showMoreCampaigns ? 'Show Less' : 'Show More'}
                     <ChevronDown className={`h-4 w-4 ml-2 transition-transform ${showMoreCampaigns ? 'rotate-180' : ''}`} />
@@ -425,178 +380,153 @@ const PromotionStrategiesEnhanced = () => {
               <CardContent>
                 <div className="space-y-4">
                   {paginatedCampaigns.map((campaign) => (
-                    <div key={campaign.id} className="border rounded-lg p-3 lg:p-4 space-y-3">
-                      {/* Campaign header - mobile stacked, desktop inline */}
-                      <div className="flex flex-col space-y-3 lg:flex-row lg:items-start lg:justify-between lg:space-y-0">
-                        <div className="flex-1 space-y-2">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <Badge variant="secondary" className="text-xs">{campaign.type}</Badge>
-                            <Badge variant={campaign.status === 'Active' ? "default" : "secondary"} className="text-xs">
+                    <div key={campaign.id} className="flex items-start justify-between p-4 border rounded-lg">
+                      <div className="flex-1">
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <Badge variant="secondary">{campaign.type}</Badge>
+                            <Badge variant={campaign.status === 'Active' ? "default" : "secondary"}>
                               {campaign.status}
                             </Badge>
-                            <Badge variant="outline" className="text-success border-success text-xs lg:hidden">
-                              {campaign.roi}% ROI
-                            </Badge>
                           </div>
-                          <h4 className="font-medium text-sm lg:text-base">{campaign.name}</h4>
+                          <h4 className="font-medium">{campaign.name}</h4>
                         </div>
-                        
-                        {/* Desktop ROI and action button */}
-                        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 lg:items-end lg:flex-col lg:space-x-0 lg:space-y-2">
-                          <Badge variant="outline" className="text-success border-success text-xs hidden lg:block">
-                            {campaign.roi}% ROI
-                          </Badge>
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => {
-                              setSelectedCampaign(campaign);
-                              setCampaignDetailsOpen(true);
-                            }}
-                            className="w-full sm:w-auto"
-                          >
-                            View Details
-                          </Button>
+                        <div className="grid grid-cols-4 gap-4 mt-2 text-sm text-muted-foreground">
+                          <span>Period: {campaign.startDate} to {campaign.endDate}</span>
+                          <span>Cost: ${campaign.cost.toLocaleString()}</span>
+                          <span>New Patients: {campaign.newPatients}</span>
+                          <span>Revenue: ${campaign.revenue.toLocaleString()}</span>
                         </div>
                       </div>
-                      
-                      {/* Campaign metrics - mobile card layout, desktop grid */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
-                        <div className="bg-muted/50 p-2 rounded">
-                          <span className="text-muted-foreground block text-xs">Period:</span>
-                          <span className="font-medium text-xs lg:text-sm">{campaign.startDate} to {campaign.endDate}</span>
-                        </div>
-                        <div className="bg-muted/50 p-2 rounded">
-                          <span className="text-muted-foreground block text-xs">Cost:</span>
-                          <span className="font-medium">${campaign.cost.toLocaleString()}</span>
-                        </div>
-                        <div className="bg-muted/50 p-2 rounded">
-                          <span className="text-muted-foreground block text-xs">New Patients:</span>
-                          <span className="font-medium">{campaign.newPatients}</span>
-                        </div>
-                        <div className="bg-muted/50 p-2 rounded">
-                          <span className="text-muted-foreground block text-xs">Revenue:</span>
-                          <span className="font-medium">${campaign.revenue.toLocaleString()}</span>
-                        </div>
+                      <div className="flex flex-col items-end space-y-2">
+                        <Badge variant="outline" className="text-success border-success">
+                          {campaign.roi}% ROI
+                        </Badge>
+                        <Dialog open={campaignDetailsOpen} onOpenChange={setCampaignDetailsOpen}>
+                          <DialogTrigger asChild>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => setSelectedCampaign(campaign)}
+                            >
+                              View Details
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-4xl">
+                            <DialogHeader>
+                              <DialogTitle>Campaign Details</DialogTitle>
+                              <DialogDescription>
+                                Detailed information about {selectedCampaign?.name}
+                              </DialogDescription>
+                            </DialogHeader>
+                            {selectedCampaign && (
+                              <div className="space-y-6">
+                                {/* Campaign Overview */}
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                  <Card>
+                                    <CardContent className="pt-4">
+                                      <div className="text-2xl font-bold">${selectedCampaign.cost.toLocaleString()}</div>
+                                      <p className="text-xs text-muted-foreground">Total Cost</p>
+                                    </CardContent>
+                                  </Card>
+                                  <Card>
+                                    <CardContent className="pt-4">
+                                      <div className="text-2xl font-bold">{selectedCampaign.newPatients}</div>
+                                      <p className="text-xs text-muted-foreground">New Patients</p>
+                                    </CardContent>
+                                  </Card>
+                                  <Card>
+                                    <CardContent className="pt-4">
+                                      <div className="text-2xl font-bold">${selectedCampaign.revenue.toLocaleString()}</div>
+                                      <p className="text-xs text-muted-foreground">Revenue Generated</p>
+                                    </CardContent>
+                                  </Card>
+                                  <Card>
+                                    <CardContent className="pt-4">
+                                      <div className="text-2xl font-bold text-success">{selectedCampaign.roi}%</div>
+                                      <p className="text-xs text-muted-foreground">ROI</p>
+                                    </CardContent>
+                                  </Card>
+                                </div>
+
+                                {/* Campaign Details */}
+                                <div className="grid md:grid-cols-2 gap-6">
+                                  <Card>
+                                    <CardHeader>
+                                      <CardTitle className="text-lg">Campaign Information</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-3">
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Campaign Type:</span>
+                                        <Badge variant="secondary">{selectedCampaign.type}</Badge>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Status:</span>
+                                        <Badge variant={selectedCampaign.status === 'Active' ? "default" : "secondary"}>
+                                          {selectedCampaign.status}
+                                        </Badge>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Start Date:</span>
+                                        <span>{selectedCampaign.startDate}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">End Date:</span>
+                                        <span>{selectedCampaign.endDate}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Campaign ID:</span>
+                                        <span className="font-mono text-sm">{selectedCampaign.id}</span>
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+
+                                  <Card>
+                                    <CardHeader>
+                                      <CardTitle className="text-lg">Performance Metrics</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-3">
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Cost Per Patient:</span>
+                                        <span>${Math.round(selectedCampaign.cost / selectedCampaign.newPatients)}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Revenue Per Patient:</span>
+                                        <span>${Math.round(selectedCampaign.revenue / selectedCampaign.newPatients)}</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Profit Margin:</span>
+                                        <span className="text-success">
+                                          {Math.round(((selectedCampaign.revenue - selectedCampaign.cost) / selectedCampaign.revenue) * 100)}%
+                                        </span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-muted-foreground">Net Profit:</span>
+                                        <span className="font-bold text-success">
+                                          ${(selectedCampaign.revenue - selectedCampaign.cost).toLocaleString()}
+                                        </span>
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex justify-end space-x-2">
+                                  <Button variant="outline" onClick={() => setCampaignDetailsOpen(false)}>
+                                    Close
+                                  </Button>
+                                  <Button>
+                                    Edit Campaign
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </div>
                   ))}
                 </div>
-
-                {/* Campaign Details Dialog */}
-                <Dialog open={campaignDetailsOpen} onOpenChange={setCampaignDetailsOpen}>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle>Campaign Details</DialogTitle>
-                      <DialogDescription>
-                        Detailed information about {selectedCampaign?.name}
-                      </DialogDescription>
-                    </DialogHeader>
-                    {selectedCampaign && (
-                      <div className="space-y-6">
-                        {/* Campaign Overview */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                          <Card>
-                            <CardContent className="pt-4">
-                              <div className="text-xl lg:text-2xl font-bold">${selectedCampaign.cost.toLocaleString()}</div>
-                              <p className="text-xs text-muted-foreground">Total Cost</p>
-                            </CardContent>
-                          </Card>
-                          <Card>
-                            <CardContent className="pt-4">
-                              <div className="text-xl lg:text-2xl font-bold">{selectedCampaign.newPatients}</div>
-                              <p className="text-xs text-muted-foreground">New Patients</p>
-                            </CardContent>
-                          </Card>
-                          <Card>
-                            <CardContent className="pt-4">
-                              <div className="text-xl lg:text-2xl font-bold">${selectedCampaign.revenue.toLocaleString()}</div>
-                              <p className="text-xs text-muted-foreground">Revenue Generated</p>
-                            </CardContent>
-                          </Card>
-                          <Card>
-                            <CardContent className="pt-4">
-                              <div className="text-xl lg:text-2xl font-bold text-success">{selectedCampaign.roi}%</div>
-                              <p className="text-xs text-muted-foreground">ROI</p>
-                            </CardContent>
-                          </Card>
-                        </div>
-
-                        {/* Campaign Details */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          <Card>
-                            <CardHeader>
-                              <CardTitle className="text-lg">Campaign Information</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-3">
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Campaign Type:</span>
-                                <Badge variant="secondary">{selectedCampaign.type}</Badge>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Status:</span>
-                                <Badge variant={selectedCampaign.status === 'Active' ? "default" : "secondary"}>
-                                  {selectedCampaign.status}
-                                </Badge>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Start Date:</span>
-                                <span>{selectedCampaign.startDate}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">End Date:</span>
-                                <span>{selectedCampaign.endDate}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Campaign ID:</span>
-                                <span className="font-mono text-sm">{selectedCampaign.id}</span>
-                              </div>
-                            </CardContent>
-                          </Card>
-
-                          <Card>
-                            <CardHeader>
-                              <CardTitle className="text-lg">Performance Metrics</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-3">
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Cost Per Patient:</span>
-                                <span>${Math.round(selectedCampaign.cost / selectedCampaign.newPatients)}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Revenue Per Patient:</span>
-                                <span>${Math.round(selectedCampaign.revenue / selectedCampaign.newPatients)}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Profit Margin:</span>
-                                <span className="text-success">
-                                  {Math.round(((selectedCampaign.revenue - selectedCampaign.cost) / selectedCampaign.revenue) * 100)}%
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">Net Profit:</span>
-                                <span className="font-bold text-success">
-                                  ${(selectedCampaign.revenue - selectedCampaign.cost).toLocaleString()}
-                                </span>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
-                          <Button variant="outline" onClick={() => setCampaignDetailsOpen(false)} className="w-full sm:w-auto">
-                            Close
-                          </Button>
-                          <Button className="w-full sm:w-auto">
-                            Edit Campaign
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </DialogContent>
-                </Dialog>
-
                 {showMoreCampaigns && (
                   <div className="mt-4">
                     <PaginationTable
@@ -612,7 +542,7 @@ const PromotionStrategiesEnhanced = () => {
             </Card>
 
             {/* Charts Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid lg:grid-cols-2 gap-6">
               {/* Channel Attribution */}
               <Card>
                 <CardHeader>
@@ -644,10 +574,7 @@ const PromotionStrategiesEnhanced = () => {
               {/* Patient Journey Funnel */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="group cursor-pointer">
-                    <span className="group-hover:hidden">Patient Journey</span>
-                    <span className="hidden group-hover:inline">Patient Journey</span>
-                  </CardTitle>
+                  <CardTitle>Patient Journey</CardTitle>
                   <CardDescription>Conversion funnel analysis</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -690,58 +617,32 @@ const PromotionStrategiesEnhanced = () => {
               </CardContent>
             </Card>
 
-            {/* Mobile-responsive Top Performing Patients */}
+            {/* Top Performing Patients */}
             <Card>
               <CardHeader>
                 <CardTitle>Top Performing Patients</CardTitle>
                 <CardDescription>VIP customers by points and revenue</CardDescription>
               </CardHeader>
               <CardContent>
-                {/* Desktop Table View */}
-                <div className="hidden lg:block">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Patient Name</TableHead>
-                        <TableHead>Points Redeemed</TableHead>
-                        <TableHead>Treatments</TableHead>
-                        <TableHead>Revenue</TableHead>
-                        <TableHead>Tier</TableHead>
-                        <TableHead>Join Date</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {paginatedPatients.map((patient) => (
-                        <TableRow key={patient.name}>
-                          <TableCell className="font-medium">{patient.name}</TableCell>
-                          <TableCell>{patient.pointsRedeemed}</TableCell>
-                          <TableCell>{patient.treatments}</TableCell>
-                          <TableCell>${patient.revenue.toLocaleString()}</TableCell>
-                          <TableCell>
-                            <Badge variant={
-                              patient.tier === 'Diamond' ? "default" : 
-                              patient.tier === 'Platinum' ? "secondary" : 
-                              patient.tier === 'Gold' ? "outline" :
-                              patient.tier === 'Partner' ? "default" :
-                              patient.tier === 'Associate' ? "secondary" : "outline"
-                            }>
-                              {patient.tier}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-sm">{patient.joinDate}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-
-                {/* Mobile Card View */}
-                <div className="lg:hidden space-y-4">
-                  {paginatedPatients.map((patient) => (
-                    <Card key={patient.name}>
-                      <CardContent className="pt-4 space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-medium">{patient.name}</h4>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Patient Name</TableHead>
+                      <TableHead>Points Redeemed</TableHead>
+                      <TableHead>Treatments</TableHead>
+                      <TableHead>Revenue</TableHead>
+                      <TableHead>Tier</TableHead>
+                      <TableHead>Join Date</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedPatients.map((patient) => (
+                      <TableRow key={patient.name}>
+                        <TableCell className="font-medium">{patient.name}</TableCell>
+                        <TableCell>{patient.pointsRedeemed}</TableCell>
+                        <TableCell>{patient.treatments}</TableCell>
+                        <TableCell>${patient.revenue.toLocaleString()}</TableCell>
+                        <TableCell>
                           <Badge variant={
                             patient.tier === 'Diamond' ? "default" : 
                             patient.tier === 'Platinum' ? "secondary" : 
@@ -751,30 +652,12 @@ const PromotionStrategiesEnhanced = () => {
                           }>
                             {patient.tier}
                           </Badge>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3 text-sm">
-                          <div>
-                            <span className="text-muted-foreground block text-xs">Points Redeemed:</span>
-                            <span className="font-medium">{patient.pointsRedeemed}</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground block text-xs">Treatments:</span>
-                            <span className="font-medium">{patient.treatments}</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground block text-xs">Revenue:</span>
-                            <span className="font-medium">${patient.revenue.toLocaleString()}</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground block text-xs">Join Date:</span>
-                            <span className="font-medium">{patient.joinDate}</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-
+                        </TableCell>
+                        <TableCell className="text-sm">{patient.joinDate}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
                 <div className="mt-4">
                   <PaginationTable
                     currentPage={patientsPage}

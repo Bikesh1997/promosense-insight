@@ -14,30 +14,6 @@ interface MobileSidebarProps {
 const MobileSidebar = ({ isOpen, onClose, activeView, onViewChange }: MobileSidebarProps) => {
   const sidebarItems = [
     {
-      id: 'strategies',
-      title: 'Promotion Effectiveness',
-      description: '8-strategy ROI analysis',
-      badge: 'NEW'
-    },
-    {
-      id: 'funnel',
-      title: 'Funnel Analysis',
-      description: 'Conversion tracking',
-      badge: 'AI'
-    },
-    {
-      id: 'data-hub',
-      title: 'Data Integration',
-      description: 'Data connections',
-      badge: null
-    },
-    {
-      id: 'insights',
-      title: 'AI Insights',
-      description: 'Intelligent analytics',
-      badge: 'AI'
-    },
-    {
       id: 'executive',
       title: 'Executive Dashboard',
       description: 'High-level insights',
@@ -60,6 +36,30 @@ const MobileSidebar = ({ isOpen, onClose, activeView, onViewChange }: MobileSide
       title: 'System Admin',
       description: 'System management',
       badge: null
+    },
+    {
+      id: 'strategies',
+      title: 'Promotion Strategies',
+      description: 'Campaign management',
+      badge: 'NEW'
+    },
+    {
+      id: 'funnel',
+      title: 'Funnel Analysis',
+      description: 'Conversion tracking',
+      badge: 'AI'
+    },
+    {
+      id: 'data-hub',
+      title: 'Data Integration',
+      description: 'Data connections',
+      badge: null
+    },
+    {
+      id: 'insights',
+      title: 'AI Insights',
+      description: 'Intelligent analytics',
+      badge: 'AI'
     }
   ];
 

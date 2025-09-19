@@ -16,8 +16,15 @@ import { cn } from '@/lib/utils';
 
 const sidebarItems = [
   {
+    title: "Promotion Effectiveness",
+    subtitle: "8-strategy ROI analysis",
+    id: "strategies",
+    icon: Target,
+    badge: "New"
+  },
+  {
     title: "Funnel Leakage Analysis", 
-    subtitle: "Patient Journey Insights",
+    subtitle: "Patient journey insights",
     id: "funnel",
     icon: TrendingDown,
     badge: null

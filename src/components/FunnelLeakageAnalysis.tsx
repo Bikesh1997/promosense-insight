@@ -166,10 +166,7 @@ const FunnelLeakageAnalysis = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold">PromoSense – Funnel Leakage Dashboard</h2>
-            <p className="text-muted-foreground group cursor-pointer">
-              <span className="group-hover:hidden">Patient journey analysis with leakage detection and revenue impact</span>
-              <span className="hidden group-hover:inline">Patient Journey Analysis With Leakage Detection And Revenue Impact</span>
-            </p>
+          <p className="text-muted-foreground">Patient journey analysis with leakage detection and revenue impact</p>
         </div>
         <div className="flex items-center space-x-2">
           <Select value={selectedRegion} onValueChange={setSelectedRegion}>
