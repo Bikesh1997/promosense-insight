@@ -104,18 +104,16 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
                 )} />
                 
                 <div className="flex-1 flex flex-col ml-3 min-w-0">
-                  <div className="flex items-center justify-between w-full">
-                    <div className="font-medium text-sm truncate">
-                      {item.title}
-                    </div>
-                    {item.badge && (
-                      <Badge 
-                        variant={item.badge === "AI" ? "default" : "secondary"} 
-                        className="text-xs px-1.5 py-0.5 h-4 ml-2 flex-shrink-0"
-                      >
-                        {item.badge}
-                      </Badge>
-                    )}
+                  {item.badge && (
+                    <Badge 
+                      variant={item.badge === "AI" ? "default" : "secondary"} 
+                      className="text-xs px-1.5 py-0.5 h-4 mb-1 self-start"
+                    >
+                      {item.badge}
+                    </Badge>
+                  )}
+                  <div className="font-medium text-sm truncate">
+                    {item.title}
                   </div>
                   <div className="flex items-center justify-between w-full">
                     <div className={cn(
