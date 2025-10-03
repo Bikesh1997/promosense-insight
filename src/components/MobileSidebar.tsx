@@ -21,8 +21,8 @@ const MobileSidebar = ({ isOpen, onClose, activeView, onViewChange }: MobileSide
     },
     {
       id: 'strategies',
-      title: 'Available Promotions',
-      description: 'Campaign opportunities',
+      title: 'Allergan Offers',
+      description: 'Available promotions',
       badge: 'NEW'
     },
     {

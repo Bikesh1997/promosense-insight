@@ -23,10 +23,10 @@ const sidebarItems = [
     badge: null
   },
   {
-    title: "Available Promotions",
-    subtitle: "Campaign opportunities",
+    title: "Allergan Offers",
+    subtitle: "Available promotions",
     id: "strategies",
-    icon: Target,
+    icon: Gift,
     badge: "New"
   },
   {

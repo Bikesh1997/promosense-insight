@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { TrendingUp, TrendingDown, DollarSign, Users, Calendar, Award, Target, Clock, AlertCircle } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Users, Calendar, Award, Target, Clock, AlertCircle, Gift } from 'lucide-react';
 
 const DoctorDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('current-month');
@@ -25,33 +25,36 @@ const DoctorDashboard = () => {
     patientSatisfaction: 4.8
   };
 
-  const activeCampaigns = [
+  const allerganOffers = [
     {
-      name: "Allē Loyalty Rewards",
-      status: "Active",
-      period: "2025-09-01 to 2025-12-31",
-      cost: 25000,
-      newPatients: 425,
+      name: "Allē Loyalty Rewards Q4 2025",
+      provider: "Allergan Aesthetics",
+      status: "Participating",
+      period: "Sep 1 - Dec 31, 2025",
+      incentive: "$60 per new patient",
+      enrolledPatients: 425,
       revenue: 255000,
-      roi: 920
+      earnings: 25500
     },
     {
-      name: "Refer-a-Friend Program",
-      status: "Active",
-      period: "2025-08-15 to 2025-11-30",
-      cost: 12000,
-      newPatients: 184,
+      name: "Botox® Refer-a-Friend",
+      provider: "Allergan Aesthetics",
+      status: "Participating",
+      period: "Aug 15 - Nov 30, 2025",
+      incentive: "$75 per referral",
+      enrolledPatients: 184,
       revenue: 128000,
-      roi: 967
+      earnings: 13800
     },
     {
-      name: "Fall Rejuvenation Special",
-      status: "Active",
-      period: "2025-09-01 to 2025-10-31",
-      cost: 8500,
-      newPatients: 92,
+      name: "Juvéderm® Fall Special",
+      provider: "Allergan Aesthetics",
+      status: "Participating",
+      period: "Sep 1 - Oct 31, 2025",
+      incentive: "20% product discount",
+      enrolledPatients: 92,
       revenue: 67000,
-      roi: 688
+      earnings: 13400
     }
   ];
 
@@ -70,21 +73,21 @@ const DoctorDashboard = () => {
     { treatment: "Coolsculpting", patients: 20, revenue: 24000, growth: -5 }
   ];
 
-  const practiceInsights = [
+  const allerganInsights = [
     { 
       type: "opportunity", 
-      message: "High demand for lip fillers - consider Allē Lip Enhancement promo",
+      message: "New Allergan offer: Juvéderm® Voluma Holiday Special - 25% bonus on bulk orders",
       priority: "high" 
     },
     { 
-      type: "warning", 
-      message: "Appointment no-show rate increased to 8% this month",
-      priority: "medium" 
+      type: "success", 
+      message: "You're in the top 10% of Allergan partner practices for patient satisfaction",
+      priority: "low" 
     },
     { 
-      type: "success", 
-      message: "Patient satisfaction score improved by 0.3 points",
-      priority: "low" 
+      type: "opportunity", 
+      message: "Allergan webinar: Advanced injection techniques - Dec 15th",
+      priority: "medium" 
     }
   ];
 
@@ -190,48 +193,49 @@ const DoctorDashboard = () => {
         </Card>
       </div>
 
-      {/* Active Campaigns & Appointments */}
+      {/* Allergan Offers & Appointments */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg sm:text-xl">Active Campaigns</CardTitle>
-            <CardDescription>Promotions currently running at your practice</CardDescription>
+            <CardTitle className="text-lg sm:text-xl flex items-center">
+              <Gift className="h-5 w-5 mr-2" />
+              My Allergan Offers
+            </CardTitle>
+            <CardDescription>Promotional offers you're currently participating in</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {activeCampaigns.map((campaign, index) => (
+              {allerganOffers.map((offer, index) => (
                 <div key={index} className="border rounded-lg p-4 space-y-3">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-sm sm:text-base">{campaign.name}</h4>
-                      <Badge variant="default" className="text-xs mt-1">{campaign.status}</Badge>
+                      <h4 className="font-semibold text-sm sm:text-base">{offer.name}</h4>
+                      <p className="text-xs text-muted-foreground">{offer.provider}</p>
+                      <Badge variant="default" className="text-xs mt-1">{offer.status}</Badge>
                     </div>
-                    <Badge variant={campaign.roi > 800 ? "default" : "secondary"} className="text-xs">
-                      {campaign.roi}% ROI
-                    </Badge>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm">
                     <div>
                       <span className="text-muted-foreground">Period:</span>
-                      <p className="font-medium">{campaign.period}</p>
+                      <p className="font-medium">{offer.period}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Cost:</span>
-                      <p className="font-medium">${campaign.cost.toLocaleString()}</p>
+                      <span className="text-muted-foreground">Incentive:</span>
+                      <p className="font-medium">{offer.incentive}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">New Patients:</span>
-                      <p className="font-medium">{campaign.newPatients}</p>
+                      <span className="text-muted-foreground">Enrolled Patients:</span>
+                      <p className="font-medium">{offer.enrolledPatients}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Revenue:</span>
-                      <p className="font-medium">${campaign.revenue.toLocaleString()}</p>
+                      <span className="text-muted-foreground">Your Earnings:</span>
+                      <p className="font-medium text-success">${offer.earnings.toLocaleString()}</p>
                     </div>
                   </div>
                   
                   <Button variant="outline" size="sm" className="w-full">
-                    View Details
+                    View Offer Details
                   </Button>
                 </div>
               ))}
@@ -296,15 +300,15 @@ const DoctorDashboard = () => {
         </CardContent>
       </Card>
 
-      {/* Practice Insights */}
+      {/* Allergan Insights */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl">Practice Insights</CardTitle>
-          <CardDescription>AI-powered recommendations for your practice</CardDescription>
+          <CardTitle className="text-lg sm:text-xl">Allergan Updates & Insights</CardTitle>
+          <CardDescription>Recommendations and opportunities from Allergan</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {practiceInsights.map((insight, index) => (
+            {allerganInsights.map((insight, index) => (
               <div 
                 key={index} 
                 className={`p-3 sm:p-4 rounded-lg border ${
