@@ -9,11 +9,14 @@ import Dashboard from "@/components/Dashboard";
 import PromotionStrategiesEnhanced from "@/components/PromotionStrategiesEnhanced";
 import FunnelLeakageAnalysis from "@/components/FunnelLeakageAnalysis";
 import DataIntegrationHub from "@/components/DataIntegrationHub";
-import DoctorDashboard from "@/components/DoctorDashboard";
+import ExecutiveDashboard from "@/components/ExecutiveDashboard";
+import SalesManagerDashboard from "@/components/SalesManagerDashboard";
+import RepDashboardRevised from "@/components/RepDashboardRevised";
+import SystemAdminDashboard from "@/components/SystemAdminDashboard";
 import AIInsights from "@/components/AIInsights";
 
 const Index = () => {
-  const [activeView, setActiveView] = useState('doctor-dashboard');
+  const [activeView, setActiveView] = useState('executive');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleMobileMenuToggle = () => {
@@ -26,8 +29,7 @@ const Index = () => {
 
   const renderContent = () => {
     switch (activeView) {
-      case 'doctor-dashboard':
-        return <DoctorDashboard />;
+      case 'alle-loyalty':
       case 'strategies':
         return <PromotionStrategiesEnhanced />;
       case 'funnel':
@@ -36,8 +38,16 @@ const Index = () => {
         return <DataIntegrationHub />;
       case 'insights':
         return <AIInsights />;
+      case 'executive':
+        return <ExecutiveDashboard />;
+      case 'manager':
+        return <SalesManagerDashboard />;
+      case 'rep':
+        return <RepDashboardRevised />;
+      case 'admin':
+        return <SystemAdminDashboard />;
       default:
-        return <DoctorDashboard />;
+        return <ExecutiveDashboard />;
     }
   };
 
