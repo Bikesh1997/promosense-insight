@@ -16,60 +16,25 @@ import { cn } from '@/lib/utils';
 
 const sidebarItems = [
   {
-    title: "Promotion Effectiveness",
-    subtitle: "8-strategy ROI analysis",
-    id: "strategies",
-    icon: Target,
-    badge: "New"
-  },
-  {
-    title: "Funnel Leakage Analysis", 
-    subtitle: "Patient journey insights",
-    id: "funnel",
-    icon: TrendingDown,
+    title: "Available Promotions",
+    subtitle: "Current offers & programs",
+    id: "promotions",
+    icon: Gift,
     badge: null
   },
   {
-    title: "Data Integration Hub",
-    subtitle: "Pipeline monitoring",
-    id: "data-hub", 
-    icon: Database,
-    badge: null
-  },
-  {
-    title: "AI Force Multiplier",
-    subtitle: "Intelligent recommendations",
-    id: "insights",
-    icon: Brain,
-    badge: "AI"
-  },
-  {
-    title: "Executive Dashboard",
-    subtitle: "Strategic overview",
-    id: "executive",
+    title: "My Analytics",
+    subtitle: "Prescription insights",
+    id: "analytics",
     icon: BarChart3,
     badge: null
   },
   {
-    title: "Sales Manager Hub", 
-    subtitle: "Team performance",
-    id: "manager",
-    icon: Users,
-    badge: null
-  },
-  {
-    title: "Rep Dashboard",
-    subtitle: "Mobile-optimized",
-    id: "rep",
-    icon: Smartphone,
-    badge: null
-  },
-  {
-    title: "System Admin",
-    subtitle: "Data quality monitor",
-    id: "admin",
-    icon: Settings,
-    badge: null
+    title: "AI Insights",
+    subtitle: "Personalized recommendations",
+    id: "insights",
+    icon: Brain,
+    badge: "AI"
   }
 ];
 

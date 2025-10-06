@@ -16,7 +16,7 @@ import SystemAdminDashboard from "@/components/SystemAdminDashboard";
 import AIInsights from "@/components/AIInsights";
 
 const Index = () => {
-  const [activeView, setActiveView] = useState('executive');
+  const [activeView, setActiveView] = useState('promotions');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleMobileMenuToggle = () => {
@@ -29,25 +29,14 @@ const Index = () => {
 
   const renderContent = () => {
     switch (activeView) {
-      case 'alle-loyalty':
-      case 'strategies':
+      case 'promotions':
         return <PromotionStrategiesEnhanced />;
-      case 'funnel':
-        return <FunnelLeakageAnalysis />;
-      case 'data-hub':
-        return <DataIntegrationHub />;
+      case 'analytics':
+        return <RepDashboardRevised />;
       case 'insights':
         return <AIInsights />;
-      case 'executive':
-        return <ExecutiveDashboard />;
-      case 'manager':
-        return <SalesManagerDashboard />;
-      case 'rep':
-        return <RepDashboardRevised />;
-      case 'admin':
-        return <SystemAdminDashboard />;
       default:
-        return <ExecutiveDashboard />;
+        return <PromotionStrategiesEnhanced />;
     }
   };
 
