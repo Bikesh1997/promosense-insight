@@ -14,21 +14,51 @@ interface MobileSidebarProps {
 const MobileSidebar = ({ isOpen, onClose, activeView, onViewChange }: MobileSidebarProps) => {
   const sidebarItems = [
     {
-      id: 'promotions',
-      title: 'Available Promotions',
-      description: 'Current offers & programs',
+      id: 'executive',
+      title: 'Executive Dashboard',
+      description: 'High-level insights',
       badge: null
     },
     {
-      id: 'analytics',
-      title: 'My Analytics',
-      description: 'Prescription insights',
+      id: 'manager',
+      title: 'Sales Manager',
+      description: 'Team performance',
+      badge: null
+    },
+    {
+      id: 'rep',
+      title: 'Rep Dashboard',
+      description: 'Individual metrics',
+      badge: null
+    },
+    {
+      id: 'admin',
+      title: 'System Admin',
+      description: 'System management',
+      badge: null
+    },
+    {
+      id: 'strategies',
+      title: 'Promotion Strategies',
+      description: 'Campaign management',
+      badge: 'NEW'
+    },
+    {
+      id: 'funnel',
+      title: 'Funnel Analysis',
+      description: 'Conversion tracking',
+      badge: 'AI'
+    },
+    {
+      id: 'data-hub',
+      title: 'Data Integration',
+      description: 'Data connections',
       badge: null
     },
     {
       id: 'insights',
       title: 'AI Insights',
-      description: 'Personalized recommendations',
+      description: 'Intelligent analytics',
       badge: 'AI'
     }
   ];
